@@ -1,5 +1,5 @@
 /* ============================= */
-/* 🌗 Theme Variables (Light Mode) */
+/* Theme Variables (Light Mode) */
 /* ============================= */
 :root {
   --font-size: 16px;
@@ -43,7 +43,7 @@
 }
 
 /* ============================= */
-/* 🌙 Dark Mode */
+/* Dark Mode */
 /* ============================= */
 .dark {
   --background: oklch(0.145 0 0);
@@ -81,7 +81,7 @@
 }
 
 /* ============================= */
-/* 🧱 Base Styles */
+/* Base Styles */
 /* ============================= */
 * {
   border-color: var(--border);
@@ -99,7 +99,7 @@ body {
 }
 
 /* ============================= */
-/* 🧾 Typography Defaults */
+/* Typography Defaults */
 /* ============================= */
 h1 {
   font-size: 1.5rem;
@@ -120,6 +120,12 @@ h3 {
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+}
+
+p {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
 }
 
 h4,
@@ -245,4 +251,671 @@ input {
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+/* ============================= */
+/* Artist Card Styles */
+/* ============================= */
+.artist-card {
+  background-color: var(--card, #fff);
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  padding: 1.5rem 1.25rem;
+  transition: all 0.25s ease-in-out;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  width: 300px;
+  height: 380px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Đẩy nút xuống đều */
+  align-items: center;
+}
+
+.artist-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Avatar */
+.artist-avatar {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.artist-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Name & Followers */
+.artist-name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--foreground, #111);
+}
+
+.artist-followers {
+  color: #999;
+  font-size: 0.9rem;
+  margin: 0.25rem 0 1rem;
+}
+
+/* Button */
+.artist-button {
+  background: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.4rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.artist-button.following {
+  border-color: #ccc;
+  color: #000;
+  background-color: #fff;
+}
+
+.artist-button.following:hover {
+  background-color: #eaeaea;
+  border-color: #bbb;
+}
+
+/* List */
+.artist-list {
+  display: flex;
+  flex-direction: row; /* Xếp các card nằm ngang */
+  gap: 2rem; /* Khoảng cách giữa các card */
+  overflow-y: auto;
+  /* Ẩn thanh cuộn nhưng vẫn cho phép cuộn */
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  padding: 2rem 2rem;
+  background-color: #f9fafb;
+  min-height: 100vh;
+  justify-content: flex-start;
+  align-items: flex-start;
+  white-space: nowrap; /* Không cho xuống dòng */
+}
+
+/* Thanh cuộn ngang */
+.artist-list::-webkit-scrollbar {
+  height: 8px;
+}
+
+.artist-list::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.artist-list::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* Giữ kích thước card cố định */
+.artist-card {
+  flex: 0 0 auto; /* Giữ nguyên kích thước, không co giãn */
+  width: 300px;
+  height: 380px;
+}
+/* ============================= */
+/* Playlist Card Styles */
+/* ============================= */
+
+.playlist-card {
+  background-color: var(--card, #fff);
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  padding: 1rem;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  width: 220px;
+  height: 300px;
+  position: relative;
+  flex: 0 0 auto; /* Giữ kích thước cố định khi scroll ngang */
+}
+
+.playlist-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Cover */
+.playlist-cover {
+  width: 100%;
+  height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.playlist-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Text */
+.playlist-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--foreground, #111);
+}
+
+.playlist-info {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+/* Nút ba chấm */
+.playlist-more {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  border: none;
+  background: transparent;
+  color: #666;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.playlist-more:hover {
+  color: #000;
+}
+
+/* Container scroll ngang */
+.playlist-list {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  overflow-y: auto;
+  /* Ẩn thanh cuộn nhưng vẫn cho phép cuộn */
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  padding: 2rem;
+  background-color: #f9fafb;
+  white-space: nowrap;
+}
+
+.playlist-list::-webkit-scrollbar {
+  height: 8px;
+}
+
+.playlist-list::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.playlist-list::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* ============= Playlist Card ============= */
+.playlist-card {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  padding: 1rem;
+  width: 260px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.playlist-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.playlist-cover {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.playlist-cover img {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Ẩn nút play mặc định */
+.playlist-play-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  background: linear-gradient(135deg, #3dc3c0, #8568f5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.playlist-play-btn img {
+  width: 18px;
+  height: 18px;
+}
+
+/* Khi hover card => hiện nút play */
+.playlist-card:hover .playlist-play-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.playlist-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 0.75rem;
+}
+
+.playlist-info {
+  font-size: 0.85rem;
+  color: #999;
+}
+
+.playlist-more {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #999;
+  cursor: pointer;
+}
+/* ============================= */
+/* SongList Card Styles */
+/* ============================= */
+/* ========== SONG LIST ========== */
+.song-list {
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: auto;
+  /* Ẩn thanh cuộn nhưng vẫn cho phép cuộn */
+  scrollbar-width: none;
+  padding-right: 8px;
+  scrollbar-width: thin;
+}
+
+/* ========== SONG ITEM ========== */
+.song-item {
+  display: grid;
+  grid-template-columns: 40px 60px 1fr 1fr 180px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  transition: background 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  width: 1020px;
+  align-items: center;
+  height: 100px;
+  box-sizing: border-box;
+  overflow: hidden; /* Ngăn mọi phần tử tràn */
+  white-space: nowrap; /* Không cho text tự xuống dòng */
+}
+
+.song-item:hover {
+  background-color: #f6f6f6;
+}
+
+/* ========== STT / Nút Play ========== */
+.song-index {
+  position: relative;
+  width: 40px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.song-index span {
+  color: #888;
+  font-size: 14px;
+  transition: opacity 0.2s ease;
+}
+
+.play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: none;
+  cursor: pointer;
+  opacity: 0;
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(6px);
+  transition: all 0.25s ease;
+  background: linear-gradient(135deg, #3dc3c0, #8568f5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.play-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+/* Hover: ẩn STT, hiện nút Play */
+.song-item:hover .song-index span {
+  opacity: 0;
+}
+
+.song-item:hover .play-btn {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* ========== ẢNH COVER ========== */
+.song-cover {
+  position: relative;
+  width: 55px;
+  height: 55px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.song-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ========== THÔNG TIN BÀI HÁT ========== */
+.song-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0; /* cho phép text cắt gọn */
+  overflow: hidden;
+}
+
+.song-title {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+.song-artist {
+  color: #b9b9b9;
+  font-family: Montserrat;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+/* ========== ALBUM ========== */
+.song-album {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #b9b9b9;
+  font-family: Montserrat;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+/* ========== HÀNH ĐỘNG PHẢI ========== */
+.song-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.heart-btn,
+.more-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.heart-btn img,
+.more-btn img {
+  width: 18px;
+  height: 18px;
+}
+
+.song-time {
+  font-size: 13px;
+  color: #b9b9b9;
+  margin-bottom: 7px;
+}
+
+.song-more {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #888;
+  cursor: pointer;
+}
+/* ==== PROFILE HEADER ==== */
+.profile-header {
+  position: relative;
+  font-family: "Inter", sans-serif;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.profile-cover {
+  height: 250px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+}
+
+.profile-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.45;
+}
+
+.profile-info {
+  position: relative;
+  padding: 0 48px;
+  margin-top: -80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  z-index: 10;
+}
+
+.profile-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.profile-avatar {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: #fff;
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-details {
+  padding-bottom: 20px;
+}
+
+.profile-details h1 {
+  font-size: 1.75rem;
+  color: #111827;
+  font-weight: 600;
+  margin-bottom: 4px;
+  overflow: hidden;
+  color: #121212;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: Montserrat;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.profile-details p {
+  color: #b9b9b9;
+  text-align: center;
+  font-family: Montserrat;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 100px;
+}
+
+.profile-stats {
+  display: flex;
+  gap: 40px;
+}
+
+.profile-stat {
+  text-align: left;
+  margin-top: -90px;
+}
+
+.profile-stat .value {
+  color: #000;
+  font-family: Montserrat;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.profile-stat .label {
+  color: #b9b9b9;
+  font-family: Montserrat;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+/* === ACTION BUTTONS === */
+.profile-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 20px;
+  position: relative;
+  top: -50px;
+}
+
+.profile-actions button {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 9999px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profile-actions button:hover {
+  background: #f3f4f6;
+}
+
+.profile-actions .edit-btn {
+  padding: 8px 20px;
+  border: none;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.95rem;
+  background: linear-gradient(90deg, #06b6d4, #8b5cf6);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0%;
+  width: 133px;
+  height: 40px;
+  border-radius: 12px;
+}
+
+.profile-actions .edit-btn:hover {
+  transform: scale(1.03);
+}
+
+.profile-search-bar {
+  width: 100%;
+  background: #ffffff;
+  padding: 16px 32px;
+  border-bottom: 1px solid #e5e7eb;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.profile-search-input {
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  background-color: #f9fafb;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s ease;
+  padding: 12px 20px 12px 45px;
+}
+.search-container {
+  position: relative;
+  width: 100%;
+}
+.search-icon {
+  position: absolute;
+  top: 50%; /* giữa dọc */
+  left: 15px; /* nằm trong input */
+  transform: translateY(-50%);
+  color: #6b7280;
+  font-size: 18px;
+  pointer-events: none;
+}
+
+.profile-search-input:focus {
+  border-color: #6366f1;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
