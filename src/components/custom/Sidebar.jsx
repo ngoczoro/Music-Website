@@ -1,15 +1,4 @@
 import React from "react";
-import {
-  Home,
-  User,
-  Disc,
-  Clock,
-  Heart,
-  Music,
-  Briefcase,
-  UserCircle,
-  LogOut,
-} from "lucide-react";
 import HomeIcon from "../../assets/icon/home.svg";
 import ArtistIcon from "../../assets/icon/microphone.svg";
 import GenreIcon from "../../assets/icon/genre.svg";
