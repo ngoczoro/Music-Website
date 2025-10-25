@@ -10,7 +10,7 @@ import UserIcon from "../../assets/icon/user.svg";
 import LogoutIcon from "../../assets/icon/logout.svg";
 import "../../styles/theme.css";
 
-export function Sidebar({ activeItem = "Account" }) {
+export function Sidebar({ activeItem = "Account", onMenuClick }) {
   const menuItems = {
     discover: [
       { icon: HomeIcon, label: "Home", id: "Home" },
@@ -41,65 +41,28 @@ export function Sidebar({ activeItem = "Account" }) {
         <span className="logo-text">Logo</span>
       </div>
 
-      {/* Discover */}
-      <div className="sidebar-section">
-        <h3 className="section-title">Discover</h3>
-        <div className="menu-list">
-          {menuItems.discover.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeItem === item.id;
-            return (
+      {/* Render 3 nhóm menu */}
+      {Object.entries(menuItems).map(([section, items]) => (
+        <div key={section} className="sidebar-section">
+          <h3 className="section-title">
+            {section.charAt(0).toUpperCase() + section.slice(1)}
+          </h3>
+          <div className="menu-list">
+            {items.map((item) => (
               <button
                 key={item.id}
-                className={`menu-item ${isActive ? "active" : ""}`}
+                className={`menu-item ${
+                  activeItem === item.id ? "active" : ""
+                }`}
+                onClick={() => onMenuClick(item.id)} // 🔹 Gọi callback khi click
               >
-                <img src={Icon} className="menu-icon" />
+                <img src={item.icon} className="menu-icon" />
                 <span>{item.label}</span>
               </button>
-            );
-          })}
+            ))}
+          </div>
         </div>
-      </div>
-
-      {/* Library */}
-      <div className="sidebar-section">
-        <h3 className="section-title">Library</h3>
-        <div className="menu-list">
-          {menuItems.library.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeItem === item.id;
-            return (
-              <button
-                key={item.id}
-                className={`menu-item ${isActive ? "active" : ""}`}
-              >
-                <img src={Icon} className="menu-icon" />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* More */}
-      <div className="sidebar-section">
-        <h3 className="section-title">More</h3>
-        <div className="menu-list">
-          {menuItems.more.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeItem === item.id;
-            return (
-              <button
-                key={item.id}
-                className={`menu-item ${isActive ? "active" : ""}`}
-              >
-                <img src={Icon} className="menu-icon" />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      ))}
     </div>
   );
 }
