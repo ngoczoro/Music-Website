@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import theme from '../../theme';
-import Header from '../../components/Header';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import theme from "../../theme";
+import Header from "../../components/Header";
 import {
   ThemeProvider,
   CssBaseline,
@@ -11,24 +11,29 @@ import {
   Stack,
   Card,
   CardContent,
-  Alert
-} from '@mui/material';
-import TextField from '../../components/TextField'
-import Button from '../../components/Button'
-import { registerUser } from '../../services/authService'; 
-import { checkEmptyFields, checkPasswordMatch, checkPasswordPolicy, checkEmailFormat} from '../../utils/validation';
+  Alert,
+} from "@mui/material";
+import TextField from "../../components/TextField";
+import Button from "../../components/Button";
+import { registerUser } from "../../services/authService";
+import {
+  checkEmptyFields,
+  checkPasswordMatch,
+  checkPasswordPolicy,
+  checkEmailFormat,
+} from "../../utils/validation";
 export default function Register() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   // ... trong component Register()
-  const [message, setMessage] = useState(null); 
+  const [message, setMessage] = useState(null);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,9 +41,9 @@ export default function Register() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage(null); 
+    setMessage(null);
     setIsLoading(true);
 
     let errorMessage = checkEmptyFields(formData);
@@ -46,7 +51,7 @@ const handleSubmit = async (e) => {
       setMessage(errorMessage);
       setIsError(true);
       setIsLoading(false);
-      return; 
+      return;
     }
 
     errorMessage = checkEmailFormat(formData.email);
@@ -54,7 +59,7 @@ const handleSubmit = async (e) => {
       setMessage(errorMessage);
       setIsError(true);
       setIsLoading(false);
-      return; 
+      return;
     }
 
     errorMessage = checkPasswordPolicy(formData.password);
@@ -62,37 +67,41 @@ const handleSubmit = async (e) => {
       setMessage(errorMessage);
       setIsError(true);
       setIsLoading(false);
-      return; 
+      return;
     }
-    
-    errorMessage = checkPasswordMatch(formData.password, formData.confirmPassword);
+
+    errorMessage = checkPasswordMatch(
+      formData.password,
+      formData.confirmPassword
+    );
     if (errorMessage) {
       setMessage(errorMessage);
       setIsError(true);
       setIsLoading(false);
-      return; 
+      return;
     }
-    
+
     try {
       const result = await registerUser(formData);
-      
-      // Thông báo thành công
-      setMessage(result.message || 'Registration successful! Redirecting to login...');
-      setIsError(false);
-      
-      navigate('/verify-email', { 
-          state: { 
-              email: formData.email 
-          } 
-      });
 
+      // Thông báo thành công
+      setMessage(
+        result.message || "Registration successful! Redirecting to login..."
+      );
+      setIsError(false);
+
+      navigate("/verify-email", {
+        state: {
+          email: formData.email,
+        },
+      });
     } catch (error) {
-      setMessage(error.message || 'An unknown error occurred.');
+      setMessage(error.message || "An unknown error occurred.");
       setIsError(true);
     } finally {
       setIsLoading(false);
     }
-};
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -100,28 +109,44 @@ const handleSubmit = async (e) => {
       <Header />
       <Box
         sx={{
-          minHeight: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '20px',
+          minHeight: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "20px",
         }}
       >
-        <Card elevation={8} sx={{ width: '100%', maxWidth: 450, borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
-          <CardContent sx={{ padding: '40px' }}>
-            <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ marginBottom: '30px' }}>
+        <Card
+          elevation={8}
+          sx={{
+            width: "100%",
+            maxWidth: 450,
+            borderRadius: "16px",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+          }}
+        >
+          <CardContent sx={{ padding: "40px" }}>
+            <Typography
+              variant="h4"
+              component="h1"
+              align="center"
+              gutterBottom
+              sx={{ marginBottom: "30px" }}
+            >
               Register
             </Typography>
             {message && (
-        <Alert 
-          severity={isError ? 'error' : 'success'} 
-          sx={{ mb: 3 }}
-        >
-          {message}
-        </Alert>
-      )}
+              <Alert severity={isError ? "error" : "success"} sx={{ mb: 3 }}>
+                {message}
+              </Alert>
+            )}
 
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
+            >
               <Stack spacing={3}>
                 {/* SỬ DỤNG CUSTOM TEXT FIELD */}
                 <TextField
@@ -166,18 +191,19 @@ const handleSubmit = async (e) => {
                   onChange={handleChange}
                 />
 
-                <Button
-                  type="submit"
-                  isLoading={isLoading}
-                >
+                <Button type="submit" isLoading={isLoading}>
                   REGISTER
                 </Button>
               </Stack>
 
               <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
                 <Typography variant="body2" color="text.secondary">
-                  Already have an account?{' '}
-                  <Link href="/login" variant="body2" sx={{ color: '#ff4081', textDecoration: 'none' }}>
+                  Already have an account?{" "}
+                  <Link
+                    href="/login"
+                    variant="body2"
+                    sx={{ color: "#ff4081", textDecoration: "none" }}
+                  >
                     LOGIN
                   </Link>
                 </Typography>
@@ -186,7 +212,6 @@ const handleSubmit = async (e) => {
           </CardContent>
         </Card>
       </Box>
-      
     </ThemeProvider>
   );
 }
