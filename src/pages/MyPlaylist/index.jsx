@@ -1,4 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { Sidebar } from "../../components/custom/Sidebar";
+import { ProfileHeader } from "../../components/custom/ProfileHeader";
+import { PlaylistList } from "../../components/custom/PlaylistList";
+import { SongList } from "../../components/custom/SongList";
+import { ArtistList } from "../../components/custom/ArtistList";
+import "../../styles/theme.css";
 
 const MyPlaylist = () => {
   const [playlists, setPlaylists] = useState([]);
