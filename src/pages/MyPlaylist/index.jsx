@@ -1,22 +1,32 @@
 import React, { useEffect, useState } from "react";
 
 const MyPlaylist = () => {
-  const [playlists, setPlaylists] = useState([]); // lưu toàn bộ playlists từ backend
-  const [currentPage, setCurrentPage] = useState(1); // trang hiện tại
-  const playlistsPerPage = 8; // số playlist hiển thị mỗi trang
+  const [playlists, setPlaylists] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const playlistsPerPage = 8;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 🧭 Địa chỉ backend API
-  const API_URL = "http://localhost:8081/api/playlists";
-  // ⚠️ Sau khi deploy, bạn chỉ cần thay bằng URL thật trên Render, ví dụ:
-  // const API_URL = "https://musicwebapp-backend.onrender.com/api/playlists";
+  // ✅ Kiểm tra trạng thái đăng nhập
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = localStorage.getItem("token");
 
-  // 🧩 Gọi API backend khi load trang
+  // 🧭 API backend
+  const API_URL = "http://localhost:8081/api/playlists";
+
   useEffect(() => {
+    if (!user || !token) {
+      setLoading(false); // không fetch nếu là guest
+      return;
+    }
+
     const fetchPlaylists = async () => {
       try {
-        const res = await fetch(API_URL);
+        const res = await fetch(API_URL, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (!res.ok) throw new Error("Failed to fetch playlists");
         const data = await res.json();
         setPlaylists(data);
@@ -26,16 +36,16 @@ const MyPlaylist = () => {
         setLoading(false);
       }
     };
-    fetchPlaylists();
-  }, []);
 
-  // 🧮 Tính toán phân trang
+    fetchPlaylists();
+  }, [user, token]);
+
+  // 🧮 Pagination
   const indexOfLast = currentPage * playlistsPerPage;
   const indexOfFirst = indexOfLast - playlistsPerPage;
   const currentPlaylists = playlists.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(playlists.length / playlistsPerPage);
 
-  // 🧭 Xử lý khi nhấn nút chuyển trang
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
@@ -43,6 +53,27 @@ const MyPlaylist = () => {
   if (loading) return <p className="p-10 text-gray-500">Loading playlists...</p>;
   if (error) return <p className="p-10 text-red-500">Error: {error}</p>;
 
+  // 🧱 Nếu Guest → hiển thị lời mời đăng nhập
+  if (!user || !token) {
+    return (
+      <div className="flex h-screen items-center justify-center flex-col text-center">
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+          You are not logged in
+        </h2>
+        <p className="text-gray-500 mb-6">
+          Please log in to view your playlists and save your favorite songs.
+        </p>
+        <a
+          href="/login"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Go to Login
+        </a>
+      </div>
+    );
+  }
+
+  // 🧱 Nếu là User → hiển thị danh sách playlist
   return (
     <div className="flex">
       {/* Sidebar */}
@@ -89,7 +120,6 @@ const MyPlaylist = () => {
           <option>A-Z</option>
         </select>
 
-        {/* Grid hiển thị playlist */}
         {currentPlaylists.length === 0 ? (
           <p className="text-gray-500">You don’t have any playlists yet.</p>
         ) : (
@@ -111,7 +141,6 @@ const MyPlaylist = () => {
           </div>
         )}
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex justify-center mt-8 space-x-2">
             <button
