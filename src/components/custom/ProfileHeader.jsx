@@ -1,7 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getCurrentUser } from "../../services/authService";
 import "../../styles/theme.css";
 
 export function ProfileHeader() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Dòng tạm để test, sau này xóa đi
+    localStorage.setItem(
+      "authToken",
+      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzUyMTAxOUBnbS51aXQuZWR1LnZuIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NjE3OTk5MDIsImV4cCI6MTc2MzAwOTUwMn0.f1L30XSRBfVQU9xnVISSMSh4lYP-zASa2XOzBnZT30k"
+    );
+    const fetchProfile = async () => {
+      try {
+        const data = await getCurrentUser();
+        setUser(data);
+      } catch (err) {
+        console.error("Lỗi khi lấy thông tin user:", err);
+        setError("Không thể tải thông tin người dùng");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  if (loading) return <p style={{ textAlign: "center" }}>Đang tải...</p>;
+  if (error)
+    return <p style={{ color: "red", textAlign: "center" }}>{error}</p>;
+
   return (
     <div className="profile-page">
       {/* Thanh tìm kiếm */}
@@ -23,7 +53,7 @@ export function ProfileHeader() {
       <div className="profile-header">
         <div className="profile-cover">
           <img
-            src="https://images.unsplash.com/photo-1656283384093-1e227e621fad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtdXNpYyUyMGNvbmNlcnR8ZW58MXx8fHwxNzYwNTc3MjE1fDA&ixlib=rb-4.1.0&q=80&w=1080"
+            src="https://images.unsplash.com/photo-1656283384093-1e227e621fad?auto=format&fit=crop&w=1080&q=80"
             alt="cover"
           />
         </div>
@@ -32,14 +62,18 @@ export function ProfileHeader() {
           <div className="profile-left">
             <div className="profile-avatar">
               <img
-                src="https://images.unsplash.com/photo-1501027874987-73e9c32f46a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwZXJzb24lMjBwb3J0cmFpdCUyMG11c2ljfGVufDF8fHx8MTc2MDY4NDczN3ww&ixlib=rb-4.1.0&q=80&w=1080"
+                src={
+                  user?.avatarUrl
+                    ? `http://localhost:8081${user.avatarUrl}`
+                    : "https://via.placeholder.com/150"
+                }
                 alt="avatar"
               />
             </div>
 
             <div className="profile-details">
-              <h1>Sarah Johnson</h1>
-              <p>Music Enthusiast • Premium Member</p>
+              <h1>{user?.fullName || "No Name"}</h1>
+              <p>{user?.bio || "Chưa có tiểu sử"}</p>
 
               <div className="profile-stats">
                 <div className="profile-stat">

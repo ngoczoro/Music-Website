@@ -422,7 +422,7 @@ input {
 .playlist-more {
   position: absolute;
   right: 12px;
-  bottom: 12px;
+  bottom: -130px;
   border: none;
   background: transparent;
   color: #666;
@@ -809,6 +809,7 @@ input {
   font-weight: 500;
   line-height: normal;
   margin-bottom: 100px;
+  margin-right: 200px;
 }
 
 .profile-stats {
