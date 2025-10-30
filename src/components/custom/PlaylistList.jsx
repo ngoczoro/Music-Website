@@ -1,60 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { PlaylistCard } from "./PlaylistCard";
+import { fetchPublicPlaylists } from "../../services/authService";
 
 export function PlaylistList() {
-  const playlists = [
-    {
-      title: "Chill Vibes",
-      songs: 48,
-      imageUrl: "/images/chill-vibes.jpg",
-      isPublic: true,
-    },
-    {
-      title: "Evening Jazz",
-      songs: 56,
-      imageUrl:
-        "https://weart.vn/wp-content/uploads/2025/06/meo-cute-voi-anh-mat-to-tron-dang-yeu.jpg",
-      isPublic: true,
-    },
-    {
-      title: "Workout Mix",
-      songs: 32,
-      imageUrl: "/images/workout-mix.jpg",
-      isPublic: true,
-    },
-    {
-      title: "Lo-Fi Beats",
-      songs: 27,
-      imageUrl: "/images/lofi.jpg",
-      isPublic: false,
-    },
-    {
-      title: "Evening Jazz",
-      songs: 56,
-      imageUrl:
-        "https://weart.vn/wp-content/uploads/2025/06/meo-cute-voi-anh-mat-to-tron-dang-yeu.jpg",
-      isPublic: true,
-    },
-    {
-      title: "Evening Jazz",
-      songs: 56,
-      imageUrl:
-        "https://weart.vn/wp-content/uploads/2025/06/meo-cute-voi-anh-mat-to-tron-dang-yeu.jpg",
-      isPublic: true,
-    },
-    {
-      title: "Evening Jazz",
-      songs: 56,
-      imageUrl:
-        "https://weart.vn/wp-content/uploads/2025/06/meo-cute-voi-anh-mat-to-tron-dang-yeu.jpg",
-      isPublic: true,
-    },
-  ];
+  const [playlists, setPlaylists] = useState([]);
+
+  useEffect(() => {
+    // Dòng tạm để test, sau này xóa đi
+    localStorage.setItem(
+      "authToken",
+      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzUyMTAxOUBnbS51aXQuZWR1LnZuIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NjE3OTk5MDIsImV4cCI6MTc2MzAwOTUwMn0.f1L30XSRBfVQU9xnVISSMSh4lYP-zASa2XOzBnZT30k"
+    );
+    fetchPublicPlaylists()
+      .then((data) => setPlaylists(data))
+      .catch((err) => console.error(err));
+  }, []);
 
   return (
     <div className="playlist-list">
-      {playlists.map((pl, i) => (
-        <PlaylistCard key={i} {...pl} />
+      {playlists.map((p) => (
+        <PlaylistCard
+          key={p.id}
+          title={p.name}
+          description={p.description}
+          songs={p.songs}
+          isPublic={p.isPublic}
+          imageUrl={p.thumbnailUrl}
+        />
       ))}
     </div>
   );
