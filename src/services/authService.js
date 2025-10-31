@@ -137,11 +137,32 @@ export const updateProfile = async ({ fullName, bio, avatar }) => {
   return handleResponse(response);
 };
 
-// PLAYLIST (Danh sách bài hát công khai)
-// ----------------------------
-export const fetchPublicPlaylists = async () => {
+/**
+ * Lấy tất cả playlist của người dùng đang đăng nhập
+ */
+export const fetchMyPlaylists = async () => {
   const token = localStorage.getItem("authToken");
-  const url = `${API_BASE_URL}/common/playlist/public-playlists`;
+  if (!token) throw new Error("Chưa đăng nhập");
+
+  const url = `${API_BASE_URL}/common/playlist`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return handleResponse(response);
+};
+
+/**
+ * Lấy danh sách nghệ sĩ thịnh hành (trending)
+ */
+export const fetchTrendingArtists = async () => {
+  const token = localStorage.getItem("authToken");
+  const url = `${API_BASE_URL}/common/users/trending-artists`;
 
   const response = await fetch(url, {
     method: "GET",
