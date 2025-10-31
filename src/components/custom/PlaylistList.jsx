@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { PlaylistCard } from "./PlaylistCard";
-import { fetchPublicPlaylists } from "../../services/authService";
+import { fetchMyPlaylists } from "../../services/authService";
 
 export function PlaylistList() {
   const [playlists, setPlaylists] = useState([]);
@@ -11,7 +11,7 @@ export function PlaylistList() {
       "authToken",
       "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzUyMTAxOUBnbS51aXQuZWR1LnZuIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NjE3OTk5MDIsImV4cCI6MTc2MzAwOTUwMn0.f1L30XSRBfVQU9xnVISSMSh4lYP-zASa2XOzBnZT30k"
     );
-    fetchPublicPlaylists()
+    fetchMyPlaylists()
       .then((data) => setPlaylists(data))
       .catch((err) => console.error(err));
   }, []);
