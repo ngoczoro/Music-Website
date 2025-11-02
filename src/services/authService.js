@@ -158,6 +158,26 @@ export const fetchMyPlaylists = async () => {
 };
 
 /**
+ * Lấy danh sách bài hát trong playlist cụ thể (ví dụ: Favorites)
+ */
+export const fetchSongsInPlaylist = async (playlistId) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) throw new Error("Chưa đăng nhập");
+
+  const url = `${API_BASE_URL}/common/playlist/${playlistId}/songs`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return handleResponse(response);
+};
+
+/**
  * Lấy danh sách nghệ sĩ thịnh hành (trending)
  */
 export const fetchTrendingArtists = async () => {
