@@ -1,31 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { getCurrentUser } from "../../services/authService";
+import { getCurrentUser, fetchMyPlaylists } from "../../services/authService";
 import "../../styles/theme.css";
 
 export function ProfileHeader() {
   const [user, setUser] = useState(null);
+  const [playlists, setPlaylists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Dòng tạm để test, sau này xóa đi
-    localStorage.setItem(
-      "authToken",
-      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzUyMTAxOUBnbS51aXQuZWR1LnZuIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NjE3OTk5MDIsImV4cCI6MTc2MzAwOTUwMn0.f1L30XSRBfVQU9xnVISSMSh4lYP-zASa2XOzBnZT30k"
-    );
-    const fetchProfile = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getCurrentUser();
-        setUser(data);
+        // (Chỉ dùng dòng này để test, sau này có thể bỏ)
+        localStorage.setItem(
+          "authToken",
+          "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzUyMTAxOUBnbS51aXQuZWR1LnZuIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NjIwOTEyMTgsImV4cCI6MTc2MzMwMDgxOH0.Mpul2HnCnLa5Xy0aB6KR2cQLIt2h-268BYapHeynkg4"
+        );
+
+        // Lấy thông tin người dùng
+        const userData = await getCurrentUser();
+        setUser(userData);
+
+        // Lấy danh sách playlist của người dùng
+        const playlistsData = await fetchMyPlaylists();
+        setPlaylists(playlistsData || []);
       } catch (err) {
-        console.error("Lỗi khi lấy thông tin user:", err);
-        setError("Không thể tải thông tin người dùng");
+        console.error("Lỗi khi tải dữ liệu:", err);
+        setError("Không thể tải thông tin người dùng hoặc playlist");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProfile();
+    fetchData();
   }, []);
 
   if (loading) return <p style={{ textAlign: "center" }}>Đang tải...</p>;
@@ -77,7 +84,8 @@ export function ProfileHeader() {
 
               <div className="profile-stats">
                 <div className="profile-stat">
-                  <div className="value">127</div>
+                  <div className="value">{playlists.length}</div>{" "}
+                  {/* hiển thị số playlist */}
                   <div className="label">Playlists</div>
                 </div>
                 <div className="profile-stat">

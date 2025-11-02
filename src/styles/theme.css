@@ -676,18 +676,6 @@ input {
   line-height: normal;
 }
 
-/* ========== ALBUM ========== */
-.song-album {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: #b9b9b9;
-  font-family: Montserrat;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-}
-
 /* ========== HÀNH ĐỘNG PHẢI ========== */
 .song-actions {
   display: flex;
@@ -695,6 +683,7 @@ input {
   gap: 12px;
   justify-content: flex-end;
   flex-shrink: 0;
+  margin-left: 50px;
 }
 
 .heart-btn,
