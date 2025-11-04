@@ -5,6 +5,7 @@ import { PlaylistList } from "../../components/custom/PlaylistList";
 import { SongList } from "../../components/custom/SongList";
 import { ArtistList } from "../../components/custom/ArtistList";
 import "../../styles/theme.css";
+import EditProfilePage from "../EditProfile/index.jsx";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("playlist");
@@ -22,20 +23,21 @@ const ProfilePage = () => {
     }
   };
 
-  return (
+  const [showEditPage, setShowEditPage] = useState(false);
+
+  return showEditPage ? (
+    <EditProfilePage onBack={() => setShowEditPage(false)} />
+  ) : (
     <div
       className="profile-container"
       style={{ display: "flex", minHeight: "100vh" }}
     >
-      {/* Sidebar bên trái */}
-
-      {/* Nội dung chính */}
       <div
         className="profile-main"
         style={{ flex: 1, display: "flex", flexDirection: "column" }}
       >
         {/* Header */}
-        <ProfileHeader />
+        <ProfileHeader onEditClick={() => setShowEditPage(true)} />
 
         {/* Thanh chọn tab */}
         <div
@@ -80,7 +82,6 @@ const ProfilePage = () => {
             width: "1020px",
             margin: "0 auto",
             padding: "30px 0",
-            transition: "opacity 0.3s ease",
           }}
         >
           {renderContent()}

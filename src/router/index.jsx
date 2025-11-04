@@ -4,6 +4,7 @@ import VerifyEmail from "../pages/VerifyEmail";
 import ProfilePage from "../pages/ProfilePage";
 import MyPlaylist from "../pages/MyPlaylist";
 import MainLayout from "../layout/MainLayout";
+import EditProfile from "../pages/EditProfile";
 
 export default function AppRouter() {
   return (
@@ -14,6 +15,7 @@ export default function AppRouter() {
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/playlist" element={<MyPlaylist />} />
+          <Route path="/editprofile" element={<EditProfile />} />
         </Routes>
       </MainLayout>
     </BrowserRouter>
