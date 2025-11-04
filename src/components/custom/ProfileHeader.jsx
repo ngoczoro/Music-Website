@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getCurrentUser, fetchMyPlaylists } from "../../services/authService";
 import "../../styles/theme.css";
 
-export function ProfileHeader() {
+export function ProfileHeader({ onEditClick }) {
   const [user, setUser] = useState(null);
   const [playlists, setPlaylists] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -107,7 +107,9 @@ export function ProfileHeader() {
             <button>
               <img src="./src/assets/icon/setting.svg" alt="Settings" />
             </button>
-            <button className="edit-btn">Edit Profile</button>
+            <button className="edit-btn" onClick={onEditClick}>
+              Edit Profile
+            </button>
           </div>
         </div>
       </div>
