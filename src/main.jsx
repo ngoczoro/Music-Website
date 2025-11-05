@@ -9,19 +9,6 @@
 //   </StrictMode>
 // );
 
-// import React from "react";
-// import { createRoot } from "react-dom/client";
-// import { BrowserRouter } from "react-router-dom";
-// import EditProfilePage from "./pages/EditProfile";
-
-// createRoot(document.getElementById("root")).render(
-//   <React.StrictMode>
-//     <BrowserRouter>
-//       <EditProfilePage />
-//     </BrowserRouter>
-//   </React.StrictMode>
-// );
-
 import React, { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
@@ -48,6 +35,12 @@ function TestApp() {
     </div>
   );
 }
+
+// Dòng tạm để test đăng nhập
+localStorage.setItem(
+  "authToken",
+  "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzUyMTAxOUBnbS51aXQuZWR1LnZuIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NjIwOTEyMTgsImV4cCI6MTc2MzMwMDgxOH0.Mpul2HnCnLa5Xy0aB6KR2cQLIt2h-268BYapHeynkg4"
+);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

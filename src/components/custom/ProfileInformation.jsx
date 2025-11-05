@@ -1,16 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getCurrentUser, updateProfile } from "../../services/authService";
 
-export default function ProfileInformation() {
-  const [fullName, setFullName] = useState("John Doe");
-  const [userName] = useState("johndoe");
-  const [email, setEmail] = useState("john.doe@example.com");
-  const [phone, setPhone] = useState("+1 234 567 8900");
-  const [bio, setBio] = useState("Music lover and playlist curator");
-  const [avatar, setAvatar] = useState(null);
+export default function ProfileInformation({ onCancel }) {
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [bio, setBio] = useState("");
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  // --- Lấy thông tin user đang đăng nhập ---
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const data = await getCurrentUser();
+        setFullName(data.fullName || "");
+        setEmail(data.email || "");
+        setBio(data.bio || "");
+        setAvatarPreview(data.avatarUrl || "");
+      } catch (err) {
+        console.error("Lỗi tải thông tin người dùng:", err);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    setAvatarFile(file);
+    if (file) {
+      setAvatarPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Changes saved successfully!");
+    setLoading(true);
+    try {
+      await updateProfile({
+        fullName,
+        bio,
+        avatar: avatarFile,
+      });
+      alert("Cập nhật hồ sơ thành công!");
+      window.location.reload(); // reload lại để ProfilePage hiển thị dữ liệu mới
+    } catch (err) {
+      alert("Cập nhật thất bại: " + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -21,7 +59,8 @@ export default function ProfileInformation() {
       <div className="avatar-section">
         <img
           src={
-            avatar || "https://cdn-icons-png.flaticon.com/512/847/847969.png"
+            avatarPreview ||
+            "https://cdn-icons-png.flaticon.com/512/847/847969.png"
           }
           alt="avatar"
           className="avatar-img"
@@ -33,7 +72,7 @@ export default function ProfileInformation() {
           type="file"
           id="avatar-upload"
           hidden
-          onChange={(e) => setAvatar(URL.createObjectURL(e.target.files[0]))}
+          onChange={handleAvatarChange}
         />
       </div>
 
@@ -48,7 +87,7 @@ export default function ProfileInformation() {
 
         <div>
           <label>Email Address</label>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input value={email} disabled />
         </div>
 
         <div className="bio-section">
@@ -62,15 +101,12 @@ export default function ProfileInformation() {
       </div>
 
       <div className="form-buttons">
-        <button
-          type="button"
-          className="cancel-btn"
-          onClick={() => window.history.back()}
-        >
+        <button type="button" className="cancel-btn" onClick={onCancel}>
           Cancel
         </button>
-        <button type="submit" className="save-btn">
-          <img src="./src/assets/icon/save.svg" alt="Save" /> Save Changes
+        <button type="submit" className="save-btn" disabled={loading}>
+          <img src="./src/assets/icon/save.svg" alt="Save" />{" "}
+          {loading ? "Saving..." : "Save Changes"}
         </button>
       </div>
     </form>

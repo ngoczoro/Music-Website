@@ -1,17 +1,35 @@
 import React, { useState } from "react";
+import { changePassword } from "../../services/authService";
 
-export default function ChangePassword() {
+export default function ChangePassword({ onCancel }) {
   const [current, setCurrent] = useState("");
   const [newPass, setNewPass] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (newPass !== confirm) {
       alert("Passwords do not match!");
       return;
     }
-    alert("Password updated successfully!");
+
+    setLoading(true);
+    try {
+      await changePassword({
+        oldPassword: current,
+        newPassword: newPass,
+      });
+      alert("Password changed successfully!");
+      setCurrent("");
+      setNewPass("");
+      setConfirm("");
+    } catch (err) {
+      alert("Error: " + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -52,16 +70,12 @@ export default function ChangePassword() {
       </div>
 
       <div className="form-buttons">
-        <button
-          type="button"
-          className="cancel-btn"
-          onClick={() => window.history.back()}
-        >
+        <button type="button" className="cancel-btn" onClick={onCancel}>
           Cancel
         </button>
-        <button type="submit" className="save-btn">
-          <img src="./src/assets/icon/save.svg" alt="Save" />
-          Save Changes
+        <button type="submit" className="save-btn" disabled={loading}>
+          <img src="./src/assets/icon/save.svg" alt="Save" />{" "}
+          {loading ? "Saving..." : "Save Changes"}
         </button>
       </div>
     </form>

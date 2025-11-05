@@ -3,6 +3,7 @@ import { Sidebar } from "../../components/custom/Sidebar";
 import ProfileInformation from "../../components/custom/ProfileInformation";
 import ChangePassword from "../../components/custom/ChangePassword";
 import "../../styles/theme.css";
+import { getCurrentUser, updateProfile } from "../../services/authService";
 
 const EditProfilePage = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState("profile"); // profile | password
@@ -46,9 +47,9 @@ const EditProfilePage = ({ onBack }) => {
 
         <div className="tab-content">
           {activeTab === "profile" ? (
-            <ProfileInformation />
+            <ProfileInformation onCancel={onBack} />
           ) : (
-            <ChangePassword />
+            <ChangePassword onCancel={onBack} />
           )}
         </div>
       </div>

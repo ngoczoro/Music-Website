@@ -113,31 +113,6 @@ export const getCurrentUser = async () => {
 };
 
 /**
- * Cập nhật thông tin hồ sơ người dùng (tên, bio, avatar)
- * - Nếu chỉ đổi tên/bio thì bỏ qua avatar
- * - Nếu đổi avatar, truyền file (từ input type="file")
- */
-export const updateProfile = async ({ fullName, bio, avatar }) => {
-  const token = localStorage.getItem("authToken");
-  if (!token) throw new Error("Chưa đăng nhập");
-
-  const formData = new FormData();
-  if (fullName) formData.append("fullName", fullName);
-  if (bio) formData.append("bio", bio);
-  if (avatar) formData.append("avatar", avatar); // file ảnh
-
-  const response = await fetch(`${API_BASE_URL}/common/users/me/change`, {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: formData,
-  });
-
-  return handleResponse(response);
-};
-
-/**
  * Lấy tất cả playlist của người dùng đang đăng nhập
  */
 export const fetchMyPlaylists = async () => {
@@ -191,6 +166,56 @@ export const fetchTrendingArtists = async () => {
       Authorization: token ? `Bearer ${token}` : "",
     },
   });
+
+  return handleResponse(response);
+};
+/**
+ * Cập nhật thông tin hồ sơ người dùng (tên, bio, avatar)
+ * - Nếu chỉ đổi tên/bio thì bỏ qua avatar
+ * - Nếu đổi avatar, truyền file (từ input type="file")
+ */
+export const updateProfile = async ({ fullName, bio, avatar }) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) throw new Error("Chưa đăng nhập");
+
+  const formData = new FormData();
+  if (fullName) formData.append("fullName", fullName);
+  if (bio) formData.append("bio", bio);
+  if (avatar) formData.append("avatar", avatar); // file ảnh
+
+  const response = await fetch(`${API_BASE_URL}/common/users/me/change`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  return handleResponse(response);
+};
+
+/**
+ * Đổi mật khẩu người dùng đang đăng nhập
+ * @param {object} data - { oldPassword, newPassword }
+ */
+export const changePassword = async (data) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) throw new Error("Chưa đăng nhập");
+
+  const response = await fetch(
+    `${API_BASE_URL}/common/users/me/password/change`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        oldPassword: data.oldPassword,
+        newPassword: data.newPassword,
+      }),
+    }
+  );
 
   return handleResponse(response);
 };
