@@ -147,22 +147,30 @@ input {
   padding: 20px;
 }
 
-.menu-item:hover {
+/* Hiệu ứng hover giữ nguyên */
+.menu-item:hover,
+.menu-item.active {
   background: linear-gradient(
     90deg,
     #46bbc7 3.26%,
     #4488d8 56.45%,
     #8768f2 97.83%
   );
-  color: white; /* đổi màu icon */
+  color: white;
   transform: scale(1.02);
   transition: all 0.2s ease;
   border-radius: 12px;
 }
 
-/* đổi màu chữ khi hover button */
-.menu-item:hover span {
+/* Màu chữ và icon khi hover hoặc đang active */
+.menu-item:hover span,
+.menu-item.active span {
   color: white;
+}
+
+.menu-item:hover img,
+.menu-item.active img {
+  filter: brightness(0) invert(1); /* icon chuyển sang màu trắng */
 }
 
 .menu-item:hover .menu-icon {
