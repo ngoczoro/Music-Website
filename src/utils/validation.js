@@ -1,8 +1,3 @@
-/**
- * Checks if basic required fields are empty.
- * @param {object} formData - Form data.
- * @returns {string | null} - Returns the error message if any field is empty, otherwise returns null.
- */
 export const checkEmptyFields = (formData) => {
   if (!formData.fullName) {
     return 'Please enter your full name.';
@@ -19,12 +14,19 @@ export const checkEmptyFields = (formData) => {
   return null;
 };
 
-/**
- * Checks if the password and confirmation password match.
- * @param {string} password - Password.
- * @param {string} confirmPassword - Confirmation password.
- * @returns {string | null} - Returns an error message if they do not match, otherwise returns null.
- */
+export const checkEmptyFieldsLogin = (formData) => {
+  if (!formData.fullName) {
+    return 'Please enter your full name.';
+  }
+  if (!formData.email) {
+    return 'Please enter your email address.';
+  }
+  if (!formData.password) {
+    return 'Please enter a password.';
+  }
+  return null;
+};
+
 export const checkPasswordMatch = (password, confirmPassword) => {
   if (password !== confirmPassword) {
     return 'Password and Confirm Password do not match.';
@@ -32,9 +34,6 @@ export const checkPasswordMatch = (password, confirmPassword) => {
   return null;
 };
 
-/**
- * Kiểm tra định dạng email có hợp lệ không.
- */
 export const checkEmailFormat = (email) => {
   // Regex kiểm tra định dạng email cơ bản: chữ@chữ.chữ
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
@@ -44,14 +43,6 @@ export const checkEmailFormat = (email) => {
   return null;
 };
 
-/**
- * Kiểm tra chính sách mật khẩu (độ mạnh).
- * 1. Ít nhất 8 ký tự.
- * 2. Phải chứa ít nhất 1 chữ thường.
- * 3. Phải chứa ít nhất 1 chữ in hoa.
- * 4. Phải chứa ít nhất 1 số.
- * 5. Phải chứa ít nhất 1 ký tự đặc biệt.
- */
 export const checkPasswordPolicy = (password) => {
   if (password.length < 8) {
     return 'Password must be at least 8 characters long.';
@@ -69,7 +60,7 @@ export const checkPasswordPolicy = (password) => {
   );
 
   if (!strongPasswordRegex.test(password)) {
-    return 'Password must contain at least 8 characters, including 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character (!@#$%^&*).';
+    return 'Password must contain at least 8 characters, including 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.';
   }
 
   return null;

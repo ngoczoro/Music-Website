@@ -21,11 +21,6 @@ const handleResponse = async (response) => {
   return data;
 };
 
-/**
- * Gọi API Đăng ký người dùng mới.
- * @param {object} userData - { fullName, email, password, confirmPassword }
- * @returns {Promise<object>} - Trả về dữ liệu phản hồi (ví dụ: { message: 'User created' })
- */
 export const registerUser = async (userData) => {
   // console.log('Đang gọi API đăng ký với:', userData.email);
   const url = `${API_BASE_URL}/register`;
@@ -40,14 +35,9 @@ export const registerUser = async (userData) => {
   return handleResponse(response);
 };
 
-/**
- * Gọi API Đăng nhập người dùng.
- * @param {object} credentials - { email, password }
- * @returns {Promise<object>} - Trả về dữ liệu người dùng và token (ví dụ: { user, token })
- */
 export const loginUser = async (credentials) => {
   console.log("Đang gọi API đăng nhập với:", credentials.email);
-  const url = `${API_BASE_URL}/auth/login`;
+  const url = `${API_BASE_URL}/login`;
 
   const response = await fetch(url, {
     method: "POST",
