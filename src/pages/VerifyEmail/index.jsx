@@ -67,7 +67,7 @@ export default function VerifyEmail() {
           return;
         }
         setIsError(false);
-        navigate("/login");
+        navigate("/login", { state: { email: formData.email } });
         return;
       }
       const result = await verifyOtp(formData.email, formData.otp);
@@ -112,7 +112,7 @@ export default function VerifyEmail() {
         >
           <CardContent sx={{ padding: "40px" }}>
             <Typography
-              variant="h4"
+              variant="title1"
               component="h1"
               align="center"
               gutterBottom
@@ -184,7 +184,7 @@ export default function VerifyEmail() {
 
                 </Typography>
               </Box>
-              <Stack direction="column" alignItems="center" sx={{ mt: 19 }}>
+              <Stack direction="column" alignItems="center" sx={{ mt: 30 }}>
                 <Button type="submit" isLoading={isLoading} >
                   SUBMIT
                 </Button>

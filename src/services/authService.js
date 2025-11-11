@@ -78,6 +78,20 @@ export const forgotPassword = async (email) => {
   const data = await handleResponse(response);
   return data;
 };
+export const resetPassword = async (email, newPassword) => {
+  const url = `${API_BASE_URL}/password/reset`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, newPassword }),
+  });
+
+  const data = await handleResponse(response);
+  return data;
+};
 export const resendOTP = async (email, type) => {
   const url = `${API_BASE_URL}/resend-otp`;
 
@@ -94,14 +108,6 @@ export const resendOTP = async (email, type) => {
   const data = await handleResponse(response);
   return data;
 };
-/**
- * Xóa token khỏi Local Storage để Đăng xuất.
- */
-export const logoutUser = () => {
-  localStorage.removeItem("authToken");
-  // Có thể gọi thêm API logout nếu cần
-  console.log("Đã đăng xuất và xóa token.");
-};
 
 export const verifyEmail = async (email, otp) => {
   console.log("Calling OTP verification API for:", email);
@@ -115,7 +121,6 @@ export const verifyEmail = async (email, otp) => {
     body: JSON.stringify({ email, otp }),
   });
 
-  // Sử dụng hàm handleResponse đã định nghĩa trước đó trong file này
   return handleResponse(response);
 };
 export const verifyOtp = async (email, otp) => {
@@ -130,8 +135,13 @@ export const verifyOtp = async (email, otp) => {
     body: JSON.stringify({ email, otp }),
   });
 
-  // Sử dụng hàm handleResponse đã định nghĩa trước đó trong file này
   return handleResponse(response);
+};
+
+export const logoutUser = () => {
+  localStorage.removeItem("authToken");
+  // Có thể gọi thêm API logout nếu cần
+  console.log("Đã đăng xuất và xóa token.");
 };
 
 /**

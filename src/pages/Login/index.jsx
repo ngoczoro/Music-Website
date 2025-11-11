@@ -114,7 +114,7 @@ export default function Login() {
         >
           <CardContent sx={{ padding: "40px" }}>
             <Typography
-              variant="h4"
+              variant="title1"
               component="h1"
               align="center"
               gutterBottom
@@ -168,7 +168,7 @@ export default function Login() {
 
               </Stack>
 
-              <Stack direction="column" alignItems="center" sx={{ mt: 8 }}>
+              <Stack direction="column" alignItems="center" sx={{ mt: 14 }}>
                 <Button type="submit" isLoading={isLoading} >
                   LOGIN
                 </Button>

@@ -23,6 +23,16 @@ export const checkEmptyFieldsLogin = (formData) => {
   }
   return null;
 };
+
+export const checkEmptyFieldsResetPassword = (formData) => {
+  if (!formData.password) {
+    return 'Please enter a password.';
+  }
+  if (!formData.confirmPassword) {
+    return 'Please confirm your password.';
+  }
+  return null;
+};
 export const checkEmptyFieldsForgotPassword = (formData) => {
   if (!formData.email) {
     return 'Please enter your email address.';

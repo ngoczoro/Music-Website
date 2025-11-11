@@ -7,6 +7,9 @@ import MainLayout from "../layout/MainLayout";
 import EditProfile from "../pages/EditProfile";
 import Login from "../pages/Login";
 import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
+import { Navigate } from "react-router-dom";
+
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -19,6 +22,8 @@ export default function AppRouter() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/playlist" element={<MyPlaylist />} />
           <Route path="/editprofile" element={<EditProfile />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/" element={<Navigate to="/register" replace />} />
         </Routes>
       </MainLayout>
     </BrowserRouter>

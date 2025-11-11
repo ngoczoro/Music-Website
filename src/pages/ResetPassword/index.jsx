@@ -15,20 +15,24 @@ import {
 } from "@mui/material";
 import TextField from "../../components/TextField";
 import Button from "../../components/Button";
-import { forgotPassword } from "../../services/authService";
+import { resetPassword } from "../../services/authService";
 import {
-  checkEmptyFieldsForgotPassword,
-  checkEmailFormat,
+  checkEmptyFieldsResetPassword,
+  checkPasswordMatch,
+  checkPasswordPolicy,
 } from "../../utils/validation";
-export default function ForgotPassword() {
+export default function ResetPassword() {
   const navigate = useNavigate();
- const location = useLocation();
-
+  const location = useLocation();
   const initialEmail = location.state?.email || '';
+
   const [formData, setFormData] = useState({
     email: initialEmail,
+    password: "",
+    confirmPassword: "",
   });
 
+  // ... trong component Register()
   const [message, setMessage] = useState(null);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +46,7 @@ export default function ForgotPassword() {
     setMessage(null);
     setIsLoading(true);
 
-    let errorMessage = checkEmptyFieldsForgotPassword(formData);
+    let errorMessage = checkEmptyFieldsResetPassword(formData);
     if (errorMessage) {
       setMessage(errorMessage);
       setIsError(true);
@@ -50,7 +54,18 @@ export default function ForgotPassword() {
       return;
     }
 
-    errorMessage = checkEmailFormat(formData.email);
+    errorMessage = checkPasswordPolicy(formData.password);
+    if (errorMessage) {
+      setMessage(errorMessage);
+      setIsError(true);
+      setIsLoading(false);
+      return;
+    }
+
+    errorMessage = checkPasswordMatch(
+      formData.password,
+      formData.confirmPassword
+    );
     if (errorMessage) {
       setMessage(errorMessage);
       setIsError(true);
@@ -59,26 +74,21 @@ export default function ForgotPassword() {
     }
 
     try {
-      const result = await forgotPassword(formData);
-
+      const result = await resetPassword(formData.email, formData.password);
+      setMessage(
+        result.message || "Reset password successful!"
+      );
       if (!result.ok) {
-        setMessage(result.message);
         setIsError(true);
         return;
       }
-
-      setMessage(result.message);
       setIsError(false);
-
-      navigate("/verify-email", {
-        state: { email: formData.email, from: "forgot" },
-      });
+      navigate("/login");
 
     } catch (error) {
       setMessage(error.message || "An unknown error occurred.");
       setIsError(true);
-    }
-    finally {
+    } finally {
       setIsLoading(false);
     }
   };
@@ -111,55 +121,53 @@ export default function ForgotPassword() {
               component="h1"
               align="center"
               gutterBottom
-              sx={{ marginBottom: "10px", fontSize: "40px" }}
+              sx={{ marginBottom: "30px" }}
             >
-              Forgot Password
+              Reset Password
             </Typography>
-
+            {message && (
+              <Alert severity={isError ? "error" : "success"} sx={{ mb: 3 }}>
+                {message}
+              </Alert>
+            )}
 
             <Box
               component="form"
               onSubmit={handleSubmit}
               noValidate
-              sx={{ mt: 0 }}
+              sx={{ mt: 1 }}
             >
               <Stack spacing={3}>
-                <Typography variant="body2" color="text.secondary" textAlign="center">
-                  Enter your email below to recover your password.
-                </Typography>
-
-                {message && (
-                  <Alert severity={isError ? "error" : "success"}>
-                    {message}
-                  </Alert>
-                )}
+                {/* SỬ DỤNG CUSTOM TEXT FIELD */}
 
                 <TextField
                   required
-                  id="email"
-                  label="Email"
-                  name="email"
-                  autoComplete="email"
-                  value={formData.email}
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+
+                <TextField
+                  required
+                  name="confirmPassword"
+                  label="Confirm New Password"
+                  type="password"
+                  id="confirmPassword"
+                  autoComplete="new-password"
+                  value={formData.confirmPassword}
                   onChange={handleChange}
                 />
 
               </Stack>
 
-              <Stack direction="column" alignItems="center" sx={{ mt: 30 }}>
-                <Button type="submit" isLoading={isLoading} >
-                  SUBMIT
+              <Stack direction="column" alignItems="center" sx={{ mt: 24 }}>
+                <Button type="submit" isLoading={isLoading}>
+                  RESET
                 </Button>
-                <Typography variant="body2" color="text.secondary">
-                  Go back?{" "}
-                  <Link
-                    href="/login"
-                    variant="body2"
-                    sx={{ color: "#FF8682", textDecoration: "none" }}
-                  >
-                    Login
-                  </Link>
-                </Typography>
               </Stack>
             </Box>
           </CardContent>
