@@ -25,7 +25,6 @@ export default function Login() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    fullName: "",
     email: "",
     password: "",
   });
@@ -69,12 +68,15 @@ export default function Login() {
 
     try {
       const result = await loginUser(formData);
-
+      
       setMessage(
         result.message || "Login successful! Redirecting to homepage..."
       );
+      if(!result.ok) {
+        setIsError(true);
+        return;
+      }
       setIsError(false);
-
       navigate("/dashboard", {
         state: {
           email: formData.email,
@@ -135,16 +137,6 @@ export default function Login() {
               <Stack spacing={3}>
                 <TextField
                   required
-                  id="fullName"
-                  label="Full Name"
-                  name="fullName"
-                  autoComplete="name"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                />
-
-                <TextField
-                  required
                   id="email"
                   label="Email"
                   name="email"
@@ -183,7 +175,7 @@ export default function Login() {
                 <Typography variant="body2" color="text.secondary">
                   Don't have an account?{" "}
                   <Link
-                    href="/"
+                    href="/register"
                     variant="body2"
                     sx={{ color: "#FF8682", textDecoration: "none" }}
                   >

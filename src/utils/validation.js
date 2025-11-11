@@ -15,9 +15,6 @@ export const checkEmptyFields = (formData) => {
 };
 
 export const checkEmptyFieldsLogin = (formData) => {
-  if (!formData.fullName) {
-    return 'Please enter your full name.';
-  }
   if (!formData.email) {
     return 'Please enter your email address.';
   }
@@ -26,7 +23,12 @@ export const checkEmptyFieldsLogin = (formData) => {
   }
   return null;
 };
-
+export const checkEmptyFieldsForgotPassword = (formData) => {
+  if (!formData.email) {
+    return 'Please enter your email address.';
+  }
+  return null;
+};
 export const checkPasswordMatch = (password, confirmPassword) => {
   if (password !== confirmPassword) {
     return 'Password and Confirm Password do not match.';

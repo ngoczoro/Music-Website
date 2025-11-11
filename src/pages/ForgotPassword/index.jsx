@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import theme from "../../theme";
 import Header from "../../components/Header";
 import {
@@ -15,24 +15,20 @@ import {
 } from "@mui/material";
 import TextField from "../../components/TextField";
 import Button from "../../components/Button";
-import { registerUser } from "../../services/authService";
+import { forgotPassword } from "../../services/authService";
 import {
-  checkEmptyFields,
-  checkPasswordMatch,
-  checkPasswordPolicy,
+  checkEmptyFieldsForgotPassword,
   checkEmailFormat,
 } from "../../utils/validation";
-export default function Register() {
+export default function ForgotPassword() {
   const navigate = useNavigate();
+ const location = useLocation();
 
+  const initialEmail = location.state?.email || '';
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    email: initialEmail,
   });
 
-  // ... trong component Register()
   const [message, setMessage] = useState(null);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +42,7 @@ export default function Register() {
     setMessage(null);
     setIsLoading(true);
 
-    let errorMessage = checkEmptyFields(formData);
+    let errorMessage = checkEmptyFieldsForgotPassword(formData);
     if (errorMessage) {
       setMessage(errorMessage);
       setIsError(true);
@@ -62,46 +58,27 @@ export default function Register() {
       return;
     }
 
-    errorMessage = checkPasswordPolicy(formData.password);
-    if (errorMessage) {
-      setMessage(errorMessage);
-      setIsError(true);
-      setIsLoading(false);
-      return;
-    }
-
-    errorMessage = checkPasswordMatch(
-      formData.password,
-      formData.confirmPassword
-    );
-    if (errorMessage) {
-      setMessage(errorMessage);
-      setIsError(true);
-      setIsLoading(false);
-      return;
-    }
-
     try {
-      const result = await registerUser(formData);
-      setMessage(
-        result.message || "Registration successful! Redirecting to login..."
-      );
-      if(!result.ok) {
+      const result = await forgotPassword(formData);
+
+      if (!result.ok) {
+        setMessage(result.message);
         setIsError(true);
         return;
       }
+
+      setMessage(result.message);
       setIsError(false);
 
       navigate("/verify-email", {
-        state: {
-          email: formData.email,
-          from: "register", 
-        },
+        state: { email: formData.email, from: "forgot" },
       });
+
     } catch (error) {
       setMessage(error.message || "An unknown error occurred.");
       setIsError(true);
-    } finally {
+    }
+    finally {
       setIsLoading(false);
     }
   };
@@ -134,33 +111,28 @@ export default function Register() {
               component="h1"
               align="center"
               gutterBottom
-              sx={{ marginBottom: "30px" }}
+              sx={{ marginBottom: "10px" }}
             >
-              Register
+              Forgot Password
             </Typography>
-            {message && (
-              <Alert severity={isError ? "error" : "success"} sx={{ mb: 3 }}>
-                {message}
-              </Alert>
-            )}
+
 
             <Box
               component="form"
               onSubmit={handleSubmit}
               noValidate
-              sx={{ mt: 1 }}
+              sx={{ mt: 0 }}
             >
               <Stack spacing={3}>
-                {/* SỬ DỤNG CUSTOM TEXT FIELD */}
-                <TextField
-                  required
-                  id="fullName"
-                  label="Full Name"
-                  name="fullName"
-                  autoComplete="name"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                />
+                <Typography variant="body2" color="text.secondary" textAlign="center">
+                  Enter your email below to recover your password.
+                </Typography>
+
+                {message && (
+                  <Alert severity={isError ? "error" : "success"}>
+                    {message}
+                  </Alert>
+                )}
 
                 <TextField
                   required
@@ -172,37 +144,14 @@ export default function Register() {
                   onChange={handleChange}
                 />
 
-                <TextField
-                  required
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-
-                <TextField
-                  required
-                  name="confirmPassword"
-                  label="Confirm Password"
-                  type="password"
-                  id="confirmPassword"
-                  autoComplete="new-password"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                />
-
-                
               </Stack>
 
-              <Stack direction="column" alignItems="center" sx={{ mt: 8 }}>
-                <Button type="submit" isLoading={isLoading}>
-                  REGISTER
+              <Stack direction="column" alignItems="center" sx={{ mt: 19 }}>
+                <Button type="submit" isLoading={isLoading} >
+                  SUBMIT
                 </Button>
                 <Typography variant="body2" color="text.secondary">
-                  Already have an account?{" "}
+                  Go back?{" "}
                   <Link
                     href="/login"
                     variant="body2"

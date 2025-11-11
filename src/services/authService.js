@@ -1,28 +1,36 @@
 // Thay thế bằng URL API Backend thực tế của bạn
 const API_BASE_URL = "http://localhost:8081/api";
 
-/**
- * Hàm trợ giúp để xử lý phản hồi API chung.
- * @param {Response} response - Đối tượng Response từ fetch().
- * @returns {Promise<object>} - Dữ liệu JSON hoặc ném lỗi.
- */
+
+// const handleResponse = async (response) => {
+//   const isJson = response.headers
+//     .get("content-type")
+//     ?.includes("application/json");
+//   const data = isJson ? await response.json() : null;
+
+//   if (!response.ok) {
+//     // Sử dụng thông báo lỗi từ server nếu có, ngược lại dùng thông báo chung
+//     const error = (data && data.message) || response.statusText;
+//     throw new Error(error);
+//   }
+
+//   return data;
+// };
 const handleResponse = async (response) => {
   const isJson = response.headers
     .get("content-type")
     ?.includes("application/json");
-  const data = isJson ? await response.json() : null;
+  const data = isJson ? await response.json() : {};
 
-  if (!response.ok) {
-    // Sử dụng thông báo lỗi từ server nếu có, ngược lại dùng thông báo chung
-    const error = (data && data.message) || response.statusText;
-    throw new Error(error);
-  }
-
-  return data;
+  return {
+    ok: response.ok,
+    status: response.status,
+    message: data.message || response.statusText,
+    data
+  };
 };
 
 export const registerUser = async (userData) => {
-  // console.log('Đang gọi API đăng ký với:', userData.email);
   const url = `${API_BASE_URL}/register`;
 
   const response = await fetch(url, {
@@ -36,7 +44,6 @@ export const registerUser = async (userData) => {
 };
 
 export const loginUser = async (credentials) => {
-  console.log("Đang gọi API đăng nhập với:", credentials.email);
   const url = `${API_BASE_URL}/login`;
 
   const response = await fetch(url, {
@@ -57,7 +64,36 @@ export const loginUser = async (credentials) => {
 
   return data;
 };
+export const forgotPassword = async (email) => {
+  const url = `${API_BASE_URL}/password/forgot`;
 
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(email),
+  });
+
+  const data = await handleResponse(response);
+  return data;
+};
+export const resendOTP = async (email, type) => {
+  const url = `${API_BASE_URL}/resend-otp`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email,
+      type: type, // "REGISTER" hoặc "FORGOT_PASSWORD"
+    }),
+  });
+  const data = await handleResponse(response);
+  return data;
+};
 /**
  * Xóa token khỏi Local Storage để Đăng xuất.
  */
@@ -70,6 +106,21 @@ export const logoutUser = () => {
 export const verifyEmail = async (email, otp) => {
   console.log("Calling OTP verification API for:", email);
   const url = `${API_BASE_URL}/verify-email`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, otp }),
+  });
+
+  // Sử dụng hàm handleResponse đã định nghĩa trước đó trong file này
+  return handleResponse(response);
+};
+export const verifyOtp = async (email, otp) => {
+  console.log("Calling OTP verification API for:", email);
+  const url = `${API_BASE_URL}/verify-otp`;
 
   const response = await fetch(url, {
     method: "POST",
