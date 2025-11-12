@@ -1,38 +1,62 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/theme.css";
+import { fetchSongById } from "../../services/authService";
 
-const LyricsPanel = () => {
-  // ✅ Dữ liệu lyrics tĩnh (với xuống dòng)
-  const lyrics = `Dancing through these midnight dreams.
+const LyricsPanel = ({ songId }) => {
+  const [lyrics, setLyrics] = useState([]);
+  const [songTitle, setSongTitle] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-In the midnight dreams we share,
-Nothing else can compare,
-Hold me close and never let go,
-In this moment, let love flow.
+  useEffect(() => {
+    if (!songId) return;
 
-When the morning comes around,
-And our feet touch solid ground,
-I'll still hear that sweet sound,
-Of our midnight dreams.
+    const getLyrics = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const songData = await fetchSongById(songId);
+        setLyrics(songData.lyrics || []);
+        setSongTitle(songData.title || "");
+      } catch (err) {
+        console.error("Lỗi khi tải lyrics:", err);
+        setError("Không thể tải lời bài hát.");
+        setLyrics([]);
+        setSongTitle("");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-Every heartbeat echoes loud,
-Breaking through the silent crowd,
-Your voice is like a melody,
-That sets my spirit free.`;
+    getLyrics();
+  }, [songId]);
+
+  if (!songId) {
+    return <div className="lyrics-container">Chọn một bài hát để xem lời.</div>;
+  }
 
   return (
     <div className="lyrics-container">
-      <h2 className="lyrics-title">Lyrics</h2>
+      <h2 className="lyrics-title">{songTitle || "Lyrics"}</h2>
 
-      <div className="lyrics-scroll">
-        <div className="lyrics-content">
-          {lyrics.split("\n").map((line, index) => (
-            <p key={index} className="lyrics-line">
-              {line || <br />} {/* Giữ khoảng trống giữa các đoạn */}
-            </p>
-          ))}
+      {loading && <p>Đang tải...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {!loading && !error && (
+        <div className="lyrics-scroll">
+          <div className="lyrics-content">
+            {lyrics.length > 0 ? (
+              lyrics.map((line, index) => (
+                <p key={index} className="lyrics-line">
+                  {line || <br />} {/* Giữ khoảng trống giữa các đoạn */}
+                </p>
+              ))
+            ) : (
+              <p>Chưa có lời cho bài hát này.</p>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

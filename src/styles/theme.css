@@ -1479,7 +1479,6 @@ input {
   flex-shrink: 0;
 }
 
-/* Hai panel (đã set riêng CSS bên component) */
 .panel-section > * {
   width: 505px;
   height: 600px;

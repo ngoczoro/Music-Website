@@ -1,21 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/theme.css";
 import { Users, Music, Award } from "lucide-react";
+import { fetchArtistById } from "../../services/authService";
 
-export default function ArtistInfoPanel({ image, topSongs }) {
+export default function ArtistInfoPanel({ artistId, topSongs }) {
+  const [artist, setArtist] = useState({
+    fullName: "",
+    avatarUrl: "",
+    bio: "",
+  });
+
+  useEffect(() => {
+    if (!artistId) return;
+
+    const loadArtist = async () => {
+      try {
+        const data = await fetchArtistById(artistId.toString()); // chắc chắn là string
+        setArtist({
+          fullName: data.fullName || "Unknown Artist",
+          avatarUrl: data.avatarUrl || "",
+          bio: data.bio || "",
+        });
+      } catch (err) {
+        console.error("Lỗi khi load artist:", err.message);
+      }
+    };
+
+    loadArtist();
+  }, [artistId]);
+
   return (
     <div className="artist-info-panel">
       <h2 className="artist-info-title">Artist Information</h2>
 
       <div className="artist-info-header">
         <img
-          src="https://weart.vn/wp-content/uploads/2025/06/meo-cute-voi-anh-mat-to-tron-dang-yeu.jpg"
-          alt={name}
+          src={
+            artist.avatarUrl ||
+            "https://weart.vn/wp-content/uploads/2025/06/meo-cute-voi-anh-mat-to-tron-dang-yeu.jpg"
+          }
+          alt={artist.fullName}
           className="artist-avatar"
         />
 
         <div className="artist-details">
-          <h3 className="artist-name">Luna Martinez</h3>
+          <h3 className="artist-name">{artist.fullName}</h3>
 
           <div className="artist-stats">
             <div className="artist-stat">
@@ -33,24 +62,12 @@ export default function ArtistInfoPanel({ image, topSongs }) {
 
       <div className="artist-about">
         <h4>About</h4>
-        <p>
-          Luna Martinez is an award-winning singer-songwriter known for her
-          ethereal vocals and captivating melodies. With influences ranging from
-          indie pop to electronic music, she creates atmospheric soundscapes
-          that resonate with listeners worldwide. Her debut album "Starlight"
-          reached platinum status and established her as one of the most
-          promising artists. Luna Martinez is an award-winning singer-songwriter
-          known for her ethereal vocals and captivating melodies. With
-          influences ranging from indie pop to electronic music, she creates
-          atmospheric soundscapes that resonate with listeners worldwide. Her
-          debut album "Starlight" reached platinum status and established her as
-          one of the most promising artists.
-        </p>
+        <p>{artist.bio || "No information available."}</p>
       </div>
 
       <div className="artist-achievement">
         <Award className="artist-icon" />
-        <span>{topSongs} songs in Top 100</span>
+        <span>{topSongs || 0} songs in Top 100</span>
       </div>
     </div>
   );
