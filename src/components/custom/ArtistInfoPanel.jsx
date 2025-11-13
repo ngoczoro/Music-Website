@@ -3,7 +3,7 @@ import "../../styles/theme.css";
 import { Users, Music, Award } from "lucide-react";
 import { fetchArtistById } from "../../services/authService";
 
-export default function ArtistInfoPanel({ artistId, topSongs }) {
+export default function ArtistInfoPanel({ artistId, topSongs, artistData }) {
   const [artist, setArtist] = useState({
     fullName: "",
     avatarUrl: "",
@@ -11,11 +11,17 @@ export default function ArtistInfoPanel({ artistId, topSongs }) {
   });
 
   useEffect(() => {
+    if (artistData && artistData.fullName) {
+      // 🟢 Nếu đã có dữ liệu từ bài hát thì không cần fetch
+      setArtist(artistData);
+      return;
+    }
+
     if (!artistId) return;
 
     const loadArtist = async () => {
       try {
-        const data = await fetchArtistById(artistId.toString()); // chắc chắn là string
+        const data = await fetchArtistById(artistId);
         setArtist({
           fullName: data.fullName || "Unknown Artist",
           avatarUrl: data.avatarUrl || "",
@@ -27,7 +33,7 @@ export default function ArtistInfoPanel({ artistId, topSongs }) {
     };
 
     loadArtist();
-  }, [artistId]);
+  }, [artistId, artistData]);
 
   return (
     <div className="artist-info-panel">
@@ -36,22 +42,22 @@ export default function ArtistInfoPanel({ artistId, topSongs }) {
       <div className="artist-info-header">
         <img
           src={
-            artist.avatarUrl ||
-            "https://weart.vn/wp-content/uploads/2025/06/meo-cute-voi-anh-mat-to-tron-dang-yeu.jpg"
+            artist.avatarUrl?.startsWith("http")
+              ? artist.avatarUrl
+              : `http://localhost:8081${
+                  artist.avatarUrl || "/uploads/default-avatar.jpg"
+                }`
           }
           alt={artist.fullName}
           className="artist-avatar"
         />
-
         <div className="artist-details">
           <h3 className="artist-name">{artist.fullName}</h3>
-
           <div className="artist-stats">
             <div className="artist-stat">
               <Users className="artist-icon" />
               <span>2.1M followers</span>
             </div>
-
             <div className="artist-stat">
               <Music className="artist-icon" />
               <span>8.7M monthly listeners</span>

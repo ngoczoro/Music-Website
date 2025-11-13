@@ -245,6 +245,9 @@ export const fetchSongById = async (songId) => {
  */
 export const fetchArtistById = async (artistId) => {
   console.log("Fetching artistId:", artistId);
+
+  if (!artistId) throw new Error("Thiếu artistId");
+
   const token = localStorage.getItem("authToken");
   const url = `${API_BASE_URL}/common/users/${artistId}`;
 
@@ -260,7 +263,9 @@ export const fetchArtistById = async (artistId) => {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || "Lỗi khi lấy thông tin nghệ sĩ");
+    throw new Error(
+      errorData.message || `Không tìm thấy artistId: ${artistId}`
+    );
   }
 
   const data = await response.json();

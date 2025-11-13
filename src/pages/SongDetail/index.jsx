@@ -7,39 +7,66 @@ import { fetchSongById } from "../../services/authService";
 import "../../styles/theme.css";
 
 const SongDetail = () => {
-  const { id } = useParams(); // songId
+  const { id } = useParams(); // songId từ URL
   const [song, setSong] = useState(null);
 
   useEffect(() => {
     const loadSong = async () => {
       try {
         const data = await fetchSongById(id);
-        // song.artistId là string (ObjectId dạng string)
-        setSong(data);
+        console.log("✅ Song data:", data);
+
+        // Trường hợp artistId là object (ObjectId Mongo) => cần lấy _id
+        const fixedData = {
+          ...data,
+          artistId:
+            typeof data.artistId === "object"
+              ? data.artistId._id || data.artistId.id
+              : data.artistId,
+        };
+
+        setSong(fixedData);
       } catch (err) {
-        console.error("Lỗi khi fetch song:", err.message);
+        console.error("❌ Lỗi khi fetch song:", err.message);
       }
     };
-    loadSong();
+
+    if (id) loadSong();
   }, [id]);
+
+  if (!song)
+    return (
+      <div style={{ textAlign: "center" }}>Đang tải thông tin bài hát...</div>
+    );
 
   return (
     <div
       className="songdetail-container"
       style={{ display: "flex", flexDirection: "column", gap: "20px" }}
     >
+      {/* Phần player */}
       <div className="songplayer-section">
-        <SongPlayer songId={id} />
+        <SongPlayer songId={song.id || id} />
       </div>
 
-      <div className="panel-section" style={{ display: "flex", gap: "20px" }}>
-        <LyricsPanel songId={id} />
-        {song && (
-          <ArtistInfoPanel
-            artistId={song.artistId}
-            topSongs={song.topSongs || 0}
-          />
-        )}
+      {/* Phần lyric + artist */}
+      <div
+        className="panel-section"
+        style={{ display: "flex", gap: "20px", alignItems: "flex-start" }}
+      >
+        <LyricsPanel songId={song.id || id} />
+
+        <ArtistInfoPanel
+          artistId={song.artistId}
+          topSongs={song.topSongs || []}
+          artistData={{
+            fullName: song.artistName || "Nghệ sĩ chưa xác định",
+            avatarUrl:
+              song.coverImageUrl ||
+              "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+            bio: song.description || "Không có mô tả.",
+          }}
+        />
       </div>
     </div>
   );
