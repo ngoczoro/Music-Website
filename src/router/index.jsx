@@ -5,6 +5,7 @@ import ProfilePage from "../pages/ProfilePage";
 import MyPlaylist from "../pages/MyPlaylist";
 import MainLayout from "../layout/MainLayout";
 import EditProfile from "../pages/EditProfile";
+import SongDetail from "../pages/SongDetail";
 
 export default function AppRouter() {
   return (
@@ -16,6 +17,7 @@ export default function AppRouter() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/playlist" element={<MyPlaylist />} />
           <Route path="/editprofile" element={<EditProfile />} />
+          <Route path="/song/:id" element={<SongDetail />} />
         </Routes>
       </MainLayout>
     </BrowserRouter>

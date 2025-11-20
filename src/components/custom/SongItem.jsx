@@ -1,11 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../../styles/theme.css";
 
 export function SongItem({ index, song }) {
-  // Xử lý ảnh và định dạng thời lượng
+  const navigate = useNavigate();
+
+  const handlePlayClick = () => {
+    navigate(`/song/${song._id || song.id}`); // Chuyển sang trang chi tiết bài hát
+  };
+
   const coverUrl = song.coverImageUrl
-    ? `http://localhost:8081${song.coverImageUrl}` // đúng đường dẫn BE
-    : "https://via.placeholder.com/80"; // fallback nếu không có ảnh
+    ? `http://localhost:8081${song.coverImageUrl}`
+    : "https://via.placeholder.com/80";
 
   const formatDuration = (seconds) => {
     if (!seconds) return "00:00";
@@ -16,8 +22,11 @@ export function SongItem({ index, song }) {
   };
 
   return (
-    <div className="song-item">
-      {/* STT / Nút Play */}
+    <div
+      className="song-item"
+      onClick={handlePlayClick}
+      style={{ cursor: "pointer" }}
+    >
       <div className="song-index">
         <span>{index}</span>
         <button className="play-btn">
@@ -25,18 +34,15 @@ export function SongItem({ index, song }) {
         </button>
       </div>
 
-      {/* Ảnh bài hát */}
       <div className="song-cover">
         <img src={coverUrl} alt={song.title} />
       </div>
 
-      {/* Thông tin bài hát */}
       <div className="song-info">
         <div className="song-title">{song.title || "Untitled"}</div>
         <div className="song-artist">{song.artistName || "Unknown Artist"}</div>
       </div>
 
-      {/* Hành động bên phải */}
       <div className="song-actions">
         <button className="heart-btn">
           <img src="./src/assets/icon/redheart.svg" alt="Heart" />
