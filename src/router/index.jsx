@@ -5,6 +5,10 @@ import ProfilePage from "../pages/ProfilePage";
 import MyPlaylist from "../pages/MyPlaylist";
 import MainLayout from "../layout/MainLayout";
 import EditProfile from "../pages/EditProfile";
+import Login from "../pages/Login";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
+import { Navigate } from "react-router-dom";
 import SongDetail from "../pages/SongDetail";
 
 export default function AppRouter() {
@@ -12,11 +16,15 @@ export default function AppRouter() {
     <BrowserRouter>
       <MainLayout>
         <Routes>
-          <Route path="/" element={<Register />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/playlist" element={<MyPlaylist />} />
           <Route path="/editprofile" element={<EditProfile />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/" element={<Navigate to="/register" replace />} />
           <Route path="/song/:id" element={<SongDetail />} />
         </Routes>
       </MainLayout>

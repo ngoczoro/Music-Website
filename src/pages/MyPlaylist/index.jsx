@@ -60,24 +60,24 @@ const MyPlaylist = () => {
   if (error) return <p className="p-10 text-red-500">Error: {error}</p>;
 
   // 🧱 Nếu Guest → hiển thị lời mời đăng nhập
-  if (!user || !token) {
-    return (
-      <div className="flex h-screen items-center justify-center flex-col text-center">
-        <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-          You are not logged in
-        </h2>
-        <p className="text-gray-500 mb-6">
-          Please log in to view your playlists and save your favorite songs.
-        </p>
-        <a
-          href="/login"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Go to Login
-        </a>
-      </div>
-    );
-  }
+  // if (!user || !token) {
+  //   return (
+  //     <div className="flex h-screen items-center justify-center flex-col text-center">
+  //       <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+  //         You are not logged in
+  //       </h2>
+  //       <p className="text-gray-500 mb-6">
+  //         Please log in to view your playlists and save your favorite songs.
+  //       </p>
+  //       <a
+  //         href="/login"
+  //         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+  //       >
+  //         Go to Login
+  //       </a>
+  //     </div>
+  //   );
+  // }
 
   // 🧱 Nếu là User → hiển thị danh sách playlist
   return (

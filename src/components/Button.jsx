@@ -14,14 +14,14 @@ const CustomButton = ({ children,isLoading = false, ...props }) => {
         width: 'auto',
         mt: 1,
         mb: 2,
-        padding: '12px',
+        padding: '12px 19px',
         textTransform: 'none', // Theo yêu cầu trong theme ban đầu
         borderRadius: '8px',
         backgroundColor: theme.palette.custom.purple,
         '&:hover': {
           backgroundColor: '#5e35b1',
         },
-        ...props.sx, // Cho phép ghi đè styles từ bên ngoài
+        ...props.sx,
       }}
     >
       {isLoading ? (
