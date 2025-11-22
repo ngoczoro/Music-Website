@@ -4,69 +4,62 @@ import SongPlayer from "../../components/custom/SongPlayer";
 import LyricsPanel from "../../components/custom/LyricsPanel";
 import ArtistInfoPanel from "../../components/custom/ArtistInfoPanel";
 import { fetchSongById } from "../../services/authService";
-import "../../styles/theme.css";
 
 const SongDetail = () => {
-  const { id } = useParams(); // songId từ URL
+  const { id } = useParams();
   const [song, setSong] = useState(null);
-
+  const [queue, setQueue] = useState([]);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [currentSongId, setCurrentSongId] = useState(id);
   useEffect(() => {
     const loadSong = async () => {
-      try {
-        const data = await fetchSongById(id);
-        console.log("✅ Song data:", data);
+      const { data } = await fetchSongById(currentSongId);
+      setSong(data);
 
-        // Trường hợp artistId là object (ObjectId Mongo) => cần lấy _id
-        const fixedData = {
-          ...data,
-          artistId:
-            typeof data.artistId === "object"
-              ? data.artistId._id || data.artistId.id
-              : data.artistId,
-        };
+      // ⭐ Lấy token
+      const token = localStorage.getItem("authToken");
 
-        setSong(fixedData);
-      } catch (err) {
-        console.error("❌ Lỗi khi fetch song:", err.message);
+      // ⭐ Fetch bài hát cùng artist
+      const res = await fetch(
+        `http://localhost:8081/api/common/song/artist/${data.artistId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+        }
+      );
+
+      if (!res.ok) {
+        console.error("❌ Lỗi fetch songs:", res.status);
+        setQueue([]);
+        return;
       }
+
+      const artistSongs = await res.json();
+
+      // ⭐ Lưu queue
+      setQueue(artistSongs);
     };
 
-    if (id) loadSong();
-  }, [id]);
+    loadSong();
+  }, [currentSongId]);
 
-  if (!song)
-    return (
-      <div style={{ textAlign: "center" }}>Đang tải thông tin bài hát...</div>
-    );
+  if (!song) return <div>Loading...</div>;
 
   return (
-    <div
-      className="songdetail-container"
-      style={{ display: "flex", flexDirection: "column", gap: "20px" }}
-    >
-      {/* Phần player */}
-      <div className="songplayer-section">
-        <SongPlayer songId={song.id || id} />
-      </div>
+    <div className="songdetail-container">
+      <SongPlayer
+        songId={currentSongId}
+        songList={queue}
+        onChangeSong={setCurrentSongId}
+        onTimeUpdate={setCurrentTime}
+      />
 
-      {/* Phần lyric + artist */}
-      <div
-        className="panel-section"
-        style={{ display: "flex", gap: "20px", alignItems: "flex-start" }}
-      >
-        <LyricsPanel songId={song.id || id} />
-
-        <ArtistInfoPanel
-          artistId={song.artistId}
-          topSongs={song.topSongs || []}
-          artistData={{
-            fullName: song.artistName || "Nghệ sĩ chưa xác định",
-            avatarUrl:
-              song.coverImageUrl ||
-              "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-            bio: song.description || "Không có mô tả.",
-          }}
-        />
+      <div className="panel-section">
+        <LyricsPanel songId={currentSongId} currentTime={currentTime} />
+        <ArtistInfoPanel artistId={song.artistId} />
       </div>
     </div>
   );

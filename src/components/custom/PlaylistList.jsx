@@ -6,28 +6,34 @@ export function PlaylistList() {
   const [playlists, setPlaylists] = useState([]);
 
   useEffect(() => {
-    // Dòng tạm để test, sau này xóa đi
+    // Token test
     localStorage.setItem(
       "authToken",
-      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzUyMTAxOUBnbS51aXQuZWR1LnZuIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NjIwOTEyMTgsImV4cCI6MTc2MzMwMDgxOH0.Mpul2HnCnLa5Xy0aB6KR2cQLIt2h-268BYapHeynkg4"
+      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzUyMTAxOUBnbS51aXQuZWR1LnZuIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NjM4MTk5MDAsImV4cCI6MTc2NTAyOTUwMH0.ZtbbdiBolZyc1gIdHRZlju8MrdPNDhQiw6LqEzAuLVE"
     );
+
     fetchMyPlaylists()
-      .then((data) => setPlaylists(data))
+      .then((data) => {
+        console.log("Playlists FE nhận:", data);
+        if (Array.isArray(data)) setPlaylists(data);
+        else setPlaylists([]);
+      })
       .catch((err) => console.error(err));
   }, []);
 
   return (
     <div className="playlist-list">
-      {playlists.map((p) => (
-        <PlaylistCard
-          key={p.id}
-          title={p.name}
-          description={p.description}
-          songs={p.songs}
-          isPublic={p.isPublic}
-          imageUrl={p.thumbnailUrl}
-        />
-      ))}
+      {Array.isArray(playlists) &&
+        playlists.map((p) => (
+          <PlaylistCard
+            key={p.id}
+            title={p.name}
+            description={p.description}
+            songs={p.songs}
+            isPublic={p.isPublic}
+            imageUrl={p.thumbnailUrl}
+          />
+        ))}
     </div>
   );
 }

@@ -1,7 +1,6 @@
 // Thay thế bằng URL API Backend thực tế của bạn
 const API_BASE_URL = "http://localhost:8081/api";
 
-
 // const handleResponse = async (response) => {
 //   const isJson = response.headers
 //     .get("content-type")
@@ -26,7 +25,7 @@ const handleResponse = async (response) => {
     ok: response.ok,
     status: response.status,
     message: data.message || response.statusText,
-    data
+    data,
   };
 };
 
@@ -57,12 +56,11 @@ export const loginUser = async (credentials) => {
   const data = await handleResponse(response);
 
   // Lưu token vào Local Storage (Thực hành phổ biến)
-  if (data.token) {
-    console.log("Lưu token vào Local Storage:", data.token);
-    localStorage.setItem("authToken", data.token);
+  if (res.data?.token) {
+    localStorage.setItem("authToken", res.data.token);
   }
 
-  return data;
+  return res;
 };
 export const forgotPassword = async (email) => {
   const url = `${API_BASE_URL}/password/forgot`;
@@ -151,16 +149,14 @@ export const getCurrentUser = async () => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
 
-  const url = `${API_BASE_URL}/common/users/me`;
-
-  const response = await fetch(url, {
+  const res = await fetch(`${API_BASE_URL}/common/users/me`, {
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { Authorization: `Bearer ${token}` },
   });
 
-  return handleResponse(response);
+  const result = await handleResponse(res);
+
+  return result.data; // ✔ chỉ trả về phần data
 };
 
 /**
@@ -170,9 +166,7 @@ export const fetchMyPlaylists = async () => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
 
-  const url = `${API_BASE_URL}/common/playlist`;
-
-  const response = await fetch(url, {
+  const res = await fetch(`${API_BASE_URL}/common/playlist`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -180,7 +174,10 @@ export const fetchMyPlaylists = async () => {
     },
   });
 
-  return handleResponse(response);
+  const result = await handleResponse(res);
+
+  // Backend trả data là ARRAY
+  return Array.isArray(result.data) ? result.data : [];
 };
 
 /**
@@ -190,17 +187,20 @@ export const fetchSongsInPlaylist = async (playlistId) => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
 
-  const url = `${API_BASE_URL}/common/playlist/${playlistId}/songs`;
+  const res = await fetch(
+    `${API_BASE_URL}/common/playlist/${playlistId}/songs`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const result = await handleResponse(res);
 
-  return handleResponse(response);
+  return Array.isArray(result.data) ? result.data : [];
 };
 
 /**
@@ -208,9 +208,8 @@ export const fetchSongsInPlaylist = async (playlistId) => {
  */
 export const fetchTrendingArtists = async () => {
   const token = localStorage.getItem("authToken");
-  const url = `${API_BASE_URL}/common/users/trending-artists`;
 
-  const response = await fetch(url, {
+  const res = await fetch(`${API_BASE_URL}/common/users/trending-artists`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -218,7 +217,7 @@ export const fetchTrendingArtists = async () => {
     },
   });
 
-  return handleResponse(response);
+  return handleResponse(res);
 };
 /**
  * Cập nhật thông tin hồ sơ người dùng (tên, bio, avatar)
@@ -232,9 +231,9 @@ export const updateProfile = async ({ fullName, bio, avatar }) => {
   const formData = new FormData();
   if (fullName) formData.append("fullName", fullName);
   if (bio) formData.append("bio", bio);
-  if (avatar) formData.append("avatar", avatar); // file ảnh
+  if (avatar) formData.append("avatar", avatar);
 
-  const response = await fetch(`${API_BASE_URL}/common/users/me/change`, {
+  const res = await fetch(`${API_BASE_URL}/common/users/me/change`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -242,43 +241,36 @@ export const updateProfile = async ({ fullName, bio, avatar }) => {
     body: formData,
   });
 
-  return handleResponse(response);
+  return handleResponse(res);
 };
 
 /**
  * Đổi mật khẩu người dùng đang đăng nhập
  * @param {object} data - { oldPassword, newPassword }
  */
-export const changePassword = async (data) => {
+export const changePassword = async ({ oldPassword, newPassword }) => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
 
-  const response = await fetch(
-    `${API_BASE_URL}/common/users/me/password/change`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        oldPassword: data.oldPassword,
-        newPassword: data.newPassword,
-      }),
-    }
-  );
+  const res = await fetch(`${API_BASE_URL}/common/users/me/password/change`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ oldPassword, newPassword }),
+  });
 
-  return handleResponse(response);
+  return handleResponse(res);
 };
+
 /**
  * Lấy chi tiết bài hát theo ID
  */
 export const fetchSongById = async (songId) => {
   const token = localStorage.getItem("authToken");
-  if (!songId) throw new Error("Thiếu songId");
 
-  const url = `http://localhost:8081/api/common/song/${songId}`;
-  const response = await fetch(url, {
+  const res = await fetch(`${API_BASE_URL}/common/song/${songId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -286,23 +278,17 @@ export const fetchSongById = async (songId) => {
     },
   });
 
-  return handleResponse(response);
+  return handleResponse(res);
 };
-
 /**
  * Lấy thông tin nghệ sĩ theo artistId
  * @param {string} artistId
  * @returns {Promise<object>} - { fullName, avatarUrl, bio, ... }
  */
 export const fetchArtistById = async (artistId) => {
-  console.log("Fetching artistId:", artistId);
-
-  if (!artistId) throw new Error("Thiếu artistId");
-
   const token = localStorage.getItem("authToken");
-  const url = `${API_BASE_URL}/common/users/${artistId}`;
 
-  const response = await fetch(url, {
+  const res = await fetch(`${API_BASE_URL}/common/users/${artistId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -310,16 +296,5 @@ export const fetchArtistById = async (artistId) => {
     },
   });
 
-  console.log("Artist response status:", response.status);
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(
-      errorData.message || `Không tìm thấy artistId: ${artistId}`
-    );
-  }
-
-  const data = await response.json();
-  console.log("Artist data:", data);
-  return data;
+  return handleResponse(res);
 };

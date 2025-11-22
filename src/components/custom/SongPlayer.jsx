@@ -12,7 +12,7 @@ import {
 import "../../styles/theme.css";
 import { fetchSongById } from "../../services/authService";
 
-const SongPlayer = ({ songId, songList = [], onChangeSong }) => {
+const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
   const [song, setSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -27,7 +27,7 @@ const SongPlayer = ({ songId, songList = [], onChangeSong }) => {
   useEffect(() => {
     const loadSong = async () => {
       try {
-        const data = await fetchSongById(songId);
+        const { data } = await fetchSongById(songId);
         setSong(data);
       } catch (err) {
         console.error("Lỗi tải bài hát:", err);
@@ -38,13 +38,26 @@ const SongPlayer = ({ songId, songList = [], onChangeSong }) => {
 
   // 🟢 Reset khi đổi bài hát
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      setCurrentTime(0);
-      setDuration(0);
-      setIsPlaying(false);
-    }
+    if (!audioRef.current) return;
+
+    const audio = audioRef.current;
+
+    audio.pause();
+    audio.currentTime = 0;
+
+    setCurrentTime(0);
+    setDuration(0);
+    setIsPlaying(false);
+
+    audio.src = `http://localhost:8081/api/common/song/stream/${songId}`;
+
+    audio.load(); // ⭐ Quan trọng nhất
+    audio
+      .play()
+      .then(() => {
+        setIsPlaying(true);
+      })
+      .catch(() => {});
   }, [songId]);
 
   // 🟢 Lắng nghe audio events
@@ -53,7 +66,10 @@ const SongPlayer = ({ songId, songList = [], onChangeSong }) => {
     if (!audio) return;
 
     const handleLoaded = () => setDuration(audio.duration || 0);
-    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
+    const handleTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+      if (onTimeUpdate) onTimeUpdate(audio.currentTime); // ⭐ Gửi thời gian ra ngoài
+    };
     const handleEnded = () => {
       if (isShuffle) {
         handleShuffle();
@@ -72,6 +88,14 @@ const SongPlayer = ({ songId, songList = [], onChangeSong }) => {
       audio.removeEventListener("ended", handleEnded);
     };
   }, [isShuffle, songList]);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.src = `http://localhost:8081/api/common/song/stream/${songId}`;
+      audioRef.current.load(); // ⭐ BẮT BUỘC
+      audioRef.current.play().catch(() => {});
+    }
+  }, [songId]);
 
   // 🟢 Play / Pause
   const togglePlay = async () => {

@@ -11,17 +11,13 @@ export default function ArtistInfoPanel({ artistId, topSongs, artistData }) {
   });
 
   useEffect(() => {
-    if (artistData && artistData.fullName) {
-      // 🟢 Nếu đã có dữ liệu từ bài hát thì không cần fetch
-      setArtist(artistData);
-      return;
-    }
-
     if (!artistId) return;
 
     const loadArtist = async () => {
       try {
-        const data = await fetchArtistById(artistId);
+        const res = await fetchArtistById(artistId);
+        const data = res.data;
+
         setArtist({
           fullName: data.fullName || "Unknown Artist",
           avatarUrl: data.avatarUrl || "",
@@ -33,7 +29,7 @@ export default function ArtistInfoPanel({ artistId, topSongs, artistData }) {
     };
 
     loadArtist();
-  }, [artistId, artistData]);
+  }, [artistId]);
 
   return (
     <div className="artist-info-panel">

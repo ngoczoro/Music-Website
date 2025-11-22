@@ -807,6 +807,11 @@ input {
   line-height: normal;
   margin-bottom: 100px;
   margin-right: 200px;
+  display: inline-block;
+  max-width: 60ch; /* tối đa 60 ký tự */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .profile-stats {
@@ -1269,6 +1274,17 @@ input {
   line-height: 1.8;
   transition: color 0.2s ease;
   white-space: pre-wrap;
+}
+.lyrics-line {
+  font-size: 16px;
+  color: #666;
+  transition: 0.25s;
+}
+
+.active-line {
+  font-weight: bold;
+  color: black;
+  font-size: 18px;
 }
 
 .lyrics-line:hover {
