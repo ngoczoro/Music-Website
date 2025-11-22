@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/theme.css";
 import { Users, Music, Award } from "lucide-react";
-import { fetchArtistById } from "../../services/authService";
+import { fetchArtistById } from "../../services/musicService";
 
 export default function ArtistInfoPanel({ artistId, topSongs, artistData }) {
   const [artist, setArtist] = useState({

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/theme.css";
-import { fetchSongById } from "../../services/authService";
+import { fetchSongById } from "../../services/musicService";
 
 const LyricsPanel = ({ songId, currentTime }) => {
   const [lyrics, setLyrics] = useState([]);

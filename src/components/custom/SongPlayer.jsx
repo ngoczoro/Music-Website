@@ -10,7 +10,7 @@ import {
   Shuffle,
 } from "lucide-react";
 import "../../styles/theme.css";
-import { fetchSongById } from "../../services/authService";
+import { fetchSongById } from "../../services/musicService";
 
 const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
   const [song, setSong] = useState(null);
@@ -23,7 +23,7 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
 
   const audioRef = useRef(null);
 
-  // 🟢 Gọi API lấy bài hát
+  // Gọi API lấy bài hát
   useEffect(() => {
     const loadSong = async () => {
       try {
@@ -36,7 +36,7 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
     if (songId) loadSong();
   }, [songId]);
 
-  // 🟢 Reset khi đổi bài hát
+  // Reset khi đổi bài hát
   useEffect(() => {
     if (!audioRef.current) return;
 
@@ -51,7 +51,7 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
 
     audio.src = `http://localhost:8081/api/common/song/stream/${songId}`;
 
-    audio.load(); // ⭐ Quan trọng nhất
+    audio.load(); //  Quan trọng nhất
     audio
       .play()
       .then(() => {
@@ -60,7 +60,7 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
       .catch(() => {});
   }, [songId]);
 
-  // 🟢 Lắng nghe audio events
+  // Lắng nghe audio events
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -68,7 +68,7 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
     const handleLoaded = () => setDuration(audio.duration || 0);
     const handleTimeUpdate = () => {
       setCurrentTime(audio.currentTime);
-      if (onTimeUpdate) onTimeUpdate(audio.currentTime); // ⭐ Gửi thời gian ra ngoài
+      if (onTimeUpdate) onTimeUpdate(audio.currentTime); //  Gửi thời gian ra ngoài
     };
     const handleEnded = () => {
       if (isShuffle) {
@@ -92,12 +92,12 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.src = `http://localhost:8081/api/common/song/stream/${songId}`;
-      audioRef.current.load(); // ⭐ BẮT BUỘC
+      audioRef.current.load(); // BẮT BUỘC
       audioRef.current.play().catch(() => {});
     }
   }, [songId]);
 
-  // 🟢 Play / Pause
+  // Play / Pause
   const togglePlay = async () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -114,7 +114,7 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
     }
   };
 
-  // 🟢 Cập nhật thời gian khi kéo thanh tiến trình
+  // Cập nhật thời gian khi kéo thanh tiến trình
   const handleSeek = (e) => {
     const time = Number(e.target.value);
     setCurrentTime(time);
@@ -123,7 +123,7 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
     }
   };
 
-  // 🟢 Định dạng thời gian
+  // Định dạng thời gian
   const formatTime = (seconds) => {
     if (!seconds || isNaN(seconds)) return "0:00";
     const mins = Math.floor(seconds / 60);
@@ -131,7 +131,7 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  // 🟢 Phát ngẫu nhiên bài
+  // Phát ngẫu nhiên bài
   const handleShuffle = () => {
     if (!songList.length || !onChangeSong) return;
     const filtered = songList.filter((s) => s.id !== song.id);
@@ -139,7 +139,7 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
     if (randomSong) onChangeSong(randomSong.id);
   };
 
-  // 🟢 Skip Forward
+  // Skip Forward
   const handleSkipForward = () => {
     if (!songList.length || !onChangeSong) return;
     const currentIndex = songList.findIndex((s) => s.id === song.id);
@@ -147,7 +147,7 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
     onChangeSong(songList[nextIndex].id);
   };
 
-  // 🟢 Skip Back
+  // Skip Back
   const handleSkipBack = () => {
     if (!songList.length || !onChangeSong) return;
     const currentIndex = songList.findIndex((s) => s.id === song.id);
@@ -157,7 +157,7 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
 
   if (!song) return <div>Đang tải bài hát...</div>;
 
-  // 🟢 URL thực tế
+  // URL thực tế
   const audioUrl = `http://localhost:8081/api/common/song/stream/${song.id}`;
   const coverUrl = `http://localhost:8081${song.coverImageUrl}`;
 

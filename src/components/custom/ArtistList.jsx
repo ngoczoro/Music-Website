@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ArtistCard } from "./ArtistCard";
-import { fetchTrendingArtists } from "../../services/authService";
+import { fetchTrendingArtists } from "../../services/musicService";
 
 export function ArtistList() {
   const [artists, setArtists] = useState([]);

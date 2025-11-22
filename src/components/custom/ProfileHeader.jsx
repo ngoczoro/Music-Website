@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getCurrentUser, fetchMyPlaylists } from "../../services/authService";
+import { getCurrentUser, fetchMyPlaylists } from "../../services/musicService";
 import "../../styles/theme.css";
 
 export function ProfileHeader({ onEditClick }) {

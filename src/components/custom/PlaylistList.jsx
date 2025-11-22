@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { PlaylistCard } from "./PlaylistCard";
-import { fetchMyPlaylists } from "../../services/authService";
+import { fetchMyPlaylists } from "../../services/musicService";
 
 export function PlaylistList() {
   const [playlists, setPlaylists] = useState([]);

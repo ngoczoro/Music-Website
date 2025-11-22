@@ -3,7 +3,7 @@ import { SongItem } from "./SongItem";
 import {
   fetchMyPlaylists,
   fetchSongsInPlaylist,
-} from "../../services/authService";
+} from "../../services/musicService";
 
 export function SongList() {
   const [songs, setSongs] = useState([]);

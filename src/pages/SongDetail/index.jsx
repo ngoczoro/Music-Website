@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import SongPlayer from "../../components/custom/SongPlayer";
 import LyricsPanel from "../../components/custom/LyricsPanel";
 import ArtistInfoPanel from "../../components/custom/ArtistInfoPanel";
-import { fetchSongById } from "../../services/authService";
+import { fetchSongById } from "../../services/musicService";
 
 const SongDetail = () => {
   const { id } = useParams();
