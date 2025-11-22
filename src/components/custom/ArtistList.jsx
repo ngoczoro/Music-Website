@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ArtistCard } from "./ArtistCard";
-import { fetchTrendingArtists } from "../../services/authService";
+import { fetchTrendingArtists } from "../../services/musicService";
 
 export function ArtistList() {
   const [artists, setArtists] = useState([]);
@@ -8,21 +8,23 @@ export function ArtistList() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Dòng tạm để test, sau này xóa đi
+    // token dùng tạm
     localStorage.setItem(
       "authToken",
-      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzUyMTAxOUBnbS51aXQuZWR1LnZuIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NjIwOTEyMTgsImV4cCI6MTc2MzMwMDgxOH0.Mpul2HnCnLa5Xy0aB6KR2cQLIt2h-268BYapHeynkg4"
+      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzUyMTAxOUBnbS51aXQuZWR1LnZuIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NjM4MTk5MDAsImV4cCI6MTc2NTAyOTUwMH0.ZtbbdiBolZyc1gIdHRZlju8MrdPNDhQiw6LqEzAuLVE"
     );
+
     const loadArtists = async () => {
       try {
-        const data = await fetchTrendingArtists();
-        setArtists(data);
+        const res = await fetchTrendingArtists();
+        setArtists(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
+
     loadArtists();
   }, []);
 
