@@ -133,7 +133,8 @@ const MyPlaylist = () => {
             {currentPlaylists.map((p) => (
               <div
                 key={p._id}
-                className="border rounded-lg p-3 hover:shadow-md transition"
+                className="border rounded-lg p-3 hover:shadow-md transition cursor-pointer"
+                onClick={() => navigate(`/playlists/${p._id}`)} // 👉 chuyển đến PlaylistDetail
               >
                 <img
                   src={p.image || "https://via.placeholder.com/150"}
