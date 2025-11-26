@@ -8,13 +8,6 @@ import { ArtistList } from "../../components/custom/ArtistList";
 import Breadcrumb from "../components/Breadcrumb";
 import "../styles/theme.css";
 
-const [showMenu, setShowMenu] = useState(false);
-const [selectedSong, setSelectedSong] = useState(null);
-
-function onOpenSongMenu(song) {
-  setSelectedSong(song);
-  setShowMenu(true);
-}
 
 export default function PlaylistDetail() {
   // If your router provides a playlist id, use it
@@ -28,6 +21,8 @@ export default function PlaylistDetail() {
   const [songsPerPage] = useState(8);
   const [showPlayer, setShowPlayer] = useState(false);
   const [currentTrack, setCurrentTrack] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
+  const [selectedSong, setSelectedSong] = useState(null);
 
   // Placeholder: fetch playlist detail + songs
   useEffect(() => {
@@ -89,6 +84,11 @@ export default function PlaylistDetail() {
   function onDeleteSong(songId) {
     // Placeholder: call delete API then refresh list
     alert(`TODO: Delete song ${songId} via API`);
+  }
+
+  function onOpenSongMenu(song) {
+  setSelectedSong(song);
+  setShowMenu(true);
   }
 
   if (!playlist) return null;
