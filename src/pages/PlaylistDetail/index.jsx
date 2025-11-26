@@ -8,6 +8,14 @@ import { ArtistList } from "../../components/custom/ArtistList";
 import Breadcrumb from "../components/Breadcrumb";
 import "../styles/theme.css";
 
+const [showMenu, setShowMenu] = useState(false);
+const [selectedSong, setSelectedSong] = useState(null);
+
+function onOpenSongMenu(song) {
+  setSelectedSong(song);
+  setShowMenu(true);
+}
+
 export default function PlaylistDetail() {
   // If your router provides a playlist id, use it
   const { id } = useParams() || { id: "1" };
@@ -146,7 +154,7 @@ export default function PlaylistDetail() {
             <div className="card-actions">
               <button
                 className="icon-btn"
-                onClick={() => alert("TODO: open song menu")}
+                onClick={() => onOpenSongMenu(song)}
                 title="Options"
               >
                 ⋯
@@ -231,3 +239,28 @@ export default function PlaylistDetail() {
     </div>
   );
 }
+
+
+{showMenu && selectedSong && (
+  <div className="modal-overlay" onClick={() => setShowMenu(false)}>
+    <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+      <h3>{selectedSong.title}</h3>
+
+      <button className="modal-item" onClick={() => alert("Play TODO")}>
+        ▶ Play
+      </button>
+      <button className="modal-item" onClick={onRenamePlaylist}>
+        ✏ Rename playlist
+      </button>
+      <button
+        className="modal-item delete"
+        onClick={() => {
+          onDeleteSong(selectedSong.id);
+          setShowMenu(false);
+        }}
+      >
+        🗑 Remove from playlist
+      </button>
+    </div>
+  </div>
+)}
