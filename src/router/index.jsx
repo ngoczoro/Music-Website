@@ -26,6 +26,7 @@ export default function AppRouter() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/" element={<Navigate to="/register" replace />} />
           <Route path="/song/:id" element={<SongDetail />} />
+          <Route path="/playlists/:id" element={<PlaylistDetail />} />
         </Routes>
       </MainLayout>
     </BrowserRouter>
