@@ -4,6 +4,7 @@ import { ProfileHeader } from "../../components/custom/ProfileHeader";
 import { PlaylistList } from "../../components/custom/PlaylistList";
 import { SongList } from "../../components/custom/SongList";
 import { ArtistList } from "../../components/custom/ArtistList";
+import Breadcrumb from "../components/Breadcrumb";
 import "../../styles/theme.css";
 
 const MyPlaylist = () => {
