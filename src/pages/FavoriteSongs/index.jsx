@@ -1,4 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, Link, useParams } from "react-router-dom";
+import { Sidebar } from "../../components/custom/Sidebar";
+import { ProfileHeader } from "../../components/custom/ProfileHeader";
+import { PlaylistList } from "../../components/custom/PlaylistList";
+import { SongList } from "../../components/custom/SongList";
+import { ArtistList } from "../../components/custom/ArtistList";
+import Breadcrumb from "../components/Breadcrumb";
 import "../styles/theme.css";
 
 export default function FavoriteSongs() {
