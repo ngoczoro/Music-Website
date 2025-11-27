@@ -18,7 +18,7 @@ export function PlaylistList() {
 
   return (
     <div className="playlist-list">
-      {playlists.map((p) => (
+      {playlists.length>0 && playlists.map((p) => (
         <PlaylistCard
           key={p.id}
           title={p.name}

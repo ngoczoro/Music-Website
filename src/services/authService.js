@@ -2,20 +2,6 @@
 const API_BASE_URL = "http://localhost:8081/api";
 
 
-// const handleResponse = async (response) => {
-//   const isJson = response.headers
-//     .get("content-type")
-//     ?.includes("application/json");
-//   const data = isJson ? await response.json() : null;
-
-//   if (!response.ok) {
-//     // Sử dụng thông báo lỗi từ server nếu có, ngược lại dùng thông báo chung
-//     const error = (data && data.message) || response.statusText;
-//     throw new Error(error);
-//   }
-
-//   return data;
-// };
 const handleResponse = async (response) => {
   const isJson = response.headers
     .get("content-type")
@@ -149,6 +135,7 @@ export const logoutUser = () => {
  */
 export const getCurrentUser = async () => {
   const token = localStorage.getItem("authToken");
+  console.log(token);
   if (!token) throw new Error("Chưa đăng nhập");
 
   const url = `${API_BASE_URL}/common/users/me`;
