@@ -5,8 +5,10 @@ import { PlaylistList } from "../../components/custom/PlaylistList";
 import { SongList } from "../../components/custom/SongList";
 import { ArtistList } from "../../components/custom/ArtistList";
 import "../../styles/theme.css";
+import { useNavigate } from "react-router-dom";
 
 const MyPlaylist = () => {
+  const navigate = useNavigate();
   const [playlists, setPlaylists] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const playlistsPerPage = 8;
@@ -133,7 +135,8 @@ const MyPlaylist = () => {
             {currentPlaylists.map((p) => (
               <div
                 key={p._id}
-                className="border rounded-lg p-3 hover:shadow-md transition"
+                className="border rounded-lg p-3 hover:shadow-md transition cursor-pointer"
+                onClick={() => navigate(`/playlists/${p._id}`)} // 👉 chuyển đến PlaylistDetail
               >
                 <img
                   src={p.image || "https://via.placeholder.com/150"}

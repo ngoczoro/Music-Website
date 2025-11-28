@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getCurrentUser, fetchMyPlaylists } from "../../services/authService";
+import { getCurrentUser, fetchMyPlaylists } from "../../services/musicService";
 import "../../styles/theme.css";
 
 export function ProfileHeader({ onEditClick }) {
@@ -14,7 +14,7 @@ export function ProfileHeader({ onEditClick }) {
         // (Chỉ dùng dòng này để test, sau này có thể bỏ)
         localStorage.setItem(
           "authToken",
-          "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzUyMTAxOUBnbS51aXQuZWR1LnZuIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NjIwOTEyMTgsImV4cCI6MTc2MzMwMDgxOH0.Mpul2HnCnLa5Xy0aB6KR2cQLIt2h-268BYapHeynkg4"
+          "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzUyMTAxOUBnbS51aXQuZWR1LnZuIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NjM4MTk5MDAsImV4cCI6MTc2NTAyOTUwMH0.ZtbbdiBolZyc1gIdHRZlju8MrdPNDhQiw6LqEzAuLVE"
         );
 
         // Lấy thông tin người dùng

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { changePassword } from "../../services/authService";
+import { changePassword } from "../../services/musicService";
 
 export default function ChangePassword({ onCancel }) {
   const [current, setCurrent] = useState("");

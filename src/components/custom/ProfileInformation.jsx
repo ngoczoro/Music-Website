@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getCurrentUser, updateProfile } from "../../services/authService";
+import { getCurrentUser, updateProfile } from "../../services/musicService";
 
 export default function ProfileInformation({ onCancel }) {
   const [fullName, setFullName] = useState("");
