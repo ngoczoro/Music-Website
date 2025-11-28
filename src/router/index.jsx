@@ -10,6 +10,9 @@ import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
 import { Navigate } from "react-router-dom";
 import SongDetail from "../pages/SongDetail";
+import PlaylistDetail from "../pages/PlaylistDetail";
+import FavoriteSongs from "../pages/FavoriteSongs";
+
 
 export default function AppRouter() {
   return (
