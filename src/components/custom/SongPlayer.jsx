@@ -12,6 +12,21 @@ import {
 import "../../styles/theme.css";
 import { fetchSongById } from "../../services/musicService";
 
+async function sendListeningHistory(songId) {
+  try {
+    await fetch("http://localhost:8081/api/common/song/listening-history", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+      body: JSON.stringify({ songId: String(songId) }),
+    });
+  } catch (err) {
+    console.warn("Không thể lưu lịch sử nghe:", err);
+  }
+}
+
 const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
   const [song, setSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -22,8 +37,8 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
   const [isShuffle, setIsShuffle] = useState(false);
 
   const audioRef = useRef(null);
+  const sentHistoryRef = useRef(false); // chỉ gửi 1 lần / bài
 
-  // Gọi API lấy bài hát
   useEffect(() => {
     const loadSong = async () => {
       try {
@@ -39,16 +54,11 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
   // Reset khi đổi bài hát
   useEffect(() => {
     if (!audioRef.current) return;
+    sentHistoryRef.current = false; // reset flag
 
     const audio = audioRef.current;
-
-    audio.onloadedmetadata = () => {
-      setDuration(audio.duration || 0);
-    };
-
-    audio.ontimeupdate = () => {
-      setCurrentTime(audio.currentTime);
-    };
+    audio.onloadedmetadata = () => setDuration(audio.duration || 0);
+    audio.ontimeupdate = () => setCurrentTime(audio.currentTime);
 
     return () => {
       audio.onloadedmetadata = null;
@@ -56,22 +66,39 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
     };
   }, [songId]);
 
-  // Lắng nghe audio events
+  // Gán src mỗi khi đổi bài
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.src = `http://localhost:8081/api/common/song/stream/${songId}`;
+      audioRef.current.load();
+      audioRef.current.play().catch(() => {});
+      setIsPlaying(true);
+    }
+  }, [songId]);
+
+  // Lắng nghe audio & gửi history khi nghe >= 50%
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !song) return;
 
-    const handleLoaded = () => setDuration(audio.duration || 0);
     const handleTimeUpdate = () => {
       setCurrentTime(audio.currentTime);
-      if (onTimeUpdate) onTimeUpdate(audio.currentTime); //  Gửi thời gian ra ngoài
-    };
-    const handleEnded = () => {
-      if (isShuffle) {
-        handleShuffle();
-      } else {
-        handleSkipForward();
+      if (onTimeUpdate) onTimeUpdate(audio.currentTime);
+
+      if (
+        !sentHistoryRef.current &&
+        audio.duration > 0 &&
+        audio.currentTime >= audio.duration * 0.5
+      ) {
+        sentHistoryRef.current = true;
+        sendListeningHistory(song.id); // chỉ bắn 1 lần
       }
+    };
+
+    const handleLoaded = () => setDuration(audio.duration || 0);
+    const handleEnded = () => {
+      if (isShuffle) handleShuffle();
+      else handleSkipForward();
     };
 
     audio.addEventListener("loadedmetadata", handleLoaded);
@@ -83,17 +110,8 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
       audio.removeEventListener("timeupdate", handleTimeUpdate);
       audio.removeEventListener("ended", handleEnded);
     };
-  }, [isShuffle, songList]);
+  }, [songId, song, isShuffle, songList]);
 
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.src = `http://localhost:8081/api/common/song/stream/${songId}`;
-      audioRef.current.load(); // BẮT BUỘC
-      audioRef.current.play().catch(() => {});
-    }
-  }, [songId]);
-
-  // Play / Pause
   const togglePlay = async () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -110,16 +128,12 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
     }
   };
 
-  // Cập nhật thời gian khi kéo thanh tiến trình
   const handleSeek = (e) => {
     const time = Number(e.target.value);
     setCurrentTime(time);
-    if (audioRef.current) {
-      audioRef.current.currentTime = time;
-    }
+    if (audioRef.current) audioRef.current.currentTime = time;
   };
 
-  // Định dạng thời gian
   const formatTime = (seconds) => {
     if (!seconds || isNaN(seconds)) return "0:00";
     const mins = Math.floor(seconds / 60);
@@ -127,7 +141,6 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  // Phát ngẫu nhiên bài
   const handleShuffle = () => {
     if (!songList.length || !onChangeSong) return;
     const filtered = songList.filter((s) => s.id !== song.id);
@@ -135,7 +148,6 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
     if (randomSong) onChangeSong(randomSong.id);
   };
 
-  // Skip Forward
   const handleSkipForward = () => {
     if (!songList.length || !onChangeSong) return;
     const currentIndex = songList.findIndex((s) => s.id === song.id);
@@ -143,7 +155,6 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
     onChangeSong(songList[nextIndex].id);
   };
 
-  // Skip Back
   const handleSkipBack = () => {
     if (!songList.length || !onChangeSong) return;
     const currentIndex = songList.findIndex((s) => s.id === song.id);
@@ -153,7 +164,6 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
 
   if (!song) return <div>Đang tải bài hát...</div>;
 
-  // URL thực tế
   const audioUrl = `http://localhost:8081/api/common/song/stream/${song.id}`;
   const coverUrl = `http://localhost:8081${song.coverImageUrl}`;
 
@@ -165,7 +175,6 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
         <h2 className="songplayer-title">{song.title}</h2>
         <p className="songplayer-artist">{song.artistName}</p>
 
-        {/* Bộ điều khiển */}
         <div className="control-row">
           <button
             className={`icon-btn ${isShuffle ? "active" : ""}`}
@@ -195,7 +204,6 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
           </button>
         </div>
 
-        {/* Thanh tiến trình */}
         <div className="songplayer-progress">
           <span className="time-text">{formatTime(currentTime)}</span>
           <input
@@ -210,7 +218,6 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
           <span className="time-text">{formatTime(duration)}</span>
         </div>
 
-        {/* Heart + Volume */}
         <div className="bottom-row">
           <div style={{ flex: 1 }} />
           <button
@@ -237,7 +244,6 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
         </div>
       </div>
 
-      {/* Audio */}
       <audio
         ref={audioRef}
         src={audioUrl}

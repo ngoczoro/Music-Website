@@ -232,3 +232,25 @@ export async function getPopularSongs() {
     throw new Error("Failed to fetch trending songs");
   }
 }
+// Lấy danh sách gợi ý
+export async function getRecommendedSongs(userId) {
+  try {
+    const token = localStorage.getItem("authToken");
+    if (!token) throw new Error("Chưa đăng nhập");
+
+    const res = await fetch(`${API_BASE_URL}/common/song/rcm/${userId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) throw new Error(res.status);
+
+    // BE đang trả List<Song>
+    return await res.json();
+  } catch (err) {
+    console.error("❌ Lỗi fetch recommended:", err);
+    return [];
+  }
+}
