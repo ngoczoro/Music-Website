@@ -42,22 +42,18 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
 
     const audio = audioRef.current;
 
-    audio.pause();
-    audio.currentTime = 0;
+    audio.onloadedmetadata = () => {
+      setDuration(audio.duration || 0);
+    };
 
-    setCurrentTime(0);
-    setDuration(0);
-    setIsPlaying(false);
+    audio.ontimeupdate = () => {
+      setCurrentTime(audio.currentTime);
+    };
 
-    audio.src = `http://localhost:8081/api/common/song/stream/${songId}`;
-
-    audio.load(); //  Quan trọng nhất
-    audio
-      .play()
-      .then(() => {
-        setIsPlaying(true);
-      })
-      .catch(() => {});
+    return () => {
+      audio.onloadedmetadata = null;
+      audio.ontimeupdate = null;
+    };
   }, [songId]);
 
   // Lắng nghe audio events

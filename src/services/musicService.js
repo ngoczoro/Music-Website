@@ -171,3 +171,64 @@ export const fetchArtistById = async (artistId) => {
 
   return handleResponse(res);
 };
+
+/**
+ * Lấy URL stream nhạc từ backend
+ * FE chỉ cần set vào <audio src> là phát.
+ */
+export const getStreamUrl = (songId) => {
+  return `${API_BASE_URL}/common/song/stream/${songId}`;
+};
+/**
+ * Lấy lyric từ BE.
+ * dùng field `lyrics` BE trả về.
+ * Nếu BE CHƯA parse sẵn, fallback sang đọc file .txt/.lrc từ `lyricUrl`.
+ */
+export const fetchLyricsBySongId = async (songId) => {
+  const result = await fetchSongById(songId);
+  const song = result.data;
+
+  if (!song) {
+    return { song: null, lines: [] };
+  }
+
+  // BE hiện tại đã đọc file và trả về mảng `lyrics`
+  if (Array.isArray(song.lyrics) && song.lyrics.length > 0) {
+    return { song, lines: song.lyrics };
+  }
+
+  // Fallback: tự đọc file .txt/.lrc từ lyricUrl
+  if (song.lyricUrl) {
+    const lyricUrl = song.lyricUrl.startsWith("http")
+      ? song.lyricUrl
+      : `http://localhost:8081${song.lyricUrl}`;
+
+    const res = await fetch(lyricUrl);
+    if (res.ok) {
+      const text = await res.text();
+      const lines = text.split(/\r?\n/);
+      return { song, lines };
+    }
+  }
+
+  return { song, lines: [] };
+};
+
+//getPopularSongs
+
+export async function getPopularSongs() {
+  try {
+    const token = localStorage.getItem("authToken");
+
+    const res = await fetch("http://localhost:8081/api/common/song/popular", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!res.ok) throw new Error(res.status);
+
+    return await res.json();
+  } catch (error) {
+    console.error("❌ Lỗi fetch trending:", error);
+    throw new Error("Failed to fetch trending songs");
+  }
+}

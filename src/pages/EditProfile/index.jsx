@@ -8,7 +8,7 @@ const EditProfilePage = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState("profile"); // profile | password
 
   return (
-    <div className="edit-profile-page">
+    <div className="edit-profile-page" style={{ marginLeft: "220px" }}>
       {/* sidebar bên trái */}
       <div className="edit-profile-content">
         <div className="breadcrumb-wrapper">

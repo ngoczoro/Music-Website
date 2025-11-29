@@ -30,7 +30,7 @@ const ProfilePage = () => {
   ) : (
     <div
       className="profile-container"
-      style={{ display: "flex", minHeight: "100vh" }}
+      style={{ display: "flex", minHeight: "100vh", marginLeft: "220px" }}
     >
       <div
         className="profile-main"
