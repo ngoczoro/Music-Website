@@ -9,9 +9,9 @@ export function SongItem({ index, song }) {
     navigate(`/song/${song._id || song.id}`); // Chuyển sang trang chi tiết bài hát
   };
 
-  const coverUrl = song.coverImageUrl
+  const coverUrl = song.coverImageUrl?.startsWith("/")
     ? `http://localhost:8081${song.coverImageUrl}`
-    : "https://via.placeholder.com/80";
+    : song.coverImageUrl;
 
   const formatDuration = (seconds) => {
     if (!seconds) return "00:00";
