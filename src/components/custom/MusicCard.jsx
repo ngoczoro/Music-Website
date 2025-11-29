@@ -1,9 +1,9 @@
 import React from "react";
 import "../../styles/theme.css";
 
-export function MusicCard({ title, artist, duration, imageUrl }) {
+export function MusicCard({ title, artist, imageUrl, duration, onClick }) {
   return (
-    <div className="music-card">
+    <div className="music-card" onClick={onClick} style={{ cursor: "pointer" }}>
       <div className="music-cover">
         <img
           src={
