@@ -221,16 +221,10 @@ export async function getPopularSongs() {
     const token = localStorage.getItem("authToken");
 
     const res = await fetch("http://localhost:8081/api/common/song/popular", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token ? `Bearer ${token}` : "",
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
 
-    if (!res.ok) {
-      throw new Error("Server returned " + res.status);
-    }
+    if (!res.ok) throw new Error(res.status);
 
     return await res.json();
   } catch (error) {
