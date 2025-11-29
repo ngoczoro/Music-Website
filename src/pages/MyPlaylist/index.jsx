@@ -4,6 +4,7 @@ import { ProfileHeader } from "../../components/custom/ProfileHeader";
 import { PlaylistList } from "../../components/custom/PlaylistList";
 import { SongList } from "../../components/custom/SongList";
 import { ArtistList } from "../../components/custom/ArtistList";
+import Breadcrumb from "../components/Breadcrumb";
 import "../../styles/theme.css";
 
 const MyPlaylist = () => {
@@ -133,7 +134,8 @@ const MyPlaylist = () => {
             {currentPlaylists.map((p) => (
               <div
                 key={p._id}
-                className="border rounded-lg p-3 hover:shadow-md transition"
+                className="border rounded-lg p-3 hover:shadow-md transition cursor-pointer"
+                onClick={() => navigate(`/playlists/${p._id}`)} // 👉 chuyển đến PlaylistDetail
               >
                 <img
                   src={p.image || "https://via.placeholder.com/150"}
