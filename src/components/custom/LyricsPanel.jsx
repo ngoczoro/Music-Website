@@ -33,7 +33,7 @@ const LyricsPanel = ({ songId, currentTime }) => {
     getLyrics();
   }, [songId]);
 
-  // ⭐ Tính dòng lyric đang phát
+  // Tính dòng lyric đang phát
   const lineDuration = 3; // mỗi dòng 3 giây
   const activeIndex = Math.floor(currentTime / lineDuration);
 

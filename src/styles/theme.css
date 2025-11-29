@@ -145,6 +145,9 @@ input {
   width: 220px;
   height: 100vh;
   padding: 20px;
+  position: fixed;
+  z-index: 999;
+  overflow-y: auto;
 }
 
 /* Hiệu ứng hover giữ nguyên */
@@ -1393,6 +1396,7 @@ input {
   border-radius: 20px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   padding: 24px;
+  margin-bottom: 30px;
 }
 
 /* ảnh vừa khung, không bị to quá */
@@ -1567,6 +1571,208 @@ input {
   height: 600px;
   flex-shrink: 0;
 }
+/*---------------------------------- Trending------------------------------ */
+.home-section {
+  width: 100%;
+  margin-bottom: -24px;
+}
+
+.home-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #3c3e43;
+}
+
+.playlist-grid {
+  flex: 0 0 300px;
+  display: flex;
+  gap: 31px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  padding-bottom: 10px;
+  scroll-behavior: smooth;
+
+  /* Ẩn thanh scroll xấu */
+  scrollbar-width: none;
+}
+
+.playlist-grid::-webkit-scrollbar {
+  display: none;
+}
+/* --- TOP ARTIST LIST --- */
+.artist-scroll {
+  display: flex;
+  gap: 32px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scrollbar-width: none;
+}
+
+.artist-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.artist-scroll::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  border-radius: 4px;
+}
+
+.artist-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ===========================
+       HOME PAGE LAYOUT
+=========================== */
+.home-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+/* Vùng nội dung phải */
+.home-content {
+  flex: 1;
+  padding: 20px 40px;
+  overflow-x: hidden !important;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-left: 220px; /* né sidebar */
+}
+
+.home-section-box {
+  width: 1106px;
+  height: auto;
+
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+
+  overflow: hidden; /* không cho tràn */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+/* ============================= */
+/* Music Card */
+/* ============================= */
+
+.music-card {
+  background-color: var(--card, #fff);
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  width: 260px;
+  height: 300px;
+  position: relative;
+  flex: 0 0 auto; /* Giữ kích thước cố định khi scroll ngang */
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.music-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Cover */
+.music-cover {
+  width: 100%;
+  height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.music-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Play button */
+.music-play-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3dc3c0, #8568f5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: 0.25s;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  margin-bottom: 100px;
+  margin-right: 10px;
+}
+
+.music-card:hover .music-play-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.music-play-btn img {
+  width: 18px;
+  height: 18px;
+}
+
+/* Info line */
+.music-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.music-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.music-artist {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 2px;
+}
+
+.music-duration {
+  font-size: 0.8rem;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+/* More button */
+.music-more {
+  border: none;
+  background: none;
+  font-size: 1.4rem;
+  color: #888;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 8px;
+}
+
+.music-more:hover {
+  color: #444;
+}
+
+.music-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
 
 .modal-overlay {
   position: fixed;
@@ -1605,4 +1811,5 @@ input {
   color: #ff4b4b;
   font-weight: 600;
 }
+
 
