@@ -12,13 +12,14 @@ export function ProfileHeader({ onEditClick }) {
     const fetchData = async () => {
       try {
         // (Chỉ dùng dòng này để test, sau này có thể bỏ)
-        localStorage.setItem(
-          "authToken",
-          "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzUyMTAxOUBnbS51aXQuZWR1LnZuIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NjM4MTk5MDAsImV4cCI6MTc2NTAyOTUwMH0.ZtbbdiBolZyc1gIdHRZlju8MrdPNDhQiw6LqEzAuLVE"
-        );
+        // localStorage.setItem(
+        //   "authToken",
+        //   "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzUyMTAxOUBnbS51aXQuZWR1LnZuIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NjM4MTk5MDAsImV4cCI6MTc2NTAyOTUwMH0.ZtbbdiBolZyc1gIdHRZlju8MrdPNDhQiw6LqEzAuLVE"
+        // );
 
         // Lấy thông tin người dùng
         const userData = await getCurrentUser();
+        console.log("Nguoi dung:", userData);
         setUser(userData);
 
         // Lấy danh sách playlist của người dùng

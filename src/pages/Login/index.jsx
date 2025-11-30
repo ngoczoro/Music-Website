@@ -77,7 +77,7 @@ export default function Login() {
         return;
       }
       setIsError(false);
-      navigate("/dashboard", {
+      navigate("/home", {
         state: {
           email: formData.email,
         },
