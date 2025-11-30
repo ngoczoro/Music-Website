@@ -54,6 +54,26 @@ export const fetchMyPlaylists = async () => {
 };
 
 /**
+ * Lấy thông tin playlist theo ID
+ */
+export const fetchPlaylistById = async (playlistId) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) throw new Error("Chưa đăng nhập");
+
+  // Lấy tất cả playlists và tìm playlist có ID khớp
+  const playlists = await fetchMyPlaylists();
+  const playlist = playlists.find(
+    (p) => p.id === playlistId || p._id === playlistId
+  );
+
+  if (!playlist) {
+    throw new Error("Không tìm thấy playlist");
+  }
+
+  return playlist;
+};
+
+/**
  * Lấy danh sách bài hát trong playlist cụ thể (ví dụ: Favorites)
  */
 export const fetchSongsInPlaylist = async (playlistId) => {
