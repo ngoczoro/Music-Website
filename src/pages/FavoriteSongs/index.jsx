@@ -148,6 +148,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/theme.css";
 import { fetchMyPlaylists, fetchSongsInPlaylist } from "../../services/musicService";
+import { MusicCard } from "../../components/custom/MusicCard";
 
 export default function FavoriteSongs() {
   const navigate = useNavigate();
@@ -192,8 +193,15 @@ export default function FavoriteSongs() {
   const currentSongs = favoriteSongs.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(favoriteSongs.length / songsPerPage);
 
-  function onPlaySong(song) {
-    navigate(`/song/${song.id || song._id}`);
+  const formatDuration = (seconds) => {
+    if (!seconds || isNaN(seconds)) return "00:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  function onPlaySong(songId) {
+    navigate(`/song/${songId}`);
   }
 
   function unlikeSong(songId) {
@@ -217,43 +225,51 @@ export default function FavoriteSongs() {
         <p>You don't have any favorite songs yet.</p>
       ) : (
         <>
-          <div className="song-grid">
-            {currentSongs.map(song => (
-              <div className="playlist-card" key={song.id || song._id}>
-                <div className="cover-wrapper">
-                  <img 
-                    src={
-                      song.imageUrl?.startsWith("http")
-                        ? song.imageUrl
-                        : song.imageUrl
-                        ? `http://localhost:8081${song.imageUrl}`
-                        : "https://via.placeholder.com/300"
-                    } 
-                    alt={song.title || song.name} 
-                    className="playlist-cover" 
+          <div className="playlist-grid">
+            {currentSongs.map(song => {
+              const songId = song.id || song._id;
+              const imageUrl = song.imageUrl?.startsWith("http")
+                ? song.imageUrl
+                : song.imageUrl
+                ? `http://localhost:8081${song.imageUrl}`
+                : song.coverImageUrl?.startsWith("/")
+                ? `http://localhost:8081${song.coverImageUrl}`
+                : song.coverImageUrl || "https://via.placeholder.com/300";
+              
+              return (
+                <div key={songId} style={{ position: "relative" }}>
+                  <MusicCard
+                    title={song.title || song.name}
+                    artist={song.artist || song.artistName || "Unknown Artist"}
+                    duration={formatDuration(song.duration)}
+                    imageUrl={imageUrl}
+                    onClick={() => onPlaySong(songId)}
                   />
-                  <button
-                    className="play-overlay"
-                    aria-label={`Play ${song.title || song.name}`}
-                    onClick={() => onPlaySong(song)}
-                  >
-                    ▶
-                  </button>
                   <button
                     className="favorite-icon active"
                     title="Remove from Favourite"
-                    onClick={() => unlikeSong(song.id || song._id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      unlikeSong(songId);
+                    }}
+                    style={{
+                      position: "absolute",
+                      top: "10px",
+                      right: "10px",
+                      background: "rgba(255, 255, 255, 0.9)",
+                      border: "none",
+                      borderRadius: "50%",
+                      width: "30px",
+                      height: "30px",
+                      cursor: "pointer",
+                      zIndex: 10,
+                    }}
                   >
                     ❤️
                   </button>
                 </div>
-
-                <div className="card-meta">
-                  <p className="playlist-title">{song.title || song.name}</p>
-                  <p className="playlist-info">{song.artist || song.artistName || "Unknown Artist"}</p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {totalPages > 1 && (
