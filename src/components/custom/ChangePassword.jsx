@@ -7,13 +7,39 @@ export default function ChangePassword({ onCancel }) {
   const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const validatePassword = () => {
+    // Kiểm tra độ dài
+    if (newPass.length < 8) {
+      alert("Mật khẩu mới phải có ít nhất 8 ký tự!");
+      return false;
+    }
+
+    // Kiểm tra chữ hoa, chữ thường và ký tự đặc biệt
+    const hasUpper = /[A-Z]/.test(newPass);
+    const hasLower = /[a-z]/.test(newPass);
+    const hasSpecial = /[^A-Za-z0-9]/.test(newPass);
+
+    if (!hasUpper || !hasLower || !hasSpecial) {
+      alert(
+        "Mật khẩu mới phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 ký tự đặc biệt!"
+      );
+      return false;
+    }
+
+    // Kiểm tra confirm
+    if (newPass !== confirm) {
+      alert("Xác nhận mật khẩu không trùng khớp!");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (newPass !== confirm) {
-      alert("Passwords do not match!");
-      return;
-    }
+    // FE validation
+    if (!validatePassword()) return;
 
     setLoading(true);
     try {
@@ -21,12 +47,17 @@ export default function ChangePassword({ onCancel }) {
         oldPassword: current,
         newPassword: newPass,
       });
-      alert("Password changed successfully!");
+
+      alert("Đổi mật khẩu thành công!");
       setCurrent("");
       setNewPass("");
       setConfirm("");
     } catch (err) {
-      alert("Error: " + err.message);
+      // Backend trả về trường hợp current password không đúng
+      alert(
+        "Đổi mật khẩu thất bại: " +
+          (err?.response?.data || err.message || "Unknown error")
+      );
     } finally {
       setLoading(false);
     }
@@ -55,7 +86,7 @@ export default function ChangePassword({ onCancel }) {
             type="password"
             value={newPass}
             onChange={(e) => setNewPass(e.target.value)}
-            placeholder="At least 8 characters"
+            placeholder="At least 8 characters, A-z & special char"
           />
         </div>
 
@@ -74,7 +105,7 @@ export default function ChangePassword({ onCancel }) {
           Cancel
         </button>
         <button type="submit" className="save-btn" disabled={loading}>
-          <img src="./src/assets/icon/save.svg" alt="Save" />{" "}
+          <img src="./src/assets/icon/save.svg" alt="Save" />
           {loading ? "Saving..." : "Save Changes"}
         </button>
       </div>

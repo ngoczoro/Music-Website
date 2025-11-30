@@ -134,7 +134,13 @@ export const changePassword = async ({ oldPassword, newPassword }) => {
     body: JSON.stringify({ oldPassword, newPassword }),
   });
 
-  return handleResponse(res);
+  if (!res.ok) {
+    // đọc text trả về từ BE
+    const errorText = await res.text();
+    throw new Error(errorText || "Unknown error");
+  }
+
+  return await res.text();
 };
 
 /**
