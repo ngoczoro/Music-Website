@@ -39,14 +39,15 @@ export const loginUser = async (credentials) => {
     body: JSON.stringify(credentials),
   });
 
-  const data = await handleResponse(response);
+  const result = await handleResponse(response);
+// result = { ok, status, message, data }
 
-  // Lưu token vào Local Storage (Thực hành phổ biến)
-  if (res.data?.token) {
-    localStorage.setItem("authToken", res.data.token);
-  }
+if (result.ok && result.data?.token) {
+  console.log("Token:", result.data.token);
+  localStorage.setItem("authToken", result.data.token);
+}
 
-  return res;
+  return result;
 };
 export const forgotPassword = async (email) => {
   const url = `${API_BASE_URL}/password/forgot`;

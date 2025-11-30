@@ -9,10 +9,10 @@ export function ArtistList() {
 
   useEffect(() => {
     // token dùng tạm
-    localStorage.setItem(
-      "authToken",
-      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzUyMTAxOUBnbS51aXQuZWR1LnZuIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NjM4MTk5MDAsImV4cCI6MTc2NTAyOTUwMH0.ZtbbdiBolZyc1gIdHRZlju8MrdPNDhQiw6LqEzAuLVE"
-    );
+    // localStorage.setItem(
+    //   "authToken",
+    //   "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMzUyMTAxOUBnbS51aXQuZWR1LnZuIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3NjM4MTk5MDAsImV4cCI6MTc2NTAyOTUwMH0.ZtbbdiBolZyc1gIdHRZlju8MrdPNDhQiw6LqEzAuLVE"
+    // );
 
     const loadArtists = async () => {
       try {
@@ -33,9 +33,7 @@ export function ArtistList() {
 
   return (
     <div className="artist-list grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {artists.length === 0 ? (
-        <p>Chưa có nghệ sĩ thịnh hành.</p>
-      ) : (
+      {artists.length > 0 ?  (
         artists.map((artist) => (
           <ArtistCard
             key={artist.id || artist._id}
@@ -45,7 +43,10 @@ export function ArtistList() {
             views={artist.totalViews || 0}
           />
         ))
-      )}
+      ) : 
+      (
+        <p>Chưa có nghệ sĩ thịnh hành.</p>
+      ) }
     </div>
   );
 }

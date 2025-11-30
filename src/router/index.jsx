@@ -11,22 +11,24 @@ import Login from "../pages/Login";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
 import SongDetail from "../pages/SongDetail";
-import PlaylistDetail from "../pages/PlaylistDetail";
-import FavoriteSongs from "../pages/FavoriteSongs";
+// import PlaylistDetail from "../pages/PlaylistDetail";
+// import FavoriteSongs from "../pages/FavoriteSongs";
 
 export default function AppRouter() {
+  const hasToken = !!localStorage.getItem("authToken");
+
   return (
     <BrowserRouter>
       <Routes>
-        {/* ----- ROUTES KHÔNG DÙNG LAYOUT ----- */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-
-        {/* Mặc định redirect → register */}
-        <Route path="/" element={<Navigate to="/register" replace />} />
+        <Route
+          path="/"
+          element={<Navigate to={hasToken ? "/home" : "/login"} replace />}
+        />
 
         {/* ----- ROUTES CÓ DÙNG MAINLAYOUT ----- */}
         <Route element={<MainLayout />}>
@@ -35,8 +37,8 @@ export default function AppRouter() {
           <Route path="/playlist" element={<MyPlaylist />} />
           <Route path="/editprofile" element={<EditProfile />} />
           <Route path="/song/:id" element={<SongDetail />} />
-          <Route path="/playlists/:id" element={<PlaylistDetail />} />
-          <Route path="/favourite" element={<FavoriteSongs />} />
+          {/* <Route path="/playlists/:id" element={<PlaylistDetail />} /> */}
+          {/* <Route path="/favourite" element={<FavoriteSongs />} /> */}
         </Route>
       </Routes>
     </BrowserRouter>

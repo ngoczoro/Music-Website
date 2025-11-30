@@ -4,10 +4,11 @@ import { ProfileHeader } from "../../components/custom/ProfileHeader";
 import { PlaylistList } from "../../components/custom/PlaylistList";
 import { SongList } from "../../components/custom/SongList";
 import { ArtistList } from "../../components/custom/ArtistList";
-import Breadcrumb from "../components/Breadcrumb";
 import "../../styles/theme.css";
+import { useNavigate } from "react-router-dom";
 
 const MyPlaylist = () => {
+  const navigate = useNavigate();
   const [playlists, setPlaylists] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const playlistsPerPage = 8;
