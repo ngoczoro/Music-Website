@@ -143,3 +143,157 @@
 //     </div>
 //   );
 // }
+
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "../../styles/theme.css";
+import { fetchMyPlaylists, fetchSongsInPlaylist } from "../../services/musicService";
+
+export default function FavoriteSongs() {
+  const navigate = useNavigate();
+  const [favoriteSongs, setFavoriteSongs] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [songsPerPage] = useState(8);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadFavorites = async () => {
+      try {
+        setLoading(true);
+        // Lấy tất cả playlist của user
+        const playlists = await fetchMyPlaylists();
+
+        // Tìm playlist "Favorites"
+        const favorite = playlists.find((p) => p.name === "Favorites" || p.name === "Favourite");
+        if (!favorite) {
+          console.warn("Không tìm thấy playlist Favorites.");
+          setFavoriteSongs([]);
+          setLoading(false);
+          return;
+        }
+
+        // Gọi API lấy songs trong playlist đó
+        const songsData = await fetchSongsInPlaylist(favorite.id || favorite._id);
+        setFavoriteSongs(songsData);
+      } catch (err) {
+        console.error("Lỗi khi tải playlist yêu thích:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadFavorites();
+  }, []);
+
+  const indexOfLast = currentPage * songsPerPage;
+  const indexOfFirst = indexOfLast - songsPerPage;
+  const currentSongs = favoriteSongs.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(favoriteSongs.length / songsPerPage);
+
+  function onPlaySong(song) {
+    navigate(`/song/${song.id || song._id}`);
+  }
+
+  function unlikeSong(songId) {
+    // TODO: Implement API call to remove song from favorites
+    setFavoriteSongs(prev => prev.filter(s => (s.id || s._id) !== songId));
+  }
+
+  if (loading) {
+    return <div className="main-content favourite-page"><p>Loading...</p></div>;
+  }
+
+  if (error) {
+    return <div className="main-content favourite-page"><p>Error: {error}</p></div>;
+  }
+
+  return (
+    <div className="main-content favourite-page">
+      <h2 className="page-title">Your Favourite Songs</h2>
+
+      {favoriteSongs.length === 0 ? (
+        <p>You don't have any favorite songs yet.</p>
+      ) : (
+        <>
+          <div className="song-grid">
+            {currentSongs.map(song => (
+              <div className="playlist-card" key={song.id || song._id}>
+                <div className="cover-wrapper">
+                  <img 
+                    src={
+                      song.imageUrl?.startsWith("http")
+                        ? song.imageUrl
+                        : song.imageUrl
+                        ? `http://localhost:8081${song.imageUrl}`
+                        : "https://via.placeholder.com/300"
+                    } 
+                    alt={song.title || song.name} 
+                    className="playlist-cover" 
+                  />
+                  <button
+                    className="play-overlay"
+                    aria-label={`Play ${song.title || song.name}`}
+                    onClick={() => onPlaySong(song)}
+                  >
+                    ▶
+                  </button>
+                  <button
+                    className="favorite-icon active"
+                    title="Remove from Favourite"
+                    onClick={() => unlikeSong(song.id || song._id)}
+                  >
+                    ❤️
+                  </button>
+                </div>
+
+                <div className="card-meta">
+                  <p className="playlist-title">{song.title || song.name}</p>
+                  <p className="playlist-info">{song.artist || song.artistName || "Unknown Artist"}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button disabled={currentPage === 1} onClick={() => setCurrentPage(1)}>
+                «
+              </button>
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              >
+                ‹
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i + 1}
+                  className={currentPage === i + 1 ? "active" : ""}
+                  onClick={() => setCurrentPage(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              ))}
+
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              >
+                ›
+              </button>
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage(totalPages)}
+              >
+                »
+              </button>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
