@@ -16,7 +16,6 @@ export default function MainLayout() {
     else if (path.startsWith("/playlist")) setActiveItem("Playlist");
     else if (path.startsWith("/editprofile")) setActiveItem("Account");
     else if (path.startsWith("/favourite")) setActiveItem("Favorite");
-
   }, [location.pathname]);
 
   const handleMenuClick = (id) => {
@@ -32,12 +31,12 @@ export default function MainLayout() {
     // Map id của Sidebar -> route thực tế
     const idToPath = {
       Home: "/home",
-      Artist: "/home",          // tạm thời có thể cùng trang Home hoặc sau này tạo route riêng
-      Genre: "/home",           // tương tự
-      Recent: "/home",          // hoặc /recent nếu bạn tạo
+      Artist: "/home", // tạm thời có thể cùng trang Home hoặc sau này tạo route riêng
+      Genre: "/home", // tương tự
+      Recent: "/home", // hoặc /recent nếu bạn tạo
       Favorite: "/favourite",
       Playlist: "/playlist",
-      ApplyForArtist: "/home",  // hoặc route riêng sau này
+      ApplyForArtist: "/home", // hoặc route riêng sau này
       Account: "/profile",
     };
 

@@ -8,6 +8,12 @@ export default function ChangePassword({ onCancel }) {
   const [loading, setLoading] = useState(false);
 
   const validatePassword = () => {
+    // Mật khẩu mới không được trùng mật khẩu hiện tại
+    if (newPass === current) {
+      alert("Mật khẩu mới không được trùng với mật khẩu hiện tại!");
+      return false;
+    }
+
     // Kiểm tra độ dài
     if (newPass.length < 8) {
       alert("Mật khẩu mới phải có ít nhất 8 ký tự!");
