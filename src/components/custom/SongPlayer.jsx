@@ -165,7 +165,11 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
   if (!song) return <div>Đang tải bài hát...</div>;
 
   const audioUrl = `http://localhost:8081/api/common/song/stream/${song.id}`;
-  const coverUrl = `http://localhost:8081${song.coverImageUrl}`;
+  const coverUrl = song.coverImageUrl?.startsWith("http")
+    ? song.coverImageUrl
+    : `http://localhost:8081${
+        song.coverImageUrl || "/uploads/default-cover.jpg"
+      }`;
 
   return (
     <div className="songplayer-container">
