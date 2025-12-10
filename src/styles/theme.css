@@ -1,3 +1,71 @@
+/* Pagination Styles */
+.pagination, .pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+  margin: 24px 100px 0 0;
+}
+
+.pagination-btn, .pagination button {
+  background: #fff;
+  border: 1px solid #d1d5db;
+  color: #222;
+  padding: 6px 14px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  min-width: 36px;
+}
+
+.pagination-btn-active, .pagination button.active {
+  background: #6366f1;
+  color: #fff;
+  border-color: #6366f1;
+}
+
+.pagination-btn:disabled, .pagination button:disabled {
+  background: #f3f4f6;
+  color: #bdbdbd;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+}
+
+.pagination-ellipsis {
+  background: none !important;
+  border: none !important;
+  color: #888;
+  cursor: default;
+}
+
+.pagination-nav-btn {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+/* Playlist Sort Dropdown Styles */
+.playlist-sort-dropdown {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  color: #222;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  margin-bottom: 12px;
+  margin-left: 8px;
+  cursor: pointer;
+}
+.playlist-sort-dropdown:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px #6366f133;
+}
+.playlist-sort-dropdown option {
+  background: #fff;
+  color: #222;
+}
 /* ============================= */
 /* Theme Variables (Light Mode) */
 /* ============================= */
@@ -203,6 +271,11 @@ input {
   width: auto;
 }
 
+.playlist-main-container {
+  margin-left: 300px;
+}
+
+
 .logo-text {
   font-family: Montserrat;
   font-size: 24px;
@@ -226,6 +299,11 @@ input {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+.favourite-page {
+  margin-left: 300px !important;
+}
+
 
 /* Add these styles for menu items */
 .menu-list {
