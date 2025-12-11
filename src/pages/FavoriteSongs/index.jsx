@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/theme.css";
@@ -10,17 +9,15 @@ export default function FavoriteSongs() {
   const [favoriteSongs, setFavoriteSongs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [songsPerPage] = useState(8);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [sortBy, setSortBy] = useState("recently-added"); // ✅ thêm state sort
 
   useEffect(() => {
     const loadFavorites = async () => {
       try {
         setLoading(true);
-        // Lấy tất cả playlist của user
         const playlists = await fetchMyPlaylists();
-
-        // Tìm playlist "Favorites"
         const favorite = playlists.find((p) => p.name === "Favorites" || p.name === "Favourite");
         if (!favorite) {
           console.warn("Không tìm thấy playlist Favorites.");
@@ -28,8 +25,6 @@ export default function FavoriteSongs() {
           setLoading(false);
           return;
         }
-
-        // Gọi API lấy songs trong playlist đó
         const songsData = await fetchSongsInPlaylist(favorite.id || favorite._id);
         setFavoriteSongs(songsData);
       } catch (err) {
@@ -39,32 +34,34 @@ export default function FavoriteSongs() {
         setLoading(false);
       }
     };
-
     loadFavorites();
   }, []);
 
+  // ✅ Sort logic
+  const sortedSongs = React.useMemo(() => {
+    const data = [...favoriteSongs];
+    if (sortBy === "a-z") {
+      data.sort((a, b) => (a.title || a.name).localeCompare(b.title || b.name));
+    }
+    return data;
+  }, [favoriteSongs, sortBy]);
 
   const indexOfLast = currentPage * songsPerPage;
   const indexOfFirst = indexOfLast - songsPerPage;
-  const currentSongs = favoriteSongs.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.max(1, Math.ceil(favoriteSongs.length / songsPerPage));
+  const currentSongs = sortedSongs.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.max(1, Math.ceil(sortedSongs.length / songsPerPage));
 
-  // Pagination button logic (same as Playlist)
   const getPaginationButtons = () => {
     const buttons = [];
     const maxVisible = 3;
     if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) {
-        buttons.push(i);
-      }
+      for (let i = 1; i <= totalPages; i++) buttons.push(i);
     } else {
       buttons.push(1);
       if (currentPage > maxVisible + 1) buttons.push("...");
       const start = Math.max(2, currentPage - 1);
       const end = Math.min(totalPages - 1, currentPage + 1);
-      for (let i = start; i <= end; i++) {
-        if (!buttons.includes(i)) buttons.push(i);
-      }
+      for (let i = start; i <= end; i++) if (!buttons.includes(i)) buttons.push(i);
       if (currentPage < totalPages - maxVisible) buttons.push("...");
       if (!buttons.includes(totalPages)) buttons.push(totalPages);
     }
@@ -83,35 +80,42 @@ export default function FavoriteSongs() {
   }
 
   function unlikeSong(songId) {
-    // TODO: Implement API call to remove song from favorites
     setFavoriteSongs(prev => prev.filter(s => (s.id || s._id) !== songId));
   }
 
-  if (loading) {
-    return <div className="main-content favourite-page"><p>Loading...</p></div>;
-  }
-
-  if (error) {
-    return <div className="main-content favourite-page"><p>Error: {error}</p></div>;
-  }
+  if (loading) return <div className="main-content favourite-page"><p>Loading...</p></div>;
+  if (error) return <div className="main-content favourite-page"><p>Error: {error}</p></div>;
 
   return (
     <div className="main-content favourite-page">
-      <h2 className="page-title">Your Favourites</h2>
+      <h2 className="page-title">Your Favorites</h2>
 
-      {favoriteSongs.length === 0 ? (
+      {/* ✅ Controls: sort + action buttons */}
+      <div className="playlist-controls" style={{ display: "flex", alignItems: "center" }}>
+        <select
+          className="playlist-sort-dropdown"
+          value={sortBy}
+          onChange={(e) => {
+            setSortBy(e.target.value);
+            setCurrentPage(1);
+          }}
+        >
+          <option value="recently-added">Recently added</option>
+          <option value="a-z">A-Z</option>
+        </select>
+
+        <div className="playlist-action-buttons">
+          <button className="btn-primary" onClick={() => alert("TODO: Thêm bài hát vào Favorites")}>➕ Thêm bài hát yêu thích mới</button>
+        </div>
+      </div>
+
+      {sortedSongs.length === 0 ? (
         <p>You don't have any favorite songs yet.</p>
       ) : (
         <div className="playlist-grid">
           {currentSongs.map(song => {
             const songId = song.id || song._id;
-            const imageUrl = song.imageUrl?.startsWith("http")
-              ? song.imageUrl
-              : song.imageUrl
-              ? `http://localhost:8081${song.imageUrl}`
-              : song.coverImageUrl?.startsWith("/")
-              ? `http://localhost:8081${song.coverImageUrl}`
-              : song.coverImageUrl || "https://via.placeholder.com/300";
+            const imageUrl = song.imageUrl || song.coverImageUrl || "https://via.placeholder.com/300";
             return (
               <div key={songId} style={{ position: "relative" }}>
                 <MusicCard
@@ -149,7 +153,7 @@ export default function FavoriteSongs() {
         </div>
       )}
 
-      {/* Pagination (always show, unified with Playlist) */}
+      {/* Pagination giữ nguyên */}
       <div className="pagination-container">
         <button
           className="pagination-btn pagination-nav-btn"
