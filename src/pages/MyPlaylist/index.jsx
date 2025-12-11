@@ -95,6 +95,13 @@ const MyPlaylist = () => {
           <option value="recently-added">Recently added</option>
           <option value="a-z">A-Z</option>
         </select>
+
+        {/* ✅ Nhóm nút nằm bên phải */}
+        <div className="playlist-action-buttons">
+          <button className="btn-primary" onClick={() => alert("TODO: Thêm playlist")}>➕ Thêm playlist mới</button>
+          <button className="btn-primary" onClick={() => alert("TODO: Sửa playlist")}>✏ Sửa playlist</button>
+          <button className="btn-primary btn-danger" onClick={() => alert("TODO: Xóa playlist")}>🗑 Xóa playlist</button>
+        </div>
       </div>
 
       {/* Playlists grid */}
