@@ -8,6 +8,9 @@ import "../../styles/theme.css";
 import EditProfilePage from "../EditProfile/index.jsx";
 
 const ProfilePage = () => {
+  // state biết đang search hay không
+  const [isSearching, setIsSearching] = useState(false);
+
   const [activeTab, setActiveTab] = useState("playlist");
 
   const renderContent = () => {
@@ -32,60 +35,65 @@ const ProfilePage = () => {
       className="profile-container"
       style={{ display: "flex", minHeight: "100vh", marginLeft: "220px" }}
     >
-      <div
-        className="profile-main"
-        style={{ flex: 1, display: "flex", flexDirection: "column" }}
-      >
-        {/* Header */}
-        <ProfileHeader onEditClick={() => setShowEditPage(true)} />
+      <div className="profile-main" style={{ flex: 1 }}>
+        {/*Header luôn có, nhưng nội dung bên trong phụ thuộc isSearching */}
+        <ProfileHeader
+          onEditClick={() => setShowEditPage(true)}
+          onSearchModeChange={setIsSearching}
+          isSearching={isSearching}
+        />
 
-        {/* Thanh chọn tab */}
-        <div
-          className="profile-tabs"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "40px",
-            borderBottom: "1px solid #e5e7eb",
-            width: "1020px",
-            margin: "30px auto 0",
-          }}
-        >
-          <button
-            className={`profile-tab ${
-              activeTab === "playlist" ? "active" : ""
-            }`}
-            onClick={() => setActiveTab("playlist")}
+        {/*Tabs: chỉ hiện khi KHÔNG search */}
+        {!isSearching && (
+          <div
+            className="profile-tabs"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "40px",
+              borderBottom: "1px solid #e5e7eb",
+              width: "1020px",
+              margin: "30px auto 0",
+            }}
           >
-            Playlists
-          </button>
-          <button
-            className={`profile-tab ${
-              activeTab === "favorites" ? "active" : ""
-            }`}
-            onClick={() => setActiveTab("favorites")}
-          >
-            Favorite Songs
-          </button>
-          <button
-            className={`profile-tab ${activeTab === "artists" ? "active" : ""}`}
-            onClick={() => setActiveTab("artists")}
-          >
-            Artists
-          </button>
-        </div>
+            <button
+              className={`profile-tab ${
+                activeTab === "playlist" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("playlist")}
+            >
+              Playlists
+            </button>
 
-        {/* Nội dung hiển thị theo tab */}
-        <div
-          className="profile-content"
-          style={{
-            width: "1020px",
-            margin: "0 auto",
-            padding: "30px 0",
-          }}
-        >
-          {renderContent()}
-        </div>
+            <button
+              className={`profile-tab ${
+                activeTab === "favorites" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("favorites")}
+            >
+              Favorite Songs
+            </button>
+
+            <button
+              className={`profile-tab ${
+                activeTab === "artists" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("artists")}
+            >
+              Artists
+            </button>
+          </div>
+        )}
+
+        {/*Content: chỉ hiện khi KHÔNG search */}
+        {!isSearching && (
+          <div
+            className="profile-content"
+            style={{ width: "1020px", margin: "0 auto", padding: "30px 0" }}
+          >
+            {renderContent()}
+          </div>
+        )}
       </div>
     </div>
   );

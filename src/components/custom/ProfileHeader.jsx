@@ -1,12 +1,31 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { getCurrentUser, fetchMyPlaylists } from "../../services/musicService";
 import "../../styles/theme.css";
+import { MusicCard } from "../../components/custom/MusicCard";
+import { searchSongs } from "../../services/searchService";
 
-export function ProfileHeader({ onEditClick }) {
+export function ProfileHeader({
+  onEditClick,
+  onSearchModeChange,
+  isSearching,
+}) {
   const [user, setUser] = useState(null);
   const [playlists, setPlaylists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [keyword, setKeyword] = useState("");
+  const [results, setResults] = useState([]);
+  const [searching, setSearching] = useState(false);
+  const location = useLocation();
+  useEffect(() => {
+    // Khi rời trang profile → reset search
+    if (!location.pathname.startsWith("/profile")) {
+      setKeyword("");
+      onSearchModeChange?.(false);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,13 +55,36 @@ export function ProfileHeader({ onEditClick }) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (!keyword.trim()) {
+      setResults([]);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        setSearching(true);
+        const data = await searchSongs(keyword);
+        setResults(data);
+      } catch (err) {
+        console.error("Search error:", err);
+      } finally {
+        setSearching(false);
+      }
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [keyword]);
+
+  const navigate = useNavigate();
+
   if (loading) return <p style={{ textAlign: "center" }}>Đang tải...</p>;
   if (error)
     return <p style={{ color: "red", textAlign: "center" }}>{error}</p>;
 
   return (
     <div className="profile-page">
-      {/* Thanh tìm kiếm */}
+      {/* SEARCH BAR – LUÔN HIỆN */}
       <div className="profile-search-bar">
         <div className="search-container">
           <img
@@ -52,70 +94,102 @@ export function ProfileHeader({ onEditClick }) {
           />
           <input
             type="text"
-            placeholder="Search artist, song, playlist"
+            placeholder="Search song title"
             className="profile-search-input"
+            value={keyword}
+            onChange={(e) => {
+              const value = e.target.value;
+              setKeyword(value);
+              onSearchModeChange?.(value.trim().length > 0);
+            }}
           />
         </div>
       </div>
 
-      <div className="profile-header">
-        <div className="profile-cover">
-          <img
-            src="https://images.unsplash.com/photo-1656283384093-1e227e621fad?auto=format&fit=crop&w=1080&q=80"
-            alt="cover"
-          />
-        </div>
+      {/*SEARCH RESULT */}
+      {isSearching && (
+        <div className="profile-search-horizontal">
+          {searching && <div>Searching...</div>}
 
-        <div className="profile-info">
-          <div className="profile-left">
-            <div className="profile-avatar">
-              <img
-                src={
-                  user?.avatarUrl?.startsWith("http")
-                    ? user.avatarUrl
-                    : `http://localhost:8081${
-                        user?.avatarUrl || "/uploads/default-avatar.jpg"
-                      }`
-                }
-                alt="avatar"
+          {!searching &&
+            results.map((song) => (
+              <MusicCard
+                key={song.id}
+                title={song.title}
+                artist={song.artistName || "Unknown Artist"}
+                imageUrl={song.coverImageUrl}
+                duration={song.duration}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  navigate(`/song/${song.id}`, { state: { autoplay: true } });
+                }}
               />
-            </div>
+            ))}
+        </div>
+      )}
 
-            <div className="profile-details">
-              <h1>{user?.fullName || "No Name"}</h1>
-              <p>{user?.bio || "Chưa có tiểu sử"}</p>
+      {/* PROFILE INFO – CHỈ HIỆN KHI KHÔNG SEARCH */}
+      {!isSearching && (
+        <div className="profile-header">
+          <div className="profile-cover">
+            <img
+              src="https://images.unsplash.com/photo-1656283384093-1e227e621fad?auto=format&fit=crop&w=1080&q=80"
+              alt="cover"
+            />
+          </div>
 
-              <div className="profile-stats">
-                <div className="profile-stat">
-                  <div className="value">{playlists.length}</div>{" "}
-                  {/* hiển thị số playlist */}
-                  <div className="label">Playlists</div>
-                </div>
-                <div className="profile-stat">
-                  <div className="value">2.4K</div>
-                  <div className="label">Followers</div>
-                </div>
-                <div className="profile-stat">
-                  <div className="value">892</div>
-                  <div className="label">Following</div>
+          <div className="profile-info">
+            <div className="profile-left">
+              <div className="profile-avatar">
+                <img
+                  src={
+                    user?.avatarUrl?.startsWith("http")
+                      ? user.avatarUrl
+                      : `http://localhost:8081${
+                          user?.avatarUrl || "/uploads/default-avatar.jpg"
+                        }`
+                  }
+                  alt="avatar"
+                />
+              </div>
+
+              <div className="profile-details">
+                <h1>{user?.fullName || "No Name"}</h1>
+                <p>{user?.bio || "Chưa có tiểu sử"}</p>
+
+                <div className="profile-stats">
+                  <div className="profile-stat">
+                    <div className="value">{playlists.length}</div>{" "}
+                    {/* hiển thị số playlist */}
+                    <div className="label">Playlists</div>
+                  </div>
+                  <div className="profile-stat">
+                    <div className="value">2.4K</div>
+                    <div className="label">Followers</div>
+                  </div>
+                  <div className="profile-stat">
+                    <div className="value">892</div>
+                    <div className="label">Following</div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="profile-actions">
-            <button>
-              <img src="./src/assets/icon/share.svg" alt="Share" />
-            </button>
-            <button>
-              <img src="./src/assets/icon/setting.svg" alt="Settings" />
-            </button>
-            <button className="edit-btn" onClick={onEditClick}>
-              Edit Profile
-            </button>
+            <div className="profile-actions">
+              <button>
+                <img src="./src/assets/icon/share.svg" alt="Share" />
+              </button>
+              <button>
+                <img src="./src/assets/icon/setting.svg" alt="Settings" />
+              </button>
+              <button className="edit-btn" onClick={onEditClick}>
+                Edit Profile
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
+export default ProfileHeader;

@@ -27,7 +27,13 @@ async function sendListeningHistory(songId) {
   }
 }
 
-const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
+const SongPlayer = ({
+  songId,
+  songList = [],
+  autoplay = false,
+  onChangeSong,
+  onTimeUpdate,
+}) => {
   const [song, setSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -38,6 +44,12 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
 
   const audioRef = useRef(null);
   const sentHistoryRef = useRef(false); // chỉ gửi 1 lần / bài
+
+  useEffect(() => {
+    if (autoplay && audioRef.current) {
+      audioRef.current.play().catch(() => {});
+    }
+  }, [autoplay]);
 
   useEffect(() => {
     const loadSong = async () => {
@@ -71,8 +83,7 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
     if (audioRef.current) {
       audioRef.current.src = `http://localhost:8081/api/common/song/stream/${songId}`;
       audioRef.current.load();
-      audioRef.current.play().catch(() => {});
-      setIsPlaying(true);
+      setIsPlaying(false);
     }
   }, [songId]);
 
