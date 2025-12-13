@@ -71,9 +71,11 @@ export function ProfileHeader({ onEditClick }) {
             <div className="profile-avatar">
               <img
                 src={
-                  user?.avatarUrl
-                    ? `http://localhost:8081${user.avatarUrl}`
-                    : "https://via.placeholder.com/150"
+                  user?.avatarUrl?.startsWith("http")
+                    ? user.avatarUrl
+                    : `http://localhost:8081${
+                        user?.avatarUrl || "/uploads/default-avatar.jpg"
+                      }`
                 }
                 alt="avatar"
               />

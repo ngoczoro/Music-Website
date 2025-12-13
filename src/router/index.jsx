@@ -11,8 +11,8 @@ import Login from "../pages/Login";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
 import SongDetail from "../pages/SongDetail";
-// import PlaylistDetail from "../pages/PlaylistDetail";
-// import FavoriteSongs from "../pages/FavoriteSongs";
+import PlaylistDetail from "../pages/PlaylistDetail";
+import FavoriteSongs from "../pages/FavoriteSongs";
 
 export default function AppRouter() {
   const hasToken = !!localStorage.getItem("authToken");
@@ -37,8 +37,8 @@ export default function AppRouter() {
           <Route path="/playlist" element={<MyPlaylist />} />
           <Route path="/editprofile" element={<EditProfile />} />
           <Route path="/song/:id" element={<SongDetail />} />
-          {/* <Route path="/playlists/:id" element={<PlaylistDetail />} /> */}
-          {/* <Route path="/favourite" element={<FavoriteSongs />} /> */}
+          <Route path="/playlists/:id" element={<PlaylistDetail />} />
+          <Route path="/favourite" element={<FavoriteSongs />} />
         </Route>
       </Routes>
     </BrowserRouter>
