@@ -37,7 +37,8 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
   const [isShuffle, setIsShuffle] = useState(false);
 
   const audioRef = useRef(null);
-  const sentHistoryRef = useRef(false); // chỉ gửi 1 lần / bài
+  const sentHistoryRef = useRef(false);
+  const isSeekingRef = useRef(false); // ← THÊM FLAG
 
   useEffect(() => {
     const loadSong = async () => {
@@ -51,10 +52,9 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
     if (songId) loadSong();
   }, [songId]);
 
-  // Reset khi đổi bài hát
   useEffect(() => {
     if (!audioRef.current) return;
-    sentHistoryRef.current = false; // reset flag
+    sentHistoryRef.current = false;
 
     const audio = audioRef.current;
     audio.onloadedmetadata = () => setDuration(audio.duration || 0);
@@ -66,22 +66,25 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
     };
   }, [songId]);
 
-  // Gán src mỗi khi đổi bài
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.src = `http://localhost:8081/api/common/song/stream/${songId}`;
-      audioRef.current.load();
-      audioRef.current.play().catch(() => {});
-      setIsPlaying(true);
-    }
-  }, [songId]);
+  if (audioRef.current) {
+    audioRef.current.src = `http://localhost:8081/api/common/song/stream/${songId}`;
+    audioRef.current.volume = volume / 100; // Set volume ban đầu
+    audioRef.current.load();
+    audioRef.current.play().catch(() => {});
+    setIsPlaying(true);
+  }
+}, [songId]); 
 
-  // Lắng nghe audio & gửi history khi nghe >= 50%
+  // ← SỬA useEffect NÀY
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !song) return;
 
     const handleTimeUpdate = () => {
+      // QUAN TRỌNG: Không update state khi đang seek
+      if (isSeekingRef.current) return;
+
       setCurrentTime(audio.currentTime);
       if (onTimeUpdate) onTimeUpdate(audio.currentTime);
 
@@ -91,7 +94,7 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
         audio.currentTime >= audio.duration * 0.5
       ) {
         sentHistoryRef.current = true;
-        sendListeningHistory(song.id); // chỉ bắn 1 lần
+        sendListeningHistory(song.id);
       }
     };
 
@@ -128,10 +131,28 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
     }
   };
 
-  const handleSeek = (e) => {
+  // ← THAY THẾ handleSeek CŨ
+  const handleSeekStart = () => {
+    isSeekingRef.current = true;
+  };
+
+  const handleSeekInput = (e) => {
+    // Chỉ update UI khi đang drag
     const time = Number(e.target.value);
     setCurrentTime(time);
-    if (audioRef.current) audioRef.current.currentTime = time;
+  };
+
+  const handleSeekEnd = (e) => {
+    const time = Number(e.target.value);
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // Commit vào audio
+    audio.currentTime = time;
+    setCurrentTime(time);
+
+    // Clear flag ngay
+    isSeekingRef.current = false;
   };
 
   const formatTime = (seconds) => {
@@ -212,9 +233,15 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
             max={duration || 0}
             step="0.1"
             value={currentTime}
-            onChange={handleSeek}
+            onMouseDown={handleSeekStart}
+            onTouchStart={handleSeekStart}
+            onInput={handleSeekInput}
+            onMouseUp={handleSeekEnd}      // ← Thêm onMouseUp
+            onTouchEnd={handleSeekEnd}     // ← Thêm onTouchEnd
+            onChange={handleSeekEnd}       // ← Giữ onChange cho safety
             className="progress-bar"
           />
+
           <span className="time-text">{formatTime(duration)}</span>
         </div>
 
@@ -233,6 +260,12 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
               min="0"
               max="100"
               value={volume}
+              onInput={(e) => {  // ← THÊM onInput
+                const newVol = Number(e.target.value);
+                setVolume(newVol);
+                if (audioRef.current) audioRef.current.volume = newVol / 100;
+              }}
+
               onChange={(e) => {
                 const newVol = Number(e.target.value);
                 setVolume(newVol);
