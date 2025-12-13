@@ -11,7 +11,9 @@ export function MadeForYouList() {
   const navigate = useNavigate();
 
   const goToSong = (id) => {
-    navigate(`/song/${id}`);
+    navigate(`/song/${id}`, {
+      state: { autoplay: true },
+    });
   };
 
   useEffect(() => {
@@ -49,7 +51,7 @@ export function MadeForYouList() {
             artist={item.artist}
             duration={item.duration}
             imageUrl={item.imageUrl}
-            onClick={() => goToSong(item.id)} // THÊM DÒNG NÀY
+            onMouseDown={() => goToSong(item.id)}
           />
         ))}
       </div>

@@ -39,7 +39,9 @@ export function TrendingList() {
   const navigate = useNavigate();
 
   const goToDetail = (id) => {
-    navigate(`/song/${id}`);
+    navigate(`/song/${id}`, {
+      state: { autoplay: true },
+    });
   };
 
   useEffect(() => {
@@ -97,7 +99,7 @@ export function TrendingList() {
                 ? `http://localhost:8081${item.coverImageUrl}`
                 : item.coverImageUrl
             }
-            onClick={() => goToDetail(item.id)}
+            onMouseDown={() => goToDetail(item.id)}
           />
         ))}
       </div>
