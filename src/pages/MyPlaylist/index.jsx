@@ -110,15 +110,15 @@ const MyPlaylist = () => {
       ) : (
         <div className="playlist-grid-container">
           {currentPlaylists.map((p) => (
-            <div key={p._id} onClick={() => navigate(`/playlists/${p._id}`)} style={{ cursor: "pointer" }}>
-              <PlaylistCard
-                title={p.name}
-                songs={p.songs}
-                isPublic={p.isPublic}
-                imageUrl={p.image || p.thumbnailUrl || "/uploads/images/default-img.jpg"}
-              />
-            </div>
-          ))}
+            <PlaylistCard
+              key={p._id}
+              title={p.name}
+              songs={p.songs}
+              isPublic={p.isPublic}
+              imageUrl={p.image || p.thumbnailUrl || "/uploads/images/default-img.jpg"}
+              onClick={() => navigate(`/playlists/${p._id}`)}
+        />
+      ))}
         </div>
       )}
 
