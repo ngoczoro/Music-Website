@@ -28,7 +28,7 @@ export default function FavoriteSongs() {
         const songsData = await fetchSongsInPlaylist(favorite.id || favorite._id);
         setFavoriteSongs(songsData);
       } catch (err) {
-        console.error("Lỗi khi tải playlist yêu thích:", err);
+        console.error("Error when loading favorite playlist:", err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -105,7 +105,7 @@ export default function FavoriteSongs() {
         </select>
 
         <div className="playlist-action-buttons">
-          <button className="btn-primary" onClick={() => alert("TODO: Thêm bài hát vào Favorites")}>➕ Thêm bài hát yêu thích mới</button>
+          <button className="btn-primary" onClick={() => alert("TODO: Thêm bài hát vào Favorites")}>➕ Add new favorite song</button>
         </div>
       </div>
 
