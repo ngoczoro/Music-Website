@@ -1,25 +1,38 @@
-/**
- * Thêm bài hát vào playlist Favorites
- * @param {string} songId
- */
+const API_BASE_URL = "http://localhost:8081/api";
+
 export const addSongToFavorites = async (songId) => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
 
-  // Gọi API addSongs không truyền playlistId để mặc định là Favorites
-  const res = await fetch(`${API_BASE_URL}/common/playlist/addSongs`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ songs: [songId] }),
-  });
+  const res = await fetch(
+    `${API_BASE_URL}/common/playlist/favorites/songs/${songId}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
   return handleResponse(res);
 };
 
-// Thay thế bằng URL API Backend thực tế của bạn
-const API_BASE_URL = "http://localhost:8081/api";
+export const removeSongFromFavorites = async (songId) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) throw new Error("Chưa đăng nhập");
+
+  const res = await fetch(
+    `${API_BASE_URL}/common/playlist/favorites/songs/${songId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return handleResponse(res);
+};
 
 const handleResponse = async (response) => {
   const isJson = response.headers
@@ -33,6 +46,31 @@ const handleResponse = async (response) => {
     message: data.message || response.statusText,
     data,
   };
+};
+
+export const checkSongInFavorite = async (songId) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) throw new Error("Chưa đăng nhập");
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/common/playlist/favorite/songs/${encodeURIComponent(songId)}/exists`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const res = await handleResponse(response);
+    //  console.log("Check favorite response:", res);
+    if (res.ok) return !!res.data?.inFavorite;
+    console.error("Check favorite failed:", res.message);
+    return false;
+  } catch (err) {
+    console.error("Check favorite error:", err?.message || err);
+    return false;
+  }
 };
 
 /**
