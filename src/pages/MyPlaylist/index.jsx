@@ -22,6 +22,14 @@ const MyPlaylist = () => {
   p => p._id === selectedPlaylistId
 );
   const isFavoriteSelected = selectedPlaylist?.name?.toLowerCase() === "favorites";
+  const [showAddForm, setShowAddForm] = useState(false);
+
+  const [newPlaylist, setNewPlaylist] = useState({
+    name: "",
+    description: "",
+    thumbnail: null,
+  });
+
 
 const loadPlaylists = async () => {
   try {
@@ -55,15 +63,32 @@ useEffect(() => {
 }, [sortBy]);
 
 
-const handleAddPlaylist = async () => {
-  const name = prompt("Enter playlist name:");
-  if (!name) return;
+const handleCreatePlaylist = async () => {
+  if (!newPlaylist.name.trim()) {
+    alert("Playlist name can be not empty and playlist is NOT created");
+    return;
+  }
 
-  await createPlaylist({ name });
+  const formData = new FormData();
+  formData.append("name", newPlaylist.name);
+  formData.append("description", newPlaylist.description);
 
-  setCurrentPage(1);     // 👈 QUAN TRỌNG
-  await loadPlaylists(); // 👈 reload
+  if (newPlaylist.thumbnail) {
+    formData.append("thumbnail", newPlaylist.thumbnail);
+  }
+
+  try {
+    await createPlaylist(formData);
+
+    setShowAddForm(false);
+    setNewPlaylist({ name: "", description: "", thumbnail: null });
+    setCurrentPage(1);
+    await loadPlaylists();
+  } catch (err) {
+    alert("Failed to create playlist");
+  }
 };
+
 
 
 const handleEditPlaylist = async () => {
@@ -156,6 +181,69 @@ const handleDeletePlaylist = async () => {
 
       {/* Sorting dropdown */}
       <div className="playlist-controls">
+        {showAddForm && (
+  <div className="playlist-add-form">
+    <h3>Create new playlist</h3>
+
+    {/* Name */}
+    <div className="form-group">
+      <label>Name</label>
+      <input
+        type="text"
+        value={newPlaylist.name}
+        onChange={(e) =>
+          setNewPlaylist({ ...newPlaylist, name: e.target.value })
+        }
+        placeholder="Enter playlist name"
+      />
+    </div>
+
+    {/* Description */}
+    <div className="form-group">
+      <label>Description</label>
+      <textarea
+        value={newPlaylist.description}
+        onChange={(e) =>
+          setNewPlaylist({ ...newPlaylist, description: e.target.value })
+        }
+        placeholder="Enter description"
+      />
+    </div>
+
+    {/* Thumbnail */}
+    <div className="form-group">
+      <label>Thumbnail</label>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) =>
+          setNewPlaylist({ ...newPlaylist, thumbnail: e.target.files[0] })
+        }
+      />
+    </div>
+
+    {/* Buttons */}
+    <div className="form-actions">
+      <button
+        className="btn-primary"
+        onClick={handleCreatePlaylist}
+      >
+        Create
+      </button>
+
+      <button
+        className="btn-secondary"
+        onClick={() => {
+          setShowAddForm(false);
+          setNewPlaylist({ name: "", description: "", thumbnail: null });
+        }}
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+)}
+
         <select
           className="playlist-sort-dropdown"
           value={sortBy}
@@ -170,9 +258,13 @@ const handleDeletePlaylist = async () => {
 
         {/* ✅ Nhóm nút nằm bên phải */}
         <div className="playlist-action-buttons-2">
-          <button className="btn-primary" onClick={handleAddPlaylist}>
-            ➕ Add new playlist
+          <button
+            className="btn-primary"
+            onClick={() => setShowAddForm(true)}
+          >
+          ➕ Add new playlist
           </button>
+
 
           <button
             className="btn-primary"
