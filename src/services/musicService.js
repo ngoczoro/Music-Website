@@ -18,29 +18,6 @@ export const addSongToFavorites = async (songId) => {
   return handleResponse(res);
 };
 
-/**
- * Xóa bài hát khỏi playlist Favorites
- * @param {string} songId
- */
-export const removeSongFromFavorites = async (songId) => {
-  const token = localStorage.getItem("authToken");
-  if (!token) throw new Error("Chưa đăng nhập");
-
-  // Lấy playlist Favorites
-  const playlists = await fetchMyPlaylists();
-  const favorite = playlists.find((p) => p.name === "Favorites");
-  if (!favorite) throw new Error("Không tìm thấy playlist Favorites");
-
-  const res = await fetch(`${API_BASE_URL}/common/playlist/${favorite.id}/removeSongs`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ songs: [songId] }),
-  });
-  return handleResponse(res);
-};
 // Thay thế bằng URL API Backend thực tế của bạn
 const API_BASE_URL = "http://localhost:8081/api";
 
@@ -323,3 +300,130 @@ export async function getRecommendedSongs(userId) {
     return [];
   }
 }
+
+
+
+
+/**
+ * Tạo playlist mới
+ * @param {object} payload - { name, isPublic }
+ */
+export const createPlaylist = async ({ name, isPublic = false }) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) throw new Error("Chưa đăng nhập");
+
+  const res = await fetch(`${API_BASE_URL}/common/playlist`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      name,
+      isPublic,
+    }),
+  });
+
+  return handleResponse(res);
+};
+
+/**
+ * Cập nhật playlist (đổi tên, public/private, thumbnail...)
+ * @param {string} playlistId
+ * @param {object} payload - { name?, isPublic? }
+ */
+export const updatePlaylist = async (playlistId, payload) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) throw new Error("Chưa đăng nhập");
+
+  const res = await fetch(`${API_BASE_URL}/common/playlist/${playlistId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  return handleResponse(res);
+};
+
+
+/**
+ * Xóa playlist theo ID
+ * @param {string} playlistId
+ */
+export const deletePlaylist = async (playlistId) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) throw new Error("Chưa đăng nhập");
+
+  const res = await fetch(`${API_BASE_URL}/common/playlist/${playlistId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return handleResponse(res);
+};
+
+export async function addSongsToFavorites(songIds) {
+  const res = await fetch(`${API_BASE}/common/playlist/favorites/songs`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getToken()}`
+    },
+    body: JSON.stringify({ songIds })
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to add song to favorites");
+  }
+
+  return res.json();
+}
+
+/**
+ * Xóa bài hát khỏi playlist Favorites
+ * @param {string} songId
+ */
+export const removeSongFromFavorites = async (songId) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) throw new Error("Chưa đăng nhập");
+
+  // 1️⃣ Lấy playlist Favorites
+  const playlists = await fetchMyPlaylists();
+  const favorite = playlists.find(
+    (p) => p.name === "Favorites" || p.name === "Favourite"
+  );
+
+  if (!favorite) {
+    throw new Error("Không tìm thấy playlist Favorites");
+  }
+
+  const playlistId = favorite.id || favorite._id;
+
+  // 2️⃣ Gọi API removeSongs
+  const res = await fetch(
+    `${API_BASE_URL}/common/playlist/${playlistId}/removeSongs`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        songs: [songId],
+      }),
+    }
+  );
+
+  const result = await handleResponse(res);
+
+  if (!result.ok) {
+    throw new Error(result.message || "Không thể xóa bài hát khỏi Favorites");
+  }
+
+  return result.data; // backend có thể trả playlist updated
+};
