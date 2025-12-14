@@ -62,16 +62,28 @@ useEffect(() => {
   loadPlaylists();
 }, [sortBy]);
 
-
 const handleCreatePlaylist = async () => {
-  if (!newPlaylist.name.trim()) {
+  const name = newPlaylist.name.trim();
+
+  // ❌ rỗng
+  if (!name) {
     alert("Playlist name can be not empty and playlist is NOT created");
     return;
   }
 
+  // ❌ trùng tên
+  const isDuplicate = playlists.some(
+    (p) => p.name.toLowerCase() === name.toLowerCase()
+  );
+
+  if (isDuplicate) {
+    alert("Playlist name already exists");
+    return;
+  }
+
   const formData = new FormData();
-  formData.append("name", newPlaylist.name);
-  formData.append("description", newPlaylist.description);
+  formData.append("name", name);
+  formData.append("description", newPlaylist.description || "");
 
   if (newPlaylist.thumbnail) {
     formData.append("thumbnail", newPlaylist.thumbnail);
@@ -88,8 +100,6 @@ const handleCreatePlaylist = async () => {
     alert("Failed to create playlist");
   }
 };
-
-
 
 const handleEditPlaylist = async () => {
   if (!selectedPlaylistId) {
@@ -214,12 +224,37 @@ const handleDeletePlaylist = async () => {
     <div className="form-group">
       <label>Thumbnail</label>
       <input
-        type="file"
-        accept="image/*"
-        onChange={(e) =>
-          setNewPlaylist({ ...newPlaylist, thumbnail: e.target.files[0] })
-        }
-      />
+  type="file"
+  accept="image/png,image/jpeg,image/jpg,image/webp"
+  onChange={(e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const allowedTypes = [
+      "image/png",
+      "image/jpeg",
+      "image/jpg",
+      "image/webp",
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      alert("Only image files (PNG, JPG, JPEG, WEBP) are allowed");
+      e.target.value = "";
+      return;
+    }
+
+    // Optional: giới hạn size (ví dụ 2MB)
+    const maxSize = 2 * 1024 * 1024;
+    if (file.size > maxSize) {
+      alert("Image size must be less than 2MB");
+      e.target.value = "";
+      return;
+    }
+
+    setNewPlaylist({ ...newPlaylist, thumbnail: file });
+  }}
+/>
+
     </div>
 
     {/* Buttons */}
