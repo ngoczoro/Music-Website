@@ -308,24 +308,25 @@ export async function getRecommendedSongs(userId) {
  * Tạo playlist mới
  * @param {object} payload - { name, isPublic }
  */
-export const createPlaylist = async ({ name, isPublic = false }) => {
-  const token = localStorage.getItem("authToken");
-  if (!token) throw new Error("Chưa đăng nhập");
+export const createPlaylist = async (formData) => {
+  const token = localStorage.getItem("token");
 
-  const res = await fetch(`${API_BASE_URL}/common/playlist`, {
+  const res = await fetch("http://localhost:8081/api/playlists", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      // ❌ KHÔNG set Content-Type khi dùng FormData
     },
-    body: JSON.stringify({
-      name,
-      isPublic,
-    }),
+    body: formData,
   });
 
-  return handleResponse(res);
+  if (!res.ok) {
+    throw new Error("Failed to create playlist");
+  }
+
+  return res.json();
 };
+
 
 /**
  * Cập nhật playlist (đổi tên, public/private, thumbnail...)
