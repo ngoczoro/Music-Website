@@ -1,51 +1,38 @@
-/**
- * Thêm bài hát vào playlist Favorites
- * @param {string} songId
- */
+const API_BASE_URL = "http://localhost:8081/api";
+
 export const addSongToFavorites = async (songId) => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
 
-  // Gọi API addSongs không truyền playlistId để mặc định là Favorites
-  const res = await fetch(`${API_BASE_URL}/common/playlist/addSongs`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ songs: [songId] }),
-  });
+  const res = await fetch(
+    `${API_BASE_URL}/common/playlist/favorites/songs/${songId}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
   return handleResponse(res);
 };
 
-/**
- * Xóa bài hát khỏi playlist Favorites
- * @param {string} songId
- */
 export const removeSongFromFavorites = async (songId) => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
 
-  // Lấy playlist Favorites
-  const playlists = await fetchMyPlaylists();
-  const favorite = playlists.find((p) => p.name === "Favorites");
-  if (!favorite) throw new Error("Không tìm thấy playlist Favorites");
-
   const res = await fetch(
-    `${API_BASE_URL}/common/playlist/${favorite.id}/removeSongs`,
+    `${API_BASE_URL}/common/playlist/favorites/songs/${songId}`,
     {
-      method: "PATCH",
+      method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ songs: [songId] }),
     }
   );
+
   return handleResponse(res);
 };
-// Thay thế bằng URL API Backend thực tế của bạn
-const API_BASE_URL = "http://localhost:8081/api";
 
 const handleResponse = async (response) => {
   const isJson = response.headers

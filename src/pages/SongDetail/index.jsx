@@ -30,7 +30,7 @@ const SongDetail = () => {
       );
 
       if (!res.ok) {
-        console.error("❌ Lỗi fetch songs:", res.status);
+        console.error("❌ Lỗi fetch songs trong play:", res.status);
         setQueue([]);
         return;
       }
