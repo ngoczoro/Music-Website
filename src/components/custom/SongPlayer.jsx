@@ -10,7 +10,7 @@ import {
   Shuffle,
 } from "lucide-react";
 import "../../styles/theme.css";
-import { fetchSongById } from "../../services/musicService";
+import { fetchSongById, addSongToFavorites, removeSongFromFavorites, checkSongInFavorite } from "../../services/musicService";
 
 async function sendListeningHistory(songId) {
   try {
@@ -35,22 +35,44 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [volume, setVolume] = useState(70);
   const [isShuffle, setIsShuffle] = useState(false);
-
   const audioRef = useRef(null);
   const sentHistoryRef = useRef(false);
-  const isSeekingRef = useRef(false); // ← THÊM FLAG
+  const isSeekingRef = useRef(false);
+  const [isTogglingFavorite, setIsTogglingFavorite] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+
     const loadSong = async () => {
       try {
         const { data } = await fetchSongById(songId);
-        setSong(data);
+        if (isMounted) setSong(data);
       } catch (err) {
         console.error("Lỗi tải bài hát:", err);
       }
     };
-    if (songId) loadSong();
+
+    const loadFavorite = async () => {
+      try {
+        const result = await checkSongInFavorite(songId); // (nếu cần token thì truyền vào)
+        if (isMounted) setIsFavorite(!!result);
+      } catch (err) {
+        if (isMounted) setIsFavorite(false);
+        console.error("Lỗi check favorite:", err);
+      }
+    };
+
+    if (songId) {
+      setIsFavorite(false); // reset nhanh cho UI khỏi “dính” trạng thái bài trước
+      loadSong();
+      loadFavorite();
+    }
+
+    return () => {
+      isMounted = false;
+    };
   }, [songId]);
+
 
   useEffect(() => {
     if (!audioRef.current) return;
@@ -67,22 +89,20 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
   }, [songId]);
 
   useEffect(() => {
-  if (audioRef.current) {
-    audioRef.current.src = `http://localhost:8081/api/common/song/stream/${songId}`;
-    audioRef.current.volume = volume / 100; // Set volume ban đầu
-    audioRef.current.load();
-    audioRef.current.play().catch(() => {});
-    setIsPlaying(true);
-  }
-}, [songId]); 
+    if (audioRef.current) {
+      audioRef.current.src = `http://localhost:8081/api/common/song/stream/${songId}`;
+      audioRef.current.volume = volume / 100; // Set volume ban đầu
+      audioRef.current.load();
+      audioRef.current.play().catch(() => { });
+      setIsPlaying(true);
+    }
+  }, [songId]);
 
-  // ← SỬA useEffect NÀY
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !song) return;
 
     const handleTimeUpdate = () => {
-      // QUAN TRỌNG: Không update state khi đang seek
       if (isSeekingRef.current) return;
 
       setCurrentTime(audio.currentTime);
@@ -188,9 +208,8 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
   const audioUrl = `http://localhost:8081/api/common/song/stream/${song.id}`;
   const coverUrl = song.coverImageUrl?.startsWith("http")
     ? song.coverImageUrl
-    : `http://localhost:8081${
-        song.coverImageUrl || "/uploads/default-cover.jpg"
-      }`;
+    : `http://localhost:8081${song.coverImageUrl || "/uploads/default-cover.jpg"
+    }`;
 
   return (
     <div className="songplayer-container">
@@ -252,8 +271,32 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
         <div className="bottom-row">
           <div style={{ flex: 1 }} />
           <button
+            disabled={isTogglingFavorite}
             className={`icon-btn ${isFavorite ? "liked" : ""}`}
-            onClick={() => setIsFavorite(!isFavorite)}
+
+            onClick={async () => {
+              if (isTogglingFavorite) return;
+
+              const next = !isFavorite;     // trạng thái mới
+              setIsFavorite(next);          // optimistic UI
+              setIsTogglingFavorite(true);
+
+              try {
+                // dùng songId prop (ổn định) thay vì song.id (phụ thuộc loadSong)
+                if (next) {
+                  await addSongToFavorites(songId);
+                  console.log("Added to favorites");
+                } else {
+                  await removeSongFromFavorites(songId);
+                  console.log("Removed from favorites");
+                }
+              } catch (err) {
+                setIsFavorite(!next); // rollback
+                console.error("Toggle favorite failed:", err);
+              } finally {
+                setIsTogglingFavorite(false);
+              }
+            }}
           >
             <Heart fill={isFavorite ? "#ff0000" : "none"} size={22} />
           </button>

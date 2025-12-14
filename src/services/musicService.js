@@ -31,14 +31,17 @@ export const removeSongFromFavorites = async (songId) => {
   const favorite = playlists.find((p) => p.name === "Favorites");
   if (!favorite) throw new Error("Không tìm thấy playlist Favorites");
 
-  const res = await fetch(`${API_BASE_URL}/common/playlist/${favorite.id}/removeSongs`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ songs: [songId] }),
-  });
+  const res = await fetch(
+    `${API_BASE_URL}/common/playlist/${favorite.id}/removeSongs`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ songs: [songId] }),
+    }
+  );
   return handleResponse(res);
 };
 // Thay thế bằng URL API Backend thực tế của bạn
@@ -56,6 +59,31 @@ const handleResponse = async (response) => {
     message: data.message || response.statusText,
     data,
   };
+};
+
+export const checkSongInFavorite = async (songId) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) throw new Error("Chưa đăng nhập");
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/common/playlist/favorite/songs/${encodeURIComponent(songId)}/exists`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const res = await handleResponse(response);
+    //  console.log("Check favorite response:", res);
+    if (res.ok) return !!res.data?.inFavorite;
+    console.error("Check favorite failed:", res.message);
+    return false;
+  } catch (err) {
+    console.error("Check favorite error:", err?.message || err);
+    return false;
+  }
 };
 
 /**

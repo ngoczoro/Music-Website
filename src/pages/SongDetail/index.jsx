@@ -16,10 +16,8 @@ const SongDetail = () => {
       const { data } = await fetchSongById(currentSongId);
       setSong(data);
 
-      // ⭐ Lấy token
       const token = localStorage.getItem("authToken");
 
-      // ⭐ Fetch bài hát cùng artist
       const res = await fetch(
         `http://localhost:8081/api/common/song/artist/${data.artistId}`,
         {
@@ -39,7 +37,6 @@ const SongDetail = () => {
 
       const artistSongs = await res.json();
 
-      // ⭐ Lưu queue
       setQueue(artistSongs);
     };
 
