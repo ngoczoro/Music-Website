@@ -1,1934 +1,1956 @@
-  /* Container chứa các nút hành động */
-  .playlist-action-buttons {
-    margin-left: 750px;              /* đẩy toàn bộ nhóm nút sang bên phải */
-    display: flex;                  /* xếp nút theo hàng ngang */
-    gap: 12px;                      /* khoảng cách giữa các nút */
-  }
-
-  /* Style chung cho nút */
-  .btn-primary {
-    background-color: #4a90e2;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 14px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-  }
-
-  .btn-primary:hover {
-    background-color: #357ab8;
-    transform: translateY(-2px);
-  }
-
-  .btn-primary:active {
-    transform: translateY(0);
-  }
-
-  /* Nút Xóa */
-  .btn-danger {
-    background-color: #e74c3c;
-  }
-
-  .btn-danger:hover {
-    background-color: #c0392b;
-  }
-
-
-  /* Pagination Styles */
-  .pagination, .pagination-container {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 4px;
-    margin: 24px 100px 0 0;
-  }
-
-  .pagination-btn, .pagination button {
-    background: #fff;
-    border: 1px solid #d1d5db;
-    color: #222;
-    padding: 6px 14px;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s, color 0.15s;
-    min-width: 36px;
-  }
-
-  .pagination-btn-active, .pagination button.active {
-    background: #6366f1;
-    color: #fff;
-    border-color: #6366f1;
-  }
-
-  .pagination-btn:disabled, .pagination button:disabled {
-    background: #f3f4f6;
-    color: #bdbdbd;
-    border-color: #e5e7eb;
-    cursor: not-allowed;
-  }
-
-  .pagination-ellipsis {
-    background: none !important;
-    border: none !important;
-    color: #888;
-    cursor: default;
-  }
-
-  .pagination-nav-btn {
-    font-weight: bold;
-    font-size: 1.1rem;
-  }
-  /* Playlist Sort Dropdown Styles */
-  .playlist-sort-dropdown {
-    padding: 8px 16px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background: #fff;
-    color: #222;
-    font-size: 1rem;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-    margin-bottom: 12px;
-    margin-left: 8px;
-    cursor: pointer;
-  }
-  .playlist-sort-dropdown:focus {
-    border-color: #6366f1;
-    box-shadow: 0 0 0 2px #6366f133;
-  }
-  .playlist-sort-dropdown option {
-    background: #fff;
-    color: #222;
-  }
-  /* ============================= */
-  /* Theme Variables (Light Mode) */
-  /* ============================= */
-  :root {
-    --font-size: 16px;
-    --background: #ffffff;
-    --foreground: oklch(0.145 0 0);
-    --card: #ffffff;
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: #030213;
-    --primary-foreground: oklch(1 0 0);
-    --secondary: oklch(0.95 0.0058 264.53);
-    --secondary-foreground: #030213;
-    --muted: #ececf0;
-    --muted-foreground: #717182;
-    --accent: #e9ebef;
-    --accent-foreground: #030213;
-    --destructive: #d4183d;
-    --destructive-foreground: #ffffff;
-    --border: rgba(0, 0, 0, 0.1);
-    --input: transparent;
-    --input-background: #f3f3f5;
-    --switch-background: #cbced4;
-    --font-weight-medium: 500;
-    --font-weight-normal: 400;
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.646 0.222 41.116);
-    --chart-2: oklch(0.6 0.118 184.704);
-    --chart-3: oklch(0.398 0.07 227.392);
-    --chart-4: oklch(0.828 0.189 84.429);
-    --chart-5: oklch(0.769 0.188 70.08);
-    --radius: 0.625rem;
-    --sidebar: #ffffff;
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: #030213;
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
-  }
-
-  /* ============================= */
-  /* Dark Mode */
-  /* ============================= */
-  .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.145 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.145 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.985 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.396 0.141 25.723);
-    --destructive-foreground: oklch(0.637 0.237 25.331);
-    --border: oklch(0.269 0 0);
-    --input: oklch(0.269 0 0);
-    --ring: oklch(0.439 0 0);
-    --chart-1: oklch(0.488 0.243 264.376);
-    --chart-2: oklch(0.696 0.17 162.48);
-    --chart-3: oklch(0.769 0.188 70.08);
-    --chart-4: oklch(0.627 0.265 303.9);
-    --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(0.269 0 0);
-    --sidebar-ring: oklch(0.439 0 0);
-  }
-
-  /* ============================= */
-  /* Base Styles */
-  /* ============================= */
-  * {
-    border-color: var(--border);
-    outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
-    box-sizing: border-box;
-  }
-
-  body {
-    background-color: var(--background);
-    color: var(--foreground);
-    font-family: system-ui, sans-serif;
-    font-size: var(--font-size);
-    margin: 0;
-    padding: 0;
-  }
-
-  /* ============================= */
-  /* Typography Defaults */
-  /* ============================= */
-  h1 {
-    font-size: 1.5rem;
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
-
-  h2 {
-    font-size: 1.25rem;
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
-
-  h3 {
-    color: #3c3e43;
-    font-family: Montserrat;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-  }
-
-  p {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-normal);
-    line-height: 1.5;
-  }
-
-  h4,
-  p,
-  label,
-  button,
-  input {
-    font-size: 1rem;
-    font-weight: var(--font-weight-normal);
-    line-height: 1.5;
-  }
-
-  .sidebar {
-    background-color: var(--sidebar);
-    color: var(--sidebar-foreground);
-    border-right: 1px solid var(--sidebar-border);
-    width: 220px;
-    height: 100vh;
-    padding: 20px;
-    position: fixed;
-    z-index: 999;
-    overflow-y: auto;
-  }
-
-  /* Hiệu ứng hover giữ nguyên */
-  .menu-item:hover,
-  .menu-item.active {
-    background: linear-gradient(
-      90deg,
-      #46bbc7 3.26%,
-      #4488d8 56.45%,
-      #8768f2 97.83%
-    );
-    color: white;
-    transform: scale(1.02);
-    transition: all 0.2s ease;
-    border-radius: 12px;
-  }
-
-  /* Màu chữ và icon khi hover hoặc đang active */
-  .menu-item:hover span,
-  .menu-item.active span {
-    color: white;
-  }
-
-  .menu-item:hover img,
-  .menu-item.active img {
-    filter: brightness(0) invert(1); /* icon chuyển sang màu trắng */
-  }
-
-  .menu-item:hover .menu-icon {
-    filter: brightness(0) invert(1);
-  }
-  .radius-sm {
-    border-radius: calc(var(--radius) - 4px);
-  }
-  .radius-md {
-    border-radius: calc(var(--radius) - 2px);
-  }
-  .radius-lg {
-    border-radius: var(--radius);
-  }
-  .radius-xl {
-    border-radius: calc(var(--radius) + 4px);
-  }
-
-  .sidebar-logo {
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-  }
-
-  .logo-image {
-    height: 40px;
-    width: auto;
-  }
-
-  .playlist-main-container {
-    margin-left: 300px;
-  }
-
-  .playlist-detail-page {
-    margin-left: 300px;
-  }
-
-
-  .logo-text {
-    font-family: Montserrat;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    letter-spacing: 1.92px;
-    margin-left: 9px;
-    display: flex;
-    width: 149.455px;
-    height: 29.166px;
-    flex-direction: column;
-    justify-content: center;
-    background: linear-gradient(
-      90deg,
-      #46bbc7 3.26%,
-      #4488d8 56.45%,
-      #8768f2 97.83%
-    );
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .favourite-page {
-    margin-left: 300px !important;
-  }
-
-
-  /* Add these styles for menu items */
-  .menu-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px; /* Adds space between menu items */
-  }
-
-  .menu-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    padding: 8px 12px;
-    border: none;
-    border-radius: var(--radius-sm);
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .sidebar-section {
-    margin-bottom: 24px; /* Adds space between sections */
-  }
-
-  .section-title {
-    margin-bottom: 12px; /* Space between title and menu items */
-  }
-
-  .menu-item span {
-    color: #999;
-    font-family: Montserrat;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-  /* ============================= */
-  /* Artist Card Styles */
-  /* ============================= */
-  .artist-card {
-    background-color: var(--card, #fff);
-    border-radius: 16px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-    text-align: center;
-    padding: 1.5rem 1.25rem;
-    transition: all 0.25s ease-in-out;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    width: 300px;
-    height: 380px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Đẩy nút xuống đều */
-    align-items: center;
-  }
-
-  .artist-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  }
-
-  /* Avatar */
-  .artist-avatar {
-    width: 120px;
-    height: 120px;
-    margin-bottom: 1rem;
-    border-radius: 50%;
-    overflow: hidden;
-  }
-
-  .artist-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* Name & Followers */
-  .artist-name {
-    font-size: 1rem;
-    font-weight: 600;
-    margin: 0;
-    color: var(--foreground, #111);
-  }
-
-  .artist-followers {
-    color: #999;
-    font-size: 0.9rem;
-    margin: 0.25rem 0 1rem;
-  }
-
-  /* Button */
-  .artist-button {
-    background: #fff;
-    color: #000;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 0.4rem 1.2rem;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .artist-button.following {
-    border-color: #ccc;
-    color: #000;
-    background-color: #fff;
-  }
-
-  .artist-button.following:hover {
-    background-color: #eaeaea;
-    border-color: #bbb;
-  }
-
-  /* List */
-  .artist-list {
-    display: flex;
-    flex-direction: row; /* Xếp các card nằm ngang */
-    gap: 2rem; /* Khoảng cách giữa các card */
-    overflow-y: auto;
-    /* Ẩn thanh cuộn nhưng vẫn cho phép cuộn */
-    scrollbar-width: none;
-    scroll-behavior: smooth;
-    padding: 2rem 2rem;
-    background-color: #ffff;
-    min-height: 100vh;
-    justify-content: flex-start;
-    align-items: flex-start;
-    white-space: nowrap; /* Không cho xuống dòng */
-  }
-
-  /* Thanh cuộn ngang */
-  .artist-list::-webkit-scrollbar {
-    height: 8px;
-  }
-
-  .artist-list::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 4px;
-  }
-
-  .artist-list::-webkit-scrollbar-thumb:hover {
-    background: #aaa;
-  }
-
-  /* Giữ kích thước card cố định */
-  .artist-card {
-    flex: 0 0 auto; /* Giữ nguyên kích thước, không co giãn */
-    width: 300px;
-    height: 380px;
-  }
-  /* ============================= */
-  /* Playlist Card Styles */
-  /* ============================= */
-  .playlist-header {
-    display: flex;
-    gap: 30px;
-    margin-top: 20px;
-    margin-bottom: 32px;
-  }
-
-
-  .playlist-cover-large img {
-    width: 260px;
-    height: 260px;
-    object-fit: cover;
-    border-radius: 20px;
-    box-shadow: 0 6px 14px rgba(0,0,0,0.3);
-  }
-
-
-  .playlist-header-info h2 {
-    font-size: 34px;
-    font-weight: 700;
-    margin: 0 0 10px;
-  }
-
-  .playlist-header-info p {
-    font-size: 16px;
-    opacity: 0.8;
-  }
-
-  .playlist-meta {
-    display: flex;
-    gap: 18px;
-    margin-top: 12px;
-    font-size: 14px;
-    opacity: 0.7;
-  }
-
-  .playlist-card {
-    background-color: var(--card, #fff);
-    border-radius: 16px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-    text-align: left;
-    padding: 1rem;
-    transition: all 0.2s ease-in-out;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    width: 220px;
-    height: 300px;
-    position: relative;
-    flex: 0 0 auto; /* Giữ kích thước cố định khi scroll ngang */
-  }
-
-  .playlist-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  }
-
-  /* Cover */
-  .playlist-cover {
-    width: 100%;
-    height: 180px;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 1rem;
-  }
-
-  .playlist-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* Text */
-  .playlist-title {
-    font-size: 1rem;
-    font-weight: 600;
-    margin: 0;
-    color: var(--foreground, #111);
-  }
-
-  .playlist-info {
-    color: #aaa;
-    font-size: 0.9rem;
-    margin-top: 0.25rem;
-  }
-
-  /* Nút ba chấm */
-  .playlist-more {
-    position: absolute;
-    right: 12px;
-    bottom: -130px;
-    border: none;
-    background: transparent;
-    color: #666;
-    font-size: 1.4rem;
-    cursor: pointer;
-    transition: color 0.2s ease;
-  }
-
-  .playlist-more:hover {
-    color: #000;
-  }
-
-  .play-overlay {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background: var(--primary);
-    border: none;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    opacity: 0;
-    transition: opacity .2s;
-  }
-
-  .cover-wrapper:hover .play-overlay {
-    opacity: 1;
-  }
-
-  /* Container scroll ngang */
-  .playlist-list {
-    display: flex;
-    flex-direction: row;
-    gap: 2rem;
-    overflow-y: auto;
-    /* Ẩn thanh cuộn nhưng vẫn cho phép cuộn */
-    scrollbar-width: none;
-    scroll-behavior: smooth;
-    padding: 2rem;
-    background-color: #ffff;
-    white-space: nowrap;
-  }
-
-  .playlist-list::-webkit-scrollbar {
-    height: 8px;
-  }
-
-  .playlist-list::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 4px;
-  }
-
-  .playlist-list::-webkit-scrollbar-thumb:hover {
-    background: #aaa;
-  }
-
-  /* ============= Playlist Card ============= */
-  .playlist-card {
-    position: relative;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-    padding: 1rem;
-    width: 260px;
-    transition: all 0.25s ease;
-    cursor: pointer;
-  }
-
-  .playlist-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  }
-
-  .playlist-cover {
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .playlist-cover img {
-    width: 100%;
-    height: 100%;
-    border-radius: 12px;
-    object-fit: cover;
-    display: block;
-  }
-
-  /* Ẩn nút play mặc định */
-  .playlist-play-btn {
-    position: absolute;
-    bottom: 12px;
-    right: 12px;
-    width: 44px;
-    height: 44px;
-    border: none;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transform: translateY(6px);
-    transition: all 0.25s ease;
-    cursor: pointer;
-    background: linear-gradient(135deg, #3dc3c0, #8568f5);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-
-  .playlist-play-btn img {
-    width: 18px;
-    height: 18px;
-  }
-
-  /* Khi hover card => hiện nút play */
-  .playlist-card:hover .playlist-play-btn {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .playlist-title {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-top: 0.75rem;
-  }
-
-  .playlist-info {
-    font-size: 0.85rem;
-    color: #999;
-  }
-
-  .playlist-more {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    color: #999;
-    cursor: pointer;
-  }
-  /* ============================= */
-  /* SongList Card Styles */
-  /* ============================= */
-  /* ========== SONG LIST ========== */
-  .song-list {
-    max-height: 500px;
-    overflow-y: auto;
-    overflow-x: hidden; /* không để xuất hiện thanh cuộn ngang */
-    padding-right: 8px;
-
-    /* Ẩn scrollbar trên mọi trình duyệt */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE, Edge */
-  }
-  .song-list::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Edge mới */
-  }
-
-  /* ========== SONG ITEM ========== */
-  .song-item {
-    display: grid;
-    grid-template-columns: 40px 60px 1fr 1fr 180px;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 16px;
-    border-radius: 12px;
-    transition: background 0.2s ease;
-    cursor: pointer;
-    position: relative;
-    width: 1020px;
-    align-items: center;
-    height: 100px;
-    box-sizing: border-box;
-    overflow: hidden; /* Ngăn mọi phần tử tràn */
-    white-space: nowrap; /* Không cho text tự xuống dòng */
-  }
-
-  .song-item:hover {
-    background-color: #f6f6f6;
-  }
-
-  /* ========== STT / Nút Play ========== */
-  .song-index {
-    position: relative;
-    width: 40px;
-    text-align: center;
-    flex-shrink: 0;
-  }
-
-  .song-index span {
-    color: #888;
-    font-size: 14px;
-    transition: opacity 0.2s ease;
-  }
-
-  .play-btn {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    background: none;
-    cursor: pointer;
-    opacity: 0;
-    position: absolute;
-    width: 44px;
-    height: 44px;
-    border: none;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform: translateY(6px);
-    transition: all 0.25s ease;
-    background: linear-gradient(135deg, #3dc3c0, #8568f5);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-
-  .play-btn img {
-    width: 20px;
-    height: 20px;
-  }
-
-  .cover-wrapper {
-    position: relative;
-  }
-
-  .song-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 26px;
-    margin-bottom: 40px;
-  }
-
-  /* Hover: ẩn STT, hiện nút Play */
-  .song-item:hover .song-index span {
-    opacity: 0;
-  }
-
-  .song-item:hover .play-btn {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.1);
-  }
-
-  /* ========== ẢNH COVER ========== */
-  .song-cover {
-    position: relative;
-    width: 55px;
-    height: 55px;
-    border-radius: 8px;
-    overflow: hidden;
-    flex-shrink: 0;
-  }
-
-  .song-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* ========== THÔNG TIN BÀI HÁT ========== */
-  .song-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-width: 0; /* cho phép text cắt gọn */
-    overflow: hidden;
-  }
-
-  .song-title {
-    font-weight: 600;
-    font-size: 15px;
-    margin-bottom: 20px;
-  }
-
-  .song-artist {
-    color: #b9b9b9;
-    font-family: Montserrat;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-  }
-
-  /* ========== HÀNH ĐỘNG PHẢI ========== */
-  .song-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    justify-content: flex-end;
-    flex-shrink: 0;
-    margin-left: 50px;
-  }
-
-  .heart-btn,
-  .more-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.2s ease;
-  }
-
-  .heart-btn img,
-  .more-btn img {
-    width: 18px;
-    height: 18px;
-  }
-
-  .song-time {
-    font-size: 13px;
-    color: #b9b9b9;
-    margin-bottom: 7px;
-  }
-
-  .song-more {
-    background: none;
-    border: none;
-    font-size: 18px;
-    color: #888;
-    cursor: pointer;
-  }
-  /* ==== PROFILE HEADER ==== */
-  .profile-header {
-    position: relative;
-    font-family: "Inter", sans-serif;
-    background: #fff;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  }
-
-  .profile-cover {
-    height: 250px;
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, #8b5cf6, #06b6d4);
-  }
-
-  .profile-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.45;
-  }
-
-  .profile-info {
-    position: relative;
-    padding: 0 48px;
-    margin-top: -80px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    z-index: 10;
-  }
-
-  .profile-left {
-    display: flex;
-    align-items: flex-start;
-    gap: 24px;
-  }
-
-  .profile-avatar {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    border: 4px solid #fff;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    background: #fff;
-  }
-
-  .profile-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .profile-details {
-    padding-bottom: 20px;
-  }
-
-  .profile-details h1 {
-    font-size: 1.75rem;
-    color: #111827;
-    font-weight: 600;
-    margin-bottom: 4px;
-    overflow: hidden;
-    color: #121212;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-family: Montserrat;
-    font-size: 22px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-  }
-
-  .profile-details p {
-    color: #b9b9b9;
-    text-align: center;
-    font-family: Montserrat;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    margin-bottom: 100px;
-    margin-right: 200px;
-    display: inline-block;
-    max-width: 60ch; /* tối đa 60 ký tự */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .profile-stats {
-    display: flex;
-    gap: 40px;
-  }
-
-  .profile-stat {
-    text-align: left;
-    margin-top: -90px;
-  }
-
-  .profile-stat .value {
-    color: #000;
-    font-family: Montserrat;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-
-  .profile-stat .label {
-    color: #b9b9b9;
-    font-family: Montserrat;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-
-  /* === ACTION BUTTONS === */
-  .profile-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding-bottom: 20px;
-    position: relative;
-    top: -50px;
-  }
-
-  .profile-actions button {
-    border: 1px solid #d1d5db;
-    background: #fff;
-    border-radius: 9999px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .profile-actions button:hover {
-    background: #f3f4f6;
-  }
-
-  .profile-actions .edit-btn {
-    padding: 8px 20px;
-    border: none;
-    color: #fff;
-    font-weight: 500;
-    font-size: 0.95rem;
-    background: linear-gradient(90deg, #06b6d4, #8b5cf6);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 0%;
-    width: 133px;
-    height: 40px;
-    border-radius: 12px;
-  }
-
-  .profile-actions .edit-btn:hover {
-    transform: scale(1.03);
-  }
-
-  .profile-search-bar {
-    width: 100%;
-    background: #ffffff;
-    padding: 16px 32px;
-    border-bottom: 1px solid #e5e7eb;
-    box-sizing: border-box;
-    position: relative;
-  }
-
-  .profile-search-input {
-    width: 100%;
-    padding: 12px 18px;
-    border-radius: 12px;
-    border: 1px solid #d1d5db;
-    background-color: #f9fafb;
-    font-size: 1rem;
-    outline: none;
-    transition: all 0.2s ease;
-    padding: 12px 20px 12px 45px;
-  }
-  .search-container {
-    position: relative;
-    width: 100%;
-  }
-  .search-icon {
-    position: absolute;
-    top: 50%; /* giữa dọc */
-    left: 15px; /* nằm trong input */
-    transform: translateY(-50%);
-    color: #6b7280;
-    font-size: 18px;
-    pointer-events: none;
-  }
-
-  .profile-search-input:focus {
-    border-color: #6366f1;
-    background-color: #fff;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-  }
-
-  .profile-tabs {
-    display: flex;
-    justify-content: center;
-    border-bottom: 1px solid #e5e7eb;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
-    margin-left: 65px;
-    margin-right: 50px;
-  }
-
-  .profile-tab {
-    flex: 1;
-    text-align: center;
-    padding: 16px 0;
-    font-family: Montserrat, sans-serif;
-    font-weight: 600;
-    font-size: 16px;
-    color: #000;
-    background: #fff;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .profile-tab:hover {
-    border: 1px solid #8b5cf6;
-    box-shadow: 0 4px 10px rgba(139, 92, 246, 0.25);
-    border-radius: 4px 4px 0 0;
-    transform: translateY(-2px);
-  }
-
-  /* ----- EDIT PROFILE PAGE ----- */
-
-  .edit-profile-page {
-    display: flex;
-    min-height: 100vh;
-    background-color: #fff;
-  }
-
-  .edit-profile-content {
-    flex: 1;
-    padding: 40px 60px;
-    font-family: "Mulish", sans-serif;
-  }
-
-  .breadcrumb-wrapper {
-    display: inline-block;
-  }
-
-  .breadcrumb {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-    font-size: 15px;
-    color: #777;
-    margin-bottom: 25px;
-  }
-
-  .breadcrumb-text {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 16px;
-    color: #0b7285;
-  }
-
-  .breadcrumb-line {
-    width: 100%;
-    height: 1px;
-    background-color: #0b7285;
-    margin-top: 8px;
-  }
-
-  .breadcrumb-link {
-    color: #667085;
-  }
-
-  .breadcrumb-separator {
-    color: #667085;
-    font-size: 15px;
-    margin-right: 15px;
-    margin-left: 15px;
-  }
-
-  .breadcrumb-current {
-    color: #026e78;
-    line-height: 21px;
-  }
-
-  .tab-buttons {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-
-  .tab-btn {
-    padding: 10px 20px;
-    border-radius: 10px;
-    border: none;
-    background: #f3f4f6;
-    cursor: pointer;
-    font-weight: 500;
-    transition: 0.2s;
-  }
-
-  .tab-btn.active {
-    background: #e9e5ff;
-    color: #5a34d1;
-    font-weight: 600;
-  }
-
-  .form-box {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  }
-
-  .form-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #222;
-  }
-
-  .form-subtitle {
-    color: #999;
-    font-size: 14px;
-    margin-bottom: 20px;
-  }
-
-  .avatar-section {
-    text-align: left;
-    margin-bottom: 20px;
-    position: relative;
-    display: inline-block;
-  }
-
-  .avatar-img {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #ddd;
-  }
-
-  .avatar-upload-label {
-    position: absolute;
-    right: calc(50% - 50px);
-    bottom: 0;
-    background: #fff;
-    border-radius: 50%;
-    border: 1px solid #ccc;
-    padding: 5px;
-    cursor: pointer;
-  }
-
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-
-  .bio-section {
-    grid-column: 1 / 3;
-  }
-
-  .form-grid input,
-  .form-grid textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    outline: none;
-  }
-
-  .form-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 25px;
-  }
-
-  .save-btn {
-    background: linear-gradient(#3dc3c0, #8568f5);
-    color: white;
-    border: none;
-    padding: 10px 25px;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-
-  .cancel-btn {
-    background: white;
-    border: 1px solid #7b47ff;
-    color: #7b47ff;
-    padding: 10px 25px;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  .tab-btn,
-  .save-btn {
-    display: inline-flex; /* để icon và chữ nằm cùng hàng */
-    align-items: center; /* căn giữa icon theo chiều dọc */
-    gap: 8px; /* khoảng cách giữa icon và chữ */
-  }
-
-  .tab-btn img,
-  .save-btn img {
-    width: 18px; /* chỉnh cho đồng đều */
-    height: 18px;
-    object-fit: contain;
-    vertical-align: middle; /* đảm bảo icon không lệch chữ */
-  }
-  /* ============================= */
-  /* Artist Info Panel */
-  /* ============================= */
-  .artist-info-panel {
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 32px;
-    width: 505px;
-    height: 600px;
-    color: #3c3e43;
-  }
-
-  .artist-info-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 24px;
-  }
-
-  .artist-info-header {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    margin-bottom: 24px;
-  }
-
-  .artist-avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  .artist-details {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .artist-name {
-    font-size: 18px;
-    font-weight: 600;
-    color: #6b6b6b;
-  }
-
-  .artist-stats {
-    display: flex;
-    gap: 24px;
-  }
-
-  .artist-stat {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 14px;
-    color: #b8bcca;
-  }
-
-  .artist-icon {
-    width: 16px;
-    height: 16px;
-    color: #3dc3c0;
-  }
-
-  .artist-about {
-    margin-bottom: 24px;
-  }
-
-  .artist-about h4 {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-
-  .artist-about p {
-    color: #6b6b6b;
-    line-height: 1.6;
-    max-height: 150px; /* Giới hạn chiều cao vùng cuộn */
-    overflow-y: auto; /* Cho phép cuộn dọc */
-    padding-right: 8px; /* Thêm khoảng trống cho thanh cuộn */
-  }
-
-  /* (Tùy chọn) Tùy chỉnh thanh cuộn cho đẹp hơn */
-  .artist-about p::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .artist-about p::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 3px;
-  }
-
-  .artist-about p::-webkit-scrollbar-thumb:hover {
-    background-color: #999;
-  }
-
-  .artist-achievement {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #999999;
-    font-size: 14px;
-  }
-  /* ============================= */
-  /* Lyrics Panel */
-  /* ============================= */
-  .lyrics-container {
-    background-color: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 32px;
-    width: 505px;
-    height: 600px;
-  }
-
-  .lyrics-title {
-    color: #3c3e43;
-    font-size: 18px;
-    font-weight: 500;
-    margin-bottom: 24px;
-  }
-
-  .lyrics-scroll {
-    max-height: 400px;
-    overflow-y: auto;
-    padding-right: 12px;
-  }
-
-  .lyrics-line {
-    color: #666666;
-    line-height: 1.8;
-    transition: color 0.2s ease;
-    white-space: pre-wrap;
-  }
-  .lyrics-line {
-    font-size: 16px;
-    color: #666;
-    transition: 0.25s;
-  }
-
-  .active-line {
-    font-weight: bold;
-    color: black;
-    font-size: 18px;
-  }
-
-  .lyrics-line:hover {
-    color: #3c3e43;
-  }
-
-  /* Thanh cuộn tùy chỉnh */
-  .lyrics-scroll::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .lyrics-scroll::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 10px;
-  }
-
-  .lyrics-scroll::-webkit-scrollbar-thumb:hover {
-    background-color: #999;
-  }
-  .lyrics-scroll {
-    max-height: 500px;
-    overflow-y: auto;
-    padding-right: 8px;
-  }
-
-  .lyrics-content {
-    white-space: pre-wrap; /* Giữ xuống dòng và cho phép wrap chữ */
-    word-wrap: break-word; /* Tự động xuống dòng khi quá khung */
-  }
-  /* *********************************** */
-  /* 🎵 Song Player */
-  /* *********************************** */
-  .songplayer-container {
-    display: flex;
-    align-items: center; /* căn giữa theo chiều dọc */
-    gap: 24px;
-    width: 1052px;
-    background-color: #fff;
-    border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 24px;
-    margin-bottom: 30px;
-  }
-
-  /* ảnh vừa khung, không bị to quá */
-  .songplayer-cover {
-    width: 240px;
-    height: 240px;
-    object-fit: cover;
-    border-radius: 16px;
-  }
-
-  .songplayer-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* căn giữa các hàng trong khung */
-    flex: 1;
-    gap: 10px;
-    height: 100%; /* để phần nội dung không bị tràn */
-  }
-
-  .songplayer-title {
-    font-size: 22px;
-    font-weight: 600;
-    color: #3c3e43;
-  }
-
-  .songplayer-artist {
-    font-size: 16px;
-    color: #999999;
-    margin-bottom: 8px;
-  }
-
-  /* --- Hàng 1: Nút điều khiển --- */
-  .control-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-  }
-
-  .playsong-btn {
-    background: linear-gradient(90deg, #3dc3c0, #8568f5);
-    border: none;
-    border-radius: 50%;
-    width: 58px;
-    height: 58px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: box-shadow 0.3s;
-  }
-  .playsong-btn:hover {
-    box-shadow: 0 0 12px rgba(133, 104, 245, 0.5);
-  }
-
-  /* --- Hàng 2: Thanh tiến trình --- */
-  .songplayer-progress {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 4px;
-  }
-
-  .progress-bar {
-    flex: 1;
-    height: 4px;
-    appearance: none;
-    background: linear-gradient(90deg, #3dc3c0, #8568f5);
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .progress-bar::-webkit-slider-thumb {
-    appearance: none;
-    width: 12px;
-    height: 12px;
-    background: #8568f5;
-    border-radius: 50%;
-  }
-
-  .time-text {
-    font-size: 13px;
-    color: #999999;
-    min-width: 40px;
-    text-align: center;
-  }
-
-  /* --- Hàng 3: Heart + Volume --- */
-  .bottom-row {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 16px;
-    margin-top: 6px;
-    padding-right: 4px;
-  }
-
-  .volume-control {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .volume-bar {
-    width: 80px;
-    height: 4px;
-    appearance: none;
-    background: linear-gradient(90deg, #3dc3c0, #8568f5);
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .volume-bar::-webkit-slider-thumb {
-    appearance: none;
-    width: 10px;
-    height: 10px;
-    background: #8568f5;
-    border-radius: 50%;
-  }
-
-  .icon-btn {
-    background: none;
-    border: none;
-    color: #999999;
-    cursor: pointer;
-    transition: color 0.2s;
-  }
-  .icon-btn:hover {
-    color: #3c3e43;
-  }
-
-  .liked {
-    color: #000;
-  }
-  /* *********************************** */
-  /* 🎵 Song Detail */
-  /* *********************************** */
-  .songdetail-container {
-    width: 1170px;
-    height: 1024px;
-    margin: 0 auto;
-    padding: 32px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    background-color: #ffffff;
-    border-radius: 20px;
-    overflow: hidden; /* không cho cuộn ngang */
-  }
-
-  /* Hàng trên */
-  .songplayer-section {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 40px;
-  }
-
-  /* Hàng dưới */
-  .panel-section {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 32px;
-    width: 100%;
-    max-width: 1100px; /* tránh tràn khỏi 1170px */
-    flex-shrink: 0;
-  }
-
-  .panel-section > * {
-    width: 505px;
-    height: 600px;
-    flex-shrink: 0;
-  }
-  /*---------------------------------- Trending------------------------------ */
-  .home-section {
-    width: 100%;
-    margin-bottom: -24px;
-  }
-
-  .home-title {
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: #3c3e43;
-  }
-
-  .playlist-grid {
-    flex: 0 0 300px;
-    display: flex;
-    gap: 31px;
-
-    overflow-x: auto;
-    overflow-y: hidden;
-
-    padding-bottom: 10px;
-    scroll-behavior: smooth;
-
-    /* Ẩn thanh scroll xấu */
-    scrollbar-width: none;
-  }
-
-  .playlist-grid::-webkit-scrollbar {
-    display: none;
-  }
-  /* --- TOP ARTIST LIST --- */
-  .artist-scroll {
-    display: flex;
-    gap: 32px;
-    overflow-x: auto;
-    padding-bottom: 10px;
-    scrollbar-width: none;
-  }
-
-  .artist-scroll::-webkit-scrollbar {
-    height: 8px;
-  }
-
-  .artist-scroll::-webkit-scrollbar-thumb {
-    background: #ffffff;
-    border-radius: 4px;
-  }
-
-  .artist-scroll::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  /* ===========================
+/* Container chứa các nút hành động */
+.playlist-action-buttons {
+  margin-left: 750px; /* đẩy toàn bộ nhóm nút sang bên phải */
+  display: flex; /* xếp nút theo hàng ngang */
+  gap: 12px; /* khoảng cách giữa các nút */
+}
+
+/* Style chung cho nút */
+.btn-primary {
+  background-color: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover {
+  background-color: #357ab8;
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Nút Xóa */
+.btn-danger {
+  background-color: #e74c3c;
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
+}
+
+/* Pagination Styles */
+.pagination,
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+  margin: 24px 100px 0 0;
+}
+
+.pagination-btn,
+.pagination button {
+  background: #fff;
+  border: 1px solid #d1d5db;
+  color: #222;
+  padding: 6px 14px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  min-width: 36px;
+}
+
+.pagination-btn-active,
+.pagination button.active {
+  background: #6366f1;
+  color: #fff;
+  border-color: #6366f1;
+}
+
+.pagination-btn:disabled,
+.pagination button:disabled {
+  background: #f3f4f6;
+  color: #bdbdbd;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+}
+
+.pagination-ellipsis {
+  background: none !important;
+  border: none !important;
+  color: #888;
+  cursor: default;
+}
+
+.pagination-nav-btn {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+/* Playlist Sort Dropdown Styles */
+.playlist-sort-dropdown {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  color: #222;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  margin-bottom: 12px;
+  margin-left: 8px;
+  cursor: pointer;
+}
+.playlist-sort-dropdown:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px #6366f133;
+}
+.playlist-sort-dropdown option {
+  background: #fff;
+  color: #222;
+}
+/* ============================= */
+/* Theme Variables (Light Mode) */
+/* ============================= */
+:root {
+  --font-size: 16px;
+  --background: #ffffff;
+  --foreground: oklch(0.145 0 0);
+  --card: #ffffff;
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: #030213;
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.95 0.0058 264.53);
+  --secondary-foreground: #030213;
+  --muted: #ececf0;
+  --muted-foreground: #717182;
+  --accent: #e9ebef;
+  --accent-foreground: #030213;
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+  --border: rgba(0, 0, 0, 0.1);
+  --input: transparent;
+  --input-background: #f3f3f5;
+  --switch-background: #cbced4;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: #030213;
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+/* ============================= */
+/* Dark Mode */
+/* ============================= */
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+/* ============================= */
+/* Base Styles */
+/* ============================= */
+* {
+  border-color: var(--border);
+  outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, sans-serif;
+  font-size: var(--font-size);
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================= */
+/* Typography Defaults */
+/* ============================= */
+h1 {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+}
+
+h3 {
+  color: #3c3e43;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+p {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
+}
+
+h4,
+p,
+label,
+button,
+input {
+  font-size: 1rem;
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
+}
+
+.sidebar {
+  background-color: var(--sidebar);
+  color: var(--sidebar-foreground);
+  border-right: 1px solid var(--sidebar-border);
+  width: 220px;
+  height: 100vh;
+  padding: 20px;
+  position: fixed;
+  z-index: 999;
+  overflow-y: auto;
+}
+
+/* Hiệu ứng hover giữ nguyên */
+.menu-item:hover,
+.menu-item.active {
+  background: linear-gradient(
+    90deg,
+    #46bbc7 3.26%,
+    #4488d8 56.45%,
+    #8768f2 97.83%
+  );
+  color: white;
+  transform: scale(1.02);
+  transition: all 0.2s ease;
+  border-radius: 12px;
+}
+
+/* Màu chữ và icon khi hover hoặc đang active */
+.menu-item:hover span,
+.menu-item.active span {
+  color: white;
+}
+
+.menu-item:hover img,
+.menu-item.active img {
+  filter: brightness(0) invert(1); /* icon chuyển sang màu trắng */
+}
+
+.menu-item:hover .menu-icon {
+  filter: brightness(0) invert(1);
+}
+.radius-sm {
+  border-radius: calc(var(--radius) - 4px);
+}
+.radius-md {
+  border-radius: calc(var(--radius) - 2px);
+}
+.radius-lg {
+  border-radius: var(--radius);
+}
+.radius-xl {
+  border-radius: calc(var(--radius) + 4px);
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+
+.logo-image {
+  height: 40px;
+  width: auto;
+}
+
+.playlist-main-container {
+  margin-left: 300px;
+}
+
+.playlist-detail-page {
+  margin-left: 300px;
+}
+
+.logo-text {
+  font-family: Montserrat;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 1.92px;
+  margin-left: 9px;
+  display: flex;
+  width: 149.455px;
+  height: 29.166px;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(
+    90deg,
+    #46bbc7 3.26%,
+    #4488d8 56.45%,
+    #8768f2 97.83%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.favourite-page {
+  margin-left: 300px !important;
+}
+
+/* Add these styles for menu items */
+.menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Adds space between menu items */
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebar-section {
+  margin-bottom: 24px; /* Adds space between sections */
+}
+
+.section-title {
+  margin-bottom: 12px; /* Space between title and menu items */
+}
+
+.menu-item span {
+  color: #999;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+/* ============================= */
+/* Artist Card Styles */
+/* ============================= */
+.artist-card {
+  background-color: var(--card, #fff);
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  padding: 1.5rem 1.25rem;
+  transition: all 0.25s ease-in-out;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  width: 300px;
+  height: 380px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Đẩy nút xuống đều */
+  align-items: center;
+}
+
+.artist-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Avatar */
+.artist-avatar {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.artist-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Name & Followers */
+.artist-name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--foreground, #111);
+}
+
+.artist-followers {
+  color: #999;
+  font-size: 0.9rem;
+  margin: 0.25rem 0 1rem;
+}
+
+/* Button */
+.artist-button {
+  background: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.4rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.artist-button.following {
+  border-color: #ccc;
+  color: #000;
+  background-color: #fff;
+}
+
+.artist-button.following:hover {
+  background-color: #eaeaea;
+  border-color: #bbb;
+}
+
+/* List */
+.artist-list {
+  display: flex;
+  flex-direction: row; /* Xếp các card nằm ngang */
+  gap: 2rem; /* Khoảng cách giữa các card */
+  overflow-y: auto;
+  /* Ẩn thanh cuộn nhưng vẫn cho phép cuộn */
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  padding: 2rem 2rem;
+  background-color: #ffff;
+  min-height: 100vh;
+  justify-content: flex-start;
+  align-items: flex-start;
+  white-space: nowrap; /* Không cho xuống dòng */
+}
+
+/* Thanh cuộn ngang */
+.artist-list::-webkit-scrollbar {
+  height: 8px;
+}
+
+.artist-list::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.artist-list::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* Giữ kích thước card cố định */
+.artist-card {
+  flex: 0 0 auto; /* Giữ nguyên kích thước, không co giãn */
+  width: 300px;
+  height: 380px;
+}
+/* ============================= */
+/* Playlist Card Styles */
+/* ============================= */
+.playlist-header {
+  display: flex;
+  gap: 30px;
+  margin-top: 20px;
+  margin-bottom: 32px;
+}
+
+.playlist-cover-large img {
+  width: 260px;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+
+.playlist-header-info h2 {
+  font-size: 34px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+.playlist-header-info p {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+.playlist-meta {
+  display: flex;
+  gap: 18px;
+  margin-top: 12px;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.playlist-card {
+  background-color: var(--card, #fff);
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  padding: 1rem;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  width: 220px;
+  height: 300px;
+  position: relative;
+  flex: 0 0 auto; /* Giữ kích thước cố định khi scroll ngang */
+}
+
+.playlist-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Cover */
+.playlist-cover {
+  width: 100%;
+  height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.playlist-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Text */
+.playlist-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--foreground, #111);
+}
+
+.playlist-info {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+/* Nút ba chấm */
+.playlist-more {
+  position: absolute;
+  right: 12px;
+  bottom: -130px;
+  border: none;
+  background: transparent;
+  color: #666;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.playlist-more:hover {
+  color: #000;
+}
+
+.play-overlay {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: var(--primary);
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.cover-wrapper:hover .play-overlay {
+  opacity: 1;
+}
+
+/* Container scroll ngang */
+.playlist-list {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  overflow-y: auto;
+  /* Ẩn thanh cuộn nhưng vẫn cho phép cuộn */
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  padding: 2rem;
+  background-color: #ffff;
+  white-space: nowrap;
+}
+
+.playlist-list::-webkit-scrollbar {
+  height: 8px;
+}
+
+.playlist-list::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.playlist-list::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* ============= Playlist Card ============= */
+.playlist-card {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  padding: 1rem;
+  width: 260px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.playlist-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.playlist-cover {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.playlist-cover img {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Ẩn nút play mặc định */
+.playlist-play-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  background: linear-gradient(135deg, #3dc3c0, #8568f5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.playlist-play-btn img {
+  width: 18px;
+  height: 18px;
+}
+
+/* Khi hover card => hiện nút play */
+.playlist-card:hover .playlist-play-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.playlist-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 0.75rem;
+}
+
+.playlist-info {
+  font-size: 0.85rem;
+  color: #999;
+}
+
+.playlist-more {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #999;
+  cursor: pointer;
+}
+/* ============================= */
+/* SongList Card Styles */
+/* ============================= */
+/* ========== SONG LIST ========== */
+.song-list {
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden; /* không để xuất hiện thanh cuộn ngang */
+  padding-right: 8px;
+
+  /* Ẩn scrollbar trên mọi trình duyệt */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE, Edge */
+}
+.song-list::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge mới */
+}
+
+/* ========== SONG ITEM ========== */
+.song-item {
+  display: grid;
+  grid-template-columns: 40px 60px 1fr 1fr 180px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  transition: background 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  width: 1020px;
+  align-items: center;
+  height: 100px;
+  box-sizing: border-box;
+  overflow: hidden; /* Ngăn mọi phần tử tràn */
+  white-space: nowrap; /* Không cho text tự xuống dòng */
+}
+
+.song-item:hover {
+  background-color: #f6f6f6;
+}
+
+/* ========== STT / Nút Play ========== */
+.song-index {
+  position: relative;
+  width: 40px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.song-index span {
+  color: #888;
+  font-size: 14px;
+  transition: opacity 0.2s ease;
+}
+
+.play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: none;
+  cursor: pointer;
+  opacity: 0;
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(6px);
+  transition: all 0.25s ease;
+  background: linear-gradient(135deg, #3dc3c0, #8568f5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.play-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+.cover-wrapper {
+  position: relative;
+}
+
+.song-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 26px;
+  margin-bottom: 40px;
+}
+
+/* Hover: ẩn STT, hiện nút Play */
+.song-item:hover .song-index span {
+  opacity: 0;
+}
+
+.song-item:hover .play-btn {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* ========== ẢNH COVER ========== */
+.song-cover {
+  position: relative;
+  width: 55px;
+  height: 55px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.song-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ========== THÔNG TIN BÀI HÁT ========== */
+.song-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0; /* cho phép text cắt gọn */
+  overflow: hidden;
+}
+
+.song-title {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+.song-artist {
+  color: #b9b9b9;
+  font-family: Montserrat;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+/* ========== HÀNH ĐỘNG PHẢI ========== */
+.song-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  margin-left: 50px;
+}
+
+.heart-btn,
+.more-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.heart-btn img,
+.more-btn img {
+  width: 18px;
+  height: 18px;
+}
+
+.song-time {
+  font-size: 13px;
+  color: #b9b9b9;
+  margin-bottom: 7px;
+}
+
+.song-more {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #888;
+  cursor: pointer;
+}
+/* ==== PROFILE HEADER ==== */
+.profile-header {
+  position: relative;
+  font-family: "Inter", sans-serif;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.profile-cover {
+  height: 250px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+}
+
+.profile-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.45;
+}
+
+.profile-info {
+  position: relative;
+  padding: 0 48px;
+  margin-top: -80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  z-index: 10;
+}
+
+.profile-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.profile-avatar {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: #fff;
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-details {
+  padding-bottom: 20px;
+}
+
+.profile-details h1 {
+  font-size: 1.75rem;
+  color: #111827;
+  font-weight: 600;
+  margin-bottom: 4px;
+  overflow: hidden;
+  color: #121212;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: Montserrat;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.profile-details p {
+  color: #b9b9b9;
+  text-align: center;
+  font-family: Montserrat;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 100px;
+  margin-right: 200px;
+  display: inline-block;
+  max-width: 60ch; /* tối đa 60 ký tự */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-stats {
+  display: flex;
+  gap: 40px;
+}
+
+.profile-stat {
+  text-align: left;
+  margin-top: -90px;
+}
+
+.profile-stat .value {
+  color: #000;
+  font-family: Montserrat;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.profile-stat .label {
+  color: #b9b9b9;
+  font-family: Montserrat;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+/* === ACTION BUTTONS === */
+.profile-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 20px;
+  position: relative;
+  top: -50px;
+}
+
+.profile-actions button {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 9999px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profile-actions button:hover {
+  background: #f3f4f6;
+  color: black;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(71, 69, 69, 0.1);
+}
+
+.profile-actions .edit-btn {
+  padding: 8px 20px;
+  border: none;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.95rem;
+  background: linear-gradient(90deg, #06b6d4, #8b5cf6);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0%;
+  width: 133px;
+  height: 40px;
+  border-radius: 12px;
+}
+
+.profile-actions .edit-btn:hover {
+  transform: scale(1.03);
+}
+
+.profile-search-bar {
+  width: 100%;
+  background: #ffffff;
+  padding: 16px 32px;
+  border-bottom: 1px solid #e5e7eb;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.profile-search-input {
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  background-color: #f9fafb;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s ease;
+  padding: 12px 20px 12px 45px;
+}
+.search-container {
+  position: relative;
+  width: 100%;
+}
+.search-icon {
+  position: absolute;
+  top: 50%; /* giữa dọc */
+  left: 15px; /* nằm trong input */
+  transform: translateY(-50%);
+  color: #6b7280;
+  font-size: 18px;
+  pointer-events: none;
+}
+
+.profile-search-input:focus {
+  border-color: #6366f1;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.profile-tabs {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+  margin-left: 65px;
+  margin-right: 50px;
+}
+
+.profile-tab {
+  flex: 1;
+  text-align: center;
+  padding: 16px 0;
+  font-family: Montserrat, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #000;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.profile-tab:hover {
+  border: 1px solid #8b5cf6;
+  box-shadow: 0 4px 10px rgba(139, 92, 246, 0.25);
+  border-radius: 4px 4px 0 0;
+  transform: translateY(-2px);
+}
+
+/* ----- EDIT PROFILE PAGE ----- */
+
+.edit-profile-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #fff;
+}
+
+.edit-profile-content {
+  flex: 1;
+  padding: 40px 60px;
+  font-family: "Mulish", sans-serif;
+}
+
+.breadcrumb-wrapper {
+  display: inline-block;
+}
+
+.breadcrumb {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 15px;
+  color: #777;
+  margin-bottom: 25px;
+}
+
+.breadcrumb-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  color: #0b7285;
+}
+
+.breadcrumb-line {
+  width: 100%;
+  height: 1px;
+  background-color: #0b7285;
+  margin-top: 8px;
+}
+
+.breadcrumb-link {
+  color: #667085;
+}
+
+.breadcrumb-separator {
+  color: #667085;
+  font-size: 15px;
+  margin-right: 15px;
+  margin-left: 15px;
+}
+
+.breadcrumb-current {
+  color: #026e78;
+  line-height: 21px;
+}
+
+.tab-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  background: #f3f4f6;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.tab-btn.active {
+  background: #e9e5ff;
+  color: #5a34d1;
+  font-weight: 600;
+}
+
+.form-box {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.form-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+}
+
+.form-subtitle {
+  color: #999;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.avatar-section {
+  text-align: left;
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
+}
+
+.avatar-img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+}
+
+.avatar-upload-label {
+  position: absolute;
+  right: calc(50% - 50px);
+  bottom: 0;
+  background: #fff;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.bio-section {
+  grid-column: 1 / 3;
+}
+
+.form-grid input,
+.form-grid textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.save-btn {
+  background: linear-gradient(#3dc3c0, #8568f5);
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: white;
+  border: 1px solid #7b47ff;
+  color: #7b47ff;
+  padding: 10px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.tab-btn,
+.save-btn {
+  display: inline-flex; /* để icon và chữ nằm cùng hàng */
+  align-items: center; /* căn giữa icon theo chiều dọc */
+  gap: 8px; /* khoảng cách giữa icon và chữ */
+}
+
+.tab-btn img,
+.save-btn img {
+  width: 18px; /* chỉnh cho đồng đều */
+  height: 18px;
+  object-fit: contain;
+  vertical-align: middle; /* đảm bảo icon không lệch chữ */
+}
+/* ============================= */
+/* Artist Info Panel */
+/* ============================= */
+.artist-info-panel {
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 32px;
+  width: 505px;
+  height: 600px;
+  color: #3c3e43;
+}
+
+.artist-info-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.artist-info-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.artist-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.artist-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.artist-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #6b6b6b;
+}
+
+.artist-stats {
+  display: flex;
+  gap: 24px;
+}
+
+.artist-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #b8bcca;
+}
+
+.artist-icon {
+  width: 16px;
+  height: 16px;
+  color: #3dc3c0;
+}
+
+.artist-about {
+  margin-bottom: 24px;
+}
+
+.artist-about h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.artist-about p {
+  color: #6b6b6b;
+  line-height: 1.6;
+  max-height: 150px; /* Giới hạn chiều cao vùng cuộn */
+  overflow-y: auto; /* Cho phép cuộn dọc */
+  padding-right: 8px; /* Thêm khoảng trống cho thanh cuộn */
+}
+
+/* (Tùy chọn) Tùy chỉnh thanh cuộn cho đẹp hơn */
+.artist-about p::-webkit-scrollbar {
+  width: 6px;
+}
+
+.artist-about p::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 3px;
+}
+
+.artist-about p::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
+}
+
+.artist-achievement {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #999999;
+  font-size: 14px;
+}
+/* ============================= */
+/* Lyrics Panel */
+/* ============================= */
+.lyrics-container {
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 32px;
+  width: 505px;
+  height: 600px;
+}
+
+.lyrics-title {
+  color: #3c3e43;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.lyrics-scroll {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 12px;
+}
+
+.lyrics-line {
+  color: #666666;
+  line-height: 1.8;
+  transition: color 0.2s ease;
+  white-space: pre-wrap;
+}
+.lyrics-line {
+  font-size: 16px;
+  color: #666;
+  transition: 0.25s;
+}
+
+.active-line {
+  font-weight: bold;
+  color: black;
+  font-size: 18px;
+}
+
+.lyrics-line:hover {
+  color: #3c3e43;
+}
+
+/* Thanh cuộn tùy chỉnh */
+.lyrics-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.lyrics-scroll::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+.lyrics-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
+}
+.lyrics-scroll {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.lyrics-content {
+  white-space: pre-wrap; /* Giữ xuống dòng và cho phép wrap chữ */
+  word-wrap: break-word; /* Tự động xuống dòng khi quá khung */
+}
+/* *********************************** */
+/* 🎵 Song Player */
+/* *********************************** */
+.songplayer-container {
+  display: flex;
+  align-items: center; /* căn giữa theo chiều dọc */
+  gap: 24px;
+  width: 1052px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-bottom: 30px;
+}
+
+/* ảnh vừa khung, không bị to quá */
+.songplayer-cover {
+  width: 240px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.songplayer-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* căn giữa các hàng trong khung */
+  flex: 1;
+  gap: 10px;
+  height: 100%; /* để phần nội dung không bị tràn */
+}
+
+.songplayer-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #3c3e43;
+}
+
+.songplayer-artist {
+  font-size: 16px;
+  color: #999999;
+  margin-bottom: 8px;
+}
+
+/* --- Hàng 1: Nút điều khiển --- */
+.control-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.playsong-btn {
+  background: linear-gradient(90deg, #3dc3c0, #8568f5);
+  border: none;
+  border-radius: 50%;
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: box-shadow 0.3s;
+}
+.playsong-btn:hover {
+  box-shadow: 0 0 12px rgba(133, 104, 245, 0.5);
+}
+
+/* --- Hàng 2: Thanh tiến trình --- */
+.songplayer-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 4px;
+  appearance: none;
+  background: linear-gradient(90deg, #3dc3c0, #8568f5);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.progress-bar::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #8568f5;
+  border-radius: 50%;
+}
+
+.time-text {
+  font-size: 13px;
+  color: #999999;
+  min-width: 40px;
+  text-align: center;
+}
+
+/* --- Hàng 3: Heart + Volume --- */
+.bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 6px;
+  padding-right: 4px;
+}
+
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.volume-bar {
+  width: 80px;
+  height: 4px;
+  appearance: none;
+  background: linear-gradient(90deg, #3dc3c0, #8568f5);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.volume-bar::-webkit-slider-thumb {
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  background: #8568f5;
+  border-radius: 50%;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: #999999;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.icon-btn:hover {
+  color: #3c3e43;
+}
+
+.liked {
+  color: #000;
+}
+/* *********************************** */
+/* 🎵 Song Detail */
+/* *********************************** */
+.songdetail-container {
+  width: 1170px;
+  height: 1024px;
+  margin: 0 auto;
+  padding: 32px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #ffffff;
+  border-radius: 20px;
+  overflow: hidden; /* không cho cuộn ngang */
+}
+
+/* Hàng trên */
+.songplayer-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+/* Hàng dưới */
+.panel-section {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+  width: 100%;
+  max-width: 1100px; /* tránh tràn khỏi 1170px */
+  flex-shrink: 0;
+}
+
+.panel-section > * {
+  width: 505px;
+  height: 600px;
+  flex-shrink: 0;
+}
+/*---------------------------------- Trending------------------------------ */
+.home-section {
+  width: 100%;
+  margin-bottom: -24px;
+}
+
+.home-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #3c3e43;
+}
+
+.playlist-grid {
+  flex: 0 0 300px;
+  display: flex;
+  gap: 31px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  padding-bottom: 10px;
+  scroll-behavior: smooth;
+
+  /* Ẩn thanh scroll xấu */
+  scrollbar-width: none;
+}
+
+.playlist-grid::-webkit-scrollbar {
+  display: none;
+}
+/* --- TOP ARTIST LIST --- */
+.artist-scroll {
+  display: flex;
+  gap: 32px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scrollbar-width: none;
+}
+
+.artist-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.artist-scroll::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  border-radius: 4px;
+}
+
+.artist-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ===========================
         HOME PAGE LAYOUT
   =========================== */
-  .home-container {
-    display: flex;
-    width: 100%;
-    min-height: 100vh;
-    background: #ffffff;
-  }
+.home-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+}
 
-  /* Vùng nội dung phải */
-  .home-content {
-    flex: 1;
-    padding: 20px 40px;
-    overflow-x: hidden !important;
-    max-width: 100%;
-    box-sizing: border-box;
-    margin-left: 220px; /* né sidebar */
-  }
+/* Vùng nội dung phải */
+.home-content {
+  flex: 1;
+  padding: 20px 40px;
+  overflow-x: hidden !important;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-left: 220px; /* né sidebar */
+}
 
-  .home-section-box {
-    width: 1106px;
-    height: auto;
+.home-section-box {
+  width: 1106px;
+  height: auto;
 
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 20px;
-    box-sizing: border-box;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  box-sizing: border-box;
 
-    overflow: hidden; /* không cho tràn */
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  /* ============================= */
-  /* Music Card */
-  /* ============================= */
+  overflow: hidden; /* không cho tràn */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+/* ============================= */
+/* Music Card */
+/* ============================= */
 
-  .music-card {
-    background-color: var(--card, #fff);
-    border-radius: 16px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-    text-align: left;
-    padding: 1rem;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    width: 260px;
-    height: 300px;
-    position: relative;
-    flex: 0 0 auto; /* Giữ kích thước cố định khi scroll ngang */
-    transition: all 0.25s ease;
-    cursor: pointer;
-  }
+.music-card {
+  background-color: var(--card, #fff);
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  width: 260px;
+  height: 300px;
+  position: relative;
+  flex: 0 0 auto; /* Giữ kích thước cố định khi scroll ngang */
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
 
-  .music-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  }
+.music-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
 
-  /* Cover */
-  .music-cover {
-    width: 100%;
-    height: 180px;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 1rem;
-  }
+/* Cover */
+.music-cover {
+  width: 100%;
+  height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
 
-  .music-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+.music-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-  /* Play button */
-  .music-play-btn {
-    position: absolute;
-    bottom: 12px;
-    right: 12px;
-    width: 48px;
-    height: 48px;
-    border: none;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #3dc3c0, #8568f5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transform: translateY(6px);
-    transition: 0.25s;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
-    margin-bottom: 100px;
-    margin-right: 10px;
-  }
+/* Play button */
+.music-play-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3dc3c0, #8568f5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: 0.25s;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  margin-bottom: 100px;
+  margin-right: 10px;
+}
 
-  .music-card:hover .music-play-btn {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.music-card:hover .music-play-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
 
-  .music-play-btn img {
-    width: 18px;
-    height: 18px;
-  }
+.music-play-btn img {
+  width: 18px;
+  height: 18px;
+}
 
-  /* Info line */
-  .music-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
+/* Info line */
+.music-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
 
-  .music-title {
-    font-size: 1rem;
-    font-weight: 600;
-    margin: 0;
-  }
+.music-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
 
-  .music-artist {
-    font-size: 0.85rem;
-    color: #888;
-    margin-top: 2px;
-  }
+.music-artist {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 2px;
+}
 
-  .music-duration {
-    font-size: 0.8rem;
-    color: #aaa;
-    margin-top: 4px;
-  }
+.music-duration {
+  font-size: 0.8rem;
+  color: #aaa;
+  margin-top: 4px;
+}
 
-  /* More button */
-  .music-more {
-    border: none;
-    background: none;
-    font-size: 1.4rem;
-    color: #888;
-    cursor: pointer;
-    padding: 0;
-    margin-left: 8px;
-  }
+/* More button */
+.music-more {
+  border: none;
+  background: none;
+  font-size: 1.4rem;
+  color: #888;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 8px;
+}
 
-  .music-more:hover {
-    color: #444;
-  }
+.music-more:hover {
+  color: #444;
+}
 
-  .music-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  }
+.music-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
 
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.55);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-  }
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
 
-  .modal-box {
-    background: var(--card-bg);
-    padding: 18px 22px;
-    border-radius: 18px;
-    width: 250px;
-  }
+.modal-box {
+  background: var(--card-bg);
+  padding: 18px 22px;
+  border-radius: 18px;
+  width: 250px;
+}
 
-  .modal-item {
-    display: block;
-    width: 100%;
-    text-align: left;
-    padding: 10px 4px;
-    font-size: 15px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    opacity: 0.9;
-  }
+.modal-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 4px;
+  font-size: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.9;
+}
 
-  .modal-item:hover {
-    opacity: 1;
-  }
+.modal-item:hover {
+  opacity: 1;
+}
 
-  .modal-item.delete {
-    color: #ff4b4b;
-    font-weight: 600;
-  }
+.modal-item.delete {
+  color: #ff4b4b;
+  font-weight: 600;
+}
+
+/* ===== DÀN NGANG CARD SEARCH – PROFILE HEADER ===== */
+
+.profile-search-horizontal {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 8px 4px;
+  scroll-behavior: smooth;
+}
+
+/* ẩn scrollbar (đẹp hơn) */
+.profile-search-horizontal::-webkit-scrollbar {
+  height: 6px;
+}
+
+.profile-search-horizontal::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 10px;
+}

@@ -1,9 +1,13 @@
 import React from "react";
 import "../../styles/theme.css";
 
-export function MusicCard({ title, artist, imageUrl, duration, onClick }) {
+export function MusicCard({ title, artist, imageUrl, duration, onMouseDown }) {
   return (
-    <div className="music-card" onClick={onClick} style={{ cursor: "pointer" }}>
+    <div
+      className="music-card"
+      onMouseDown={onMouseDown}
+      style={{ cursor: "pointer" }}
+    >
       <div className="music-cover">
         <img
           src={
@@ -14,7 +18,14 @@ export function MusicCard({ title, artist, imageUrl, duration, onClick }) {
           alt={title}
         />
 
-        <button className="music-play-btn">
+        <button
+          className="music-play-btn"
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+        >
           <img src="./src/assets/icon/play.svg" />
         </button>
       </div>

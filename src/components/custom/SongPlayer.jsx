@@ -27,7 +27,13 @@ async function sendListeningHistory(songId) {
   }
 }
 
-const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
+const SongPlayer = ({
+  songId,
+  songList = [],
+  autoplay = false,
+  onChangeSong,
+  onTimeUpdate,
+}) => {
   const [song, setSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -41,8 +47,14 @@ const SongPlayer = ({ songId, songList = [], onChangeSong, onTimeUpdate }) => {
   const [isTogglingFavorite, setIsTogglingFavorite] = useState(false);
 
   useEffect(() => {
-    let isMounted = true;
 
+    if (autoplay && audioRef.current) {
+      audioRef.current.play().catch(() => {});
+    }
+  }, [autoplay]);
+
+  useEffect(() => {
+    let isMounted = true;
     const loadSong = async () => {
       try {
         const { data } = await fetchSongById(songId);
