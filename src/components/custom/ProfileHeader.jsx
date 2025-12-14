@@ -94,7 +94,7 @@ export function ProfileHeader({
           />
           <input
             type="text"
-            placeholder="Search song title"
+            placeholder="Search song title or artist"
             className="profile-search-input"
             value={keyword}
             onChange={(e) => {
@@ -163,25 +163,11 @@ export function ProfileHeader({
                     {/* hiển thị số playlist */}
                     <div className="label">Playlists</div>
                   </div>
-                  <div className="profile-stat">
-                    <div className="value">2.4K</div>
-                    <div className="label">Followers</div>
-                  </div>
-                  <div className="profile-stat">
-                    <div className="value">892</div>
-                    <div className="label">Following</div>
-                  </div>
                 </div>
               </div>
             </div>
 
             <div className="profile-actions">
-              <button>
-                <img src="./src/assets/icon/share.svg" alt="Share" />
-              </button>
-              <button>
-                <img src="./src/assets/icon/setting.svg" alt="Settings" />
-              </button>
               <button className="edit-btn" onClick={onEditClick}>
                 Edit Profile
               </button>
