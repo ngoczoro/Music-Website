@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/theme.css";
 import { fetchMyPlaylists, fetchSongsInPlaylist } from "../../services/musicService";
 import { MusicCard } from "../../components/custom/MusicCard";
+import { addSongToFavorites, removeSongFromFavorites } from "../../services/musicService";
+
 
 export default function FavoriteSongs() {
   const navigate = useNavigate();
@@ -28,7 +30,7 @@ export default function FavoriteSongs() {
         const songsData = await fetchSongsInPlaylist(favorite.id || favorite._id);
         setFavoriteSongs(songsData);
       } catch (err) {
-        console.error("Lỗi khi tải playlist yêu thích:", err);
+        console.error("Error when loading favorite playlist:", err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -79,9 +81,34 @@ export default function FavoriteSongs() {
     navigate(`/song/${songId}`);
   }
 
-  function unlikeSong(songId) {
-    setFavoriteSongs(prev => prev.filter(s => (s.id || s._id) !== songId));
+async function handleAddFavorite(songId) {
+  try {
+    await addSongToFavorites(songId);
+
+    // reload lại favorites cho chắc
+    const playlists = await fetchMyPlaylists();
+    const favorite = playlists.find(p => p.name === "Favorites");
+    if (!favorite) return;
+
+    const songsData = await fetchSongsInPlaylist(favorite.id || favorite._id);
+    setFavoriteSongs(songsData);
+  } catch (err) {
+    alert(err.message);
   }
+}
+
+
+async function unlikeSong(songId) {
+  try {
+    await removeSongFromFavorites(songId);
+    setFavoriteSongs(prev =>
+      prev.filter(s => (s.id || s._id) !== songId)
+    );
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
 
   if (loading) return <div className="main-content favourite-page"><p>Loading...</p></div>;
   if (error) return <div className="main-content favourite-page"><p>Error: {error}</p></div>;
@@ -105,8 +132,11 @@ export default function FavoriteSongs() {
         </select>
 
         <div className="playlist-action-buttons">
-          <button className="btn-primary" onClick={() => alert("TODO: Thêm bài hát vào Favorites")}>➕ Thêm bài hát yêu thích mới</button>
-        </div>
+          <button className="btn-primary">
+            ▶ Play All 
+          </button>
+</div>
+
       </div>
 
       {sortedSongs.length === 0 ? (

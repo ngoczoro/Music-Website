@@ -1,9 +1,9 @@
 import React from "react";
 import "../../styles/theme.css";
 
-export function PlaylistCard({ title, songs, isPublic = true, imageUrl }) {
+export function PlaylistCard({ title, songs, isPublic = true, imageUrl, onClick }) {
   return (
-    <div className="playlist-card">
+    <div className="playlist-card" onClick={onClick}>
       <div className="playlist-cover">
         <img
           src={
