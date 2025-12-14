@@ -97,7 +97,7 @@ const MyPlaylist = () => {
         </select>
 
         {/* ✅ Nhóm nút nằm bên phải */}
-        <div className="playlist-action-buttons">
+        <div className="playlist-action-buttons-2">
           <button className="btn-primary" onClick={() => alert("TODO: Thêm playlist")}>➕ Add new playlist</button>
           <button className="btn-primary" onClick={() => alert("TODO: Sửa playlist")}>✏ Customize created playlist</button>
           <button className="btn-primary btn-danger" onClick={() => alert("TODO: Xóa playlist")}>🗑 Delete created playlist</button>
