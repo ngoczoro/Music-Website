@@ -297,7 +297,7 @@ export default function PlaylistDetail() {
         const songsData = await fetchSongsInPlaylist(id);
         setSongs(songsData);
       } catch (err) {
-        console.error("Lỗi khi tải playlist:", err);
+        console.error("Error when loading current playlist:", err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -360,16 +360,25 @@ export default function PlaylistDetail() {
     setShowMenu(true);
   }
 
+
   if (loading) {
     return <div className="main-content playlist-detail-page"><p>Loading...</p></div>;
   }
 
   if (error) {
-    return <div className="main-content playlist-detail-page"><p>Error: {error}</p></div>;
+    return <div className="main-content playlist-detail-page"><p>Error: {error}</p>
+      <Link to="/playlist" className="btn-primary" style={{ marginTop: "16px", marginLeft: "500px", display: "inline-block" }}>
+   ← Back to Your Playlists
+      </Link>
+    </div>;
   }
 
   if (!playlist) {
-    return <div className="main-content playlist-detail-page"><p>Playlist not found</p></div>;
+    return <div className="main-content playlist-detail-page"><p>Playlist not found.</p>
+      <Link to="/playlist" className="btn-primary" style={{ marginTop: "16px", marginLeft: "500px", display: "inline-block" }}>
+   ← Back to Your Playlists
+      </Link>
+    </div>;
   }
 
   return (
