@@ -1,12 +1,13 @@
 "use client"
 
-
 import { useEffect, useState } from "react";
 import "../../styles/theme.css";
 import { useNavigate } from "react-router-dom";
 import { fetchMyPlaylists } from "../../services/musicService";
 import { PlaylistCard } from "../../components/custom/PlaylistCard";
-
+import { createPlaylist } from "../../services/musicService";
+import { updatePlaylist } from "../../services/musicService";
+import { deletePlaylist } from "../../services/musicService";
 
 const MyPlaylist = () => {
   const navigate = useNavigate();
@@ -16,26 +17,97 @@ const MyPlaylist = () => {
   const playlistsPerPage = 8
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
+  const selectedPlaylist = playlists.find(
+  p => p._id === selectedPlaylistId
+);
+  const isFavoriteSelected = selectedPlaylist?.name?.toLowerCase() === "favorites";
+
+const loadPlaylists = async () => {
+  try {
+    setLoading(true);
+    const data = await fetchMyPlaylists();
+
+    console.log("🎧 PLAYLISTS FROM API:", data);
+
+    let sortedData = [...data];
+
+    if (sortBy === "recently-added") {
+      sortedData = sortedData.reverse(); // 🔥 playlist mới lên đầu
+    }
+
+    if (sortBy === "a-z") {
+      sortedData.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    setPlaylists(sortedData);
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
 
-  useEffect(() => {
-    const fetchAndSetPlaylists = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchMyPlaylists();
-        const sortedData = [...data];
-        if (sortBy === "a-z") {
-          sortedData.sort((a, b) => a.name.localeCompare(b.name));
-        }
-        setPlaylists(sortedData);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAndSetPlaylists();
-  }, [sortBy]);
+useEffect(() => {
+  setSelectedPlaylistId(null); // 👈 clear selection khi sort
+  loadPlaylists();
+}, [sortBy]);
+
+
+const handleAddPlaylist = async () => {
+  const name = prompt("Enter playlist name:");
+  if (!name) return;
+
+  await createPlaylist({ name });
+
+  setCurrentPage(1);     // 👈 QUAN TRỌNG
+  await loadPlaylists(); // 👈 reload
+};
+
+
+const handleEditPlaylist = async () => {
+  if (!selectedPlaylistId) {
+    alert("Please select a playlist first");
+    return;
+  }
+
+  const newName = prompt("New playlist name:");
+  if (!newName) return;
+
+  await updatePlaylist(selectedPlaylistId, {
+    name: newName,
+  });
+
+  await loadPlaylists(); // 🔁 refetch
+};
+
+const handleDeletePlaylist = async () => {
+  if (!selectedPlaylistId) {
+    alert("Please select a playlist first");
+    return;
+  }
+
+  const selectedPlaylist = playlists.find(
+    p => p._id === selectedPlaylistId
+  );
+
+  if (!selectedPlaylist) return;
+
+  if (selectedPlaylist.name.toLowerCase() === "favorites") {
+    alert("You cannot delete Favorites playlist");
+    return;
+  }
+
+  const ok = window.confirm(
+    `Delete playlist "${selectedPlaylist.name}"?`
+  );
+  if (!ok) return;
+
+  await deletePlaylist(selectedPlaylist._id);
+  setSelectedPlaylistId(null);
+  await loadPlaylists();
+};
 
   // 🧮 Pagination
   const indexOfLast = currentPage * playlistsPerPage
@@ -98,9 +170,33 @@ const MyPlaylist = () => {
 
         {/* ✅ Nhóm nút nằm bên phải */}
         <div className="playlist-action-buttons-2">
-          <button className="btn-primary" onClick={() => alert("TODO: Thêm playlist")}>➕ Add new playlist</button>
-          <button className="btn-primary" onClick={() => alert("TODO: Sửa playlist")}>✏ Customize created playlist</button>
-          <button className="btn-primary btn-danger" onClick={() => alert("TODO: Xóa playlist")}>🗑 Delete created playlist</button>
+          <button className="btn-primary" onClick={handleAddPlaylist}>
+            ➕ Add new playlist
+          </button>
+
+          <button
+            className="btn-primary"
+            onClick={handleEditPlaylist}
+            disabled={!selectedPlaylistId || isFavoriteSelected}
+            style={{
+              opacity: !selectedPlaylistId || isFavoriteSelected ? 0.5 : 1,
+              cursor: !selectedPlaylistId || isFavoriteSelected ? "not-allowed" : "pointer",
+            }}
+>
+            ✏ Customize created playlist
+          </button>
+
+          <button
+            className="btn-primary btn-danger"
+            onClick={handleDeletePlaylist}
+            disabled={!selectedPlaylistId || isFavoriteSelected}
+            style={{
+              opacity: !selectedPlaylistId || isFavoriteSelected ? 0.5 : 1,
+              cursor: !selectedPlaylistId || isFavoriteSelected ? "not-allowed" : "pointer",
+            }}
+>
+            🗑 Delete created playlist
+          </button>
         </div>
       </div>
 
@@ -108,17 +204,46 @@ const MyPlaylist = () => {
       {currentPlaylists.length === 0 ? (
         <p className="text-gray-500">You don't have any playlists yet.</p>
       ) : (
-        <div className="playlist-grid-container">
-          {currentPlaylists.map((p) => (
-            <PlaylistCard
-              key={p._id}
-              title={p.name}
-              songs={p.songs}
-              isPublic={p.isPublic}
-              imageUrl={p.image || p.thumbnailUrl || "/uploads/images/default-img.jpg"}
-              onClick={() => navigate(`/playlists/${p._id}`)}
+        <div
+        className="playlist-grid-container"
+        onClick={() => setSelectedPlaylistId(null)}
+        >
+
+          {currentPlaylists.map((p) => {
+          const isSelected = selectedPlaylistId === p._id;
+
+    return (
+    <div key={p._id} style={{ display: "flex", justifyContent: "flex-start" }}>
+      <div
+        onClick={(e) => {
+          e.stopPropagation();              // ⛔ không cho click lan ra grid
+          setSelectedPlaylistId(p._id);     // ✅ chọn playlist
+        }}
+        onDoubleClick={(e) => {
+          e.stopPropagation();              // ⛔ không clear selection
+          navigate(`/playlists/${p._id}`);  // ➡️ vào detail
+        }}
+        style={{
+          display: "inline-block",
+          border: isSelected
+            ? "2px solid #4f46e5"
+            : "2px solid transparent",
+          borderRadius: "12px",
+          cursor: "pointer",
+        }}
+      >
+        <PlaylistCard
+          title={p.name}
+          songs={p.songs}
+          isPublic={p.isPublic}
+          imageUrl={
+            p.image || p.thumbnailUrl || "/uploads/images/default-img.jpg"
+          }
         />
-      ))}
+      </div>
+    </div>
+  );
+})} 
         </div>
       )}
 
