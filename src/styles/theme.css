@@ -1,6 +1,12 @@
 /* Container chứa các nút hành động */
 .playlist-action-buttons {
-  margin-left: 750px; /* đẩy toàn bộ nhóm nút sang bên phải */
+  margin-left: 800px; /* đẩy toàn bộ nhóm nút sang bên phải */
+  display: flex; /* xếp nút theo hàng ngang */
+  gap: 12px; /* khoảng cách giữa các nút */
+}
+
+.playlist-action-buttons-2 {
+  margin-left: 650px; /* đẩy toàn bộ nhóm nút sang bên phải */
   display: flex; /* xếp nút theo hàng ngang */
   gap: 12px; /* khoảng cách giữa các nút */
 }
@@ -314,7 +320,7 @@ input {
 }
 
 .playlist-main-container {
-  margin-left: 250px;
+  margin-left: 300px;
 }
 
 .playlist-detail-page {
