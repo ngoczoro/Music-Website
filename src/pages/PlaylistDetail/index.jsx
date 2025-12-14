@@ -310,16 +310,19 @@ export default function PlaylistDetail() {
   }, [id]);
 
   // Sorting helper
-  const sortedSongs = React.useMemo(() => {
-    switch (sortOption) {
-      case "oldest_added":
-        return [...songs].reverse();
-      case "latest_published":
-      case "oldest_published":
-      default:
-        return songs;
-    }
-  }, [songs, sortOption]);
+const sortedSongs = React.useMemo(() => {
+  switch (sortOption) {
+    case "oldest_added":
+      return [...songs].reverse();
+
+    case "latest_added":
+      return [...songs]; // hoặc reverse tùy API trả về
+
+    default:
+      return songs;
+  }
+}, [songs, sortOption]);
+
 
   const indexOfLast = currentPage * songsPerPage;
   const indexOfFirst = indexOfLast - songsPerPage;
@@ -540,7 +543,7 @@ export default function PlaylistDetail() {
             <h3>{selectedSong.title || selectedSong.name}</h3>
 
             <button className="modal-item" onClick={() => {
-              onPlaySong(selectedSong);
+              onPlaySong(selectedSong.id || selectedSong._id);
               setShowMenu(false);
             }}>
               ▶ Play
