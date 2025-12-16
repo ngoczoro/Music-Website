@@ -131,10 +131,13 @@ const SongPlayer = ({
     };
 
     const handleLoaded = () => setDuration(audio.duration || 0);
-    const handleEnded = () => {
-      if (isShuffle) handleShuffle();
-      else handleSkipForward();
-    };
+const handleEnded = () => {
+  setIsPlaying(false);
+  // (tuỳ chọn) đưa về đầu để bấm Play sẽ phát lại từ đầu
+  // audio.currentTime = 0;
+  // setCurrentTime(0);
+};
+
 
     audio.addEventListener("loadedmetadata", handleLoaded);
     audio.addEventListener("timeupdate", handleTimeUpdate);
