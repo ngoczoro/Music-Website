@@ -131,10 +131,13 @@ const SongPlayer = ({
     };
 
     const handleLoaded = () => setDuration(audio.duration || 0);
-    const handleEnded = () => {
-      if (isShuffle) handleShuffle();
-      else handleSkipForward();
-    };
+const handleEnded = () => {
+  setIsPlaying(false);
+  // (tuỳ chọn) đưa về đầu để bấm Play sẽ phát lại từ đầu
+  // audio.currentTime = 0;
+  // setCurrentTime(0);
+};
+
 
     audio.addEventListener("loadedmetadata", handleLoaded);
     audio.addEventListener("timeupdate", handleTimeUpdate);
@@ -232,13 +235,6 @@ const SongPlayer = ({
         <p className="songplayer-artist">{song.artistName}</p>
 
         <div className="control-row">
-          <button
-            className={`icon-btn ${isShuffle ? "active" : ""}`}
-            onClick={() => setIsShuffle(!isShuffle)}
-          >
-            <Shuffle size={18} />
-          </button>
-
           <button className="icon-btn" onClick={handleSkipBack}>
             <SkipBack size={24} />
           </button>
@@ -253,10 +249,6 @@ const SongPlayer = ({
 
           <button className="icon-btn" onClick={handleSkipForward}>
             <SkipForward size={24} />
-          </button>
-
-          <button className="icon-btn">
-            <Repeat size={18} />
           </button>
         </div>
 

@@ -31,12 +31,12 @@ export default function MainLayout() {
     // Map id của Sidebar -> route thực tế
     const idToPath = {
       Home: "/home",
-      Artist: "/home", // tạm thời có thể cùng trang Home hoặc sau này tạo route riêng
-      Genre: "/home", // tương tự
-      Recent: "/home", // hoặc /recent nếu bạn tạo
+      Artist: "/blank-page", 
+      Genre: "/blank-page", 
+      Recent: "/blank-page", 
       Favorite: "/favourite",
       Playlist: "/playlist",
-      ApplyForArtist: "/home", // hoặc route riêng sau này
+      ApplyForArtist: "/blank-page",
       Account: "/profile",
     };
 

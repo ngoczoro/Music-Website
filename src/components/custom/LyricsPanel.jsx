@@ -72,7 +72,7 @@ const LyricsPanel = ({ songId, currentTime }) => {
                 );
               })
             ) : (
-              <p>Chưa có lời cho bài hát này.</p>
+              <p>Lyrics are not available</p>
             )}
           </div>
         </div>

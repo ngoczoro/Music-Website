@@ -6,19 +6,11 @@ import { TrendingList } from "../../components/custom/TrendingList";
 import { MadeForYouList } from "../../components/custom/MadeForYouList";
 import { TopArtistList } from "../../components/custom/TopArtistList";
 
-export default function Home() {
+export default function Blank() {
   return (
     <div className="home-page">
       <div className="home-content">
-        <HomeSearch />
-
-        <div className="home-section-box">
-          <TrendingList />
-        </div>
-
-        <div className="home-section-box">
-          <MadeForYouList />
-        </div>
+      <h5>This page will be completed in the future</h5>
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import TextField from "../../components/TextField";
 import Button from "../../components/Button";
-import { loginUser } from "../../services/authService";
+import { loginUser, resendOTP } from "../../services/authService";
 import {
   checkEmptyFieldsLogin,
   checkPasswordPolicy,
@@ -68,11 +68,11 @@ export default function Login() {
 
     try {
       const result = await loginUser(formData);
-      
+
       setMessage(
         result.message || "Login successful! Redirecting to homepage..."
       );
-      if(!result.ok) {
+      if (!result.ok) {
         setIsError(true);
         return;
       }
@@ -182,6 +182,41 @@ export default function Login() {
                     Register
                   </Link>
                 </Typography>
+                {message === "Unverified account" && (
+                  <Typography variant="body2" color="text.secondary">
+                    Verify your email?{" "}
+                    <Link
+                      component="button"
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        try {
+                          setIsLoading(true);
+                          const type = "REGISTER";
+                          const result = await resendOTP(formData.email, type);
+                          setMessage(result.message);
+                          if (!result.ok) {
+                            setIsError(true);
+                            return;
+                          }
+                          setIsError(false);
+                          setIsLoading(false);
+                          navigate("/verify-email", {
+                            state: { email: formData.email, from: "register" },
+                          })
+                        } catch (error) {
+                          setMessage(error.message || "Failed to resend OTP.");
+                          setIsError(true);
+                          setIsLoading(false);
+                        }
+                      }}
+
+                      sx={{ color: "#FF8682", textDecoration: "none", cursor: "pointer" }}
+                    >
+                      Verify
+                    </Link>
+                  </Typography>
+                )}
+
               </Stack>
             </Box>
           </CardContent>

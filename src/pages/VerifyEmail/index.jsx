@@ -25,6 +25,7 @@ export default function VerifyEmail() {
 
   const initialEmail = location.state?.email || '';
   const from = location.state?.from;
+  console.log("Initial email from location state:", from);
 
   const [message, setMessage] = useState(null);
   const [isError, setIsError] = useState(false);

@@ -41,7 +41,7 @@ export default function HomeSearch() {
         />
         <input
           type="text"
-          placeholder="Search song title"
+          placeholder="Search song title or artist"
           className="profile-search-input"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
