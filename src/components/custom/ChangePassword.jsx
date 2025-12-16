@@ -20,19 +20,19 @@ export default function ChangePassword({ onCancel }) {
 
     // Current password không được để trống
     if (!current.trim()) {
-      newErrors.current = "Mật khẩu hiện tại không được để trống!";
+      newErrors.current = "Current password can not be empty";
       valid = false;
     }
 
     // New password không để trống
     if (!newPass.trim()) {
-      newErrors.newPass = "Mật khẩu mới không được để trống!";
+      newErrors.newPass = "New password can not be empty";
       valid = false;
     }
 
     // Confirm không để trống
     if (!confirm.trim()) {
-      newErrors.confirm = "Xác nhận lại mật khẩu không được để trống!";
+      newErrors.confirm = "Confirm new password can not be empty";
       valid = false;
     }
 
@@ -44,31 +44,31 @@ export default function ChangePassword({ onCancel }) {
 
     // Mật khẩu mới không được trùng mật khẩu hiện tại
     if (newPass === current) {
-      newErrors.newPass =
-        "Mật khẩu mới không được trùng với mật khẩu hiện tại!";
+      newErrors.newPass = "New password must not match the old password";
       valid = false;
     }
 
     // Độ dài
     if (newPass.length < 8) {
-      newErrors.newPass = "Mật khẩu mới phải có ít nhất 8 ký tự!";
+      newErrors.newPass = "Password must contain at least 8 characters";
       valid = false;
     }
 
     // Chữ hoa, chữ thường, ký tự đặc biệt
     const hasUpper = /[A-Z]/.test(newPass);
     const hasLower = /[a-z]/.test(newPass);
+    const hasNumber = /[0-9]/.test(newPass);
     const hasSpecial = /[^A-Za-z0-9]/.test(newPass);
 
-    if (!hasUpper || !hasLower || !hasSpecial) {
+    if (!hasUpper || !hasLower || !hasNumber || !hasSpecial) {
       newErrors.newPass =
-        "Mật khẩu mới phải có 1 chữ hoa, 1 chữ thường và 1 ký tự đặc biệt!";
+        "Password must contain at least 8 characters, including 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character";
       valid = false;
     }
 
     // Confirm phải trùng
     if (newPass !== confirm) {
-      newErrors.confirm = "Xác nhận mật khẩu không trùng khớp!";
+      newErrors.confirm = "Password and Confirm Password do not match";
       valid = false;
     }
 
@@ -98,7 +98,7 @@ export default function ChangePassword({ onCancel }) {
       // Sai mật khẩu hiện tại
       setErrors({
         ...errors,
-        current: "Mật khẩu hiện tại không chính xác!",
+        current: "Current password is incorrect",
       });
     } finally {
       setLoading(false);

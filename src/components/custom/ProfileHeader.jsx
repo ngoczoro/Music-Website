@@ -46,7 +46,7 @@ export function ProfileHeader({
         setPlaylists(playlistsData || []);
       } catch (err) {
         console.error("Lỗi khi tải dữ liệu:", err);
-        setError("Không thể tải thông tin người dùng hoặc playlist");
+        setError("User not found or failed to load data.");
       } finally {
         setLoading(false);
       }

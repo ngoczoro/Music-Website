@@ -6,7 +6,7 @@ export const checkEmptyFields = (formData) => {
     return "Please enter your email address.";
   }
   if (!formData.password) {
-    return "Please enter a password.";
+    return "Please enter your password.";
   }
   if (!formData.confirmPassword) {
     return "Please confirm your password.";
@@ -19,14 +19,14 @@ export const checkEmptyFieldsLogin = (formData) => {
     return "Please enter your email address.";
   }
   if (!formData.password) {
-    return "Please enter a password.";
+    return "Please enter your password.";
   }
   return null;
 };
 
 export const checkEmptyFieldsResetPassword = (formData) => {
   if (!formData.password) {
-    return "Please enter a password.";
+    return "Please enter your password.";
   }
   if (!formData.confirmPassword) {
     return "Please confirm your password.";
