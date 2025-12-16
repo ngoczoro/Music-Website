@@ -8,6 +8,8 @@ export default function ProfileInformation({ onCancel }) {
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [setOldFullName] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   // --- Lấy thông tin user đang đăng nhập ---
   useEffect(() => {
@@ -15,11 +17,12 @@ export default function ProfileInformation({ onCancel }) {
       try {
         const data = await getCurrentUser();
         setFullName(data.fullName || "");
+        setOldFullName(data.fullName || "");
         setEmail(data.email || "");
         setBio(data.bio || "");
         setAvatarPreview(data.avatarUrl || "");
       } catch (err) {
-        console.error("Lỗi tải thông tin người dùng:", err);
+        console.error("User information loading error:", err);
       }
     };
     fetchUser();
@@ -27,25 +30,54 @@ export default function ProfileInformation({ onCancel }) {
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
-    setAvatarFile(file);
-    if (file) {
-      setAvatarPreview(URL.createObjectURL(file));
+    if (!file) return;
+
+    const ALLOWED_IMAGE_TYPES = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+    ];
+
+    //Sai format
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      setErrorMsg("Invalid image format");
+      setAvatarFile(null);
+      e.target.value = "";
+      return;
     }
+
+    //Đúng format
+    setErrorMsg("");
+    setAvatarFile(file);
+    setAvatarPreview(URL.createObjectURL(file));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (errorMsg) return; //không submit nếu có lỗi
     setLoading(true);
+
     try {
-      await updateProfile({
-        fullName,
+      const trimmedName = fullName.trim();
+
+      const payload = {
         bio,
         avatar: avatarFile,
-      });
-      alert("Cập nhật hồ sơ thành công!");
-      window.location.reload(); // reload lại để ProfilePage hiển thị dữ liệu mới
+      };
+
+      //chỉ gửi fullName khi hợp lệ
+      if (trimmedName !== "" && trimmedName.length <= 30) {
+        payload.fullName = trimmedName;
+      }
+
+      await updateProfile(payload);
+
+      alert("Profile updated successfully!");
+      window.location.reload();
     } catch (err) {
-      alert("Cập nhật thất bại: " + err.message);
+      console.error(err);
+      alert("Failed to update profile!");
     } finally {
       setLoading(false);
     }
@@ -74,6 +106,7 @@ export default function ProfileInformation({ onCancel }) {
           hidden
           onChange={handleAvatarChange}
         />
+        {errorMsg && <p className="error-msg">{errorMsg}</p>}
       </div>
 
       <div className="form-grid">

@@ -19,10 +19,6 @@ export default function Home() {
         <div className="home-section-box">
           <MadeForYouList />
         </div>
-
-        <div className="home-section-box">
-          <TopArtistList />
-        </div>
       </div>
     </div>
   );

@@ -43,6 +43,7 @@ export function TrendingList() {
       state: { autoplay: true },
     });
   };
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     async function loadTrending() {
@@ -76,12 +77,21 @@ export function TrendingList() {
 
         setSongs(withDuration);
       } catch (err) {
-        console.error("Lỗi lấy trending:", err);
+        setErrorMsg("User not found"); // MSG011
       }
     }
 
     loadTrending();
   }, []);
+
+  if (errorMsg) {
+    return (
+      <div className="home-section">
+        <h2 className="home-title">Trending</h2>
+        <p className="error-text">{errorMsg}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="home-section">

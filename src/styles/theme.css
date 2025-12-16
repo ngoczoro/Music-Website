@@ -1023,16 +1023,17 @@ input {
 .profile-stat .value {
   color: #000;
   font-family: Montserrat;
-  font-size: 18px;
+  font-size: 20px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 700;
   line-height: normal;
+  text-align: center;
 }
 
 .profile-stat .label {
   color: #b9b9b9;
   font-family: Montserrat;
-  font-size: 18px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
@@ -1961,6 +1962,7 @@ input {
   border-radius: 10px;
 }
 
+<<<<<<< HEAD
 .playlist-add-form {
   background: var(--card-bg);
   padding: 20px;
@@ -1986,4 +1988,34 @@ input {
   display: flex;
   gap: 12px;
   justify-content: flex-end;
+=======
+/* ============================= */
+/* SEARCH RESULT – HORIZONTAL */
+/* ============================= */
+
+.profile-search-horizontal {
+  display: flex;
+  flex-wrap: wrap; /*CHO PHÉP XUỐNG DÒNG */
+  gap: 24px;
+
+  overflow: visible;
+  padding: 24px 32px;
+  margin-top: 12px;
+
+  background-color: #ffffff;
+  border-radius: 16px;
+}
+
+.profile-search-horizontal::-webkit-scrollbar {
+  height: 8px;
+}
+
+.profile-search-horizontal::-webkit-scrollbar-thumb {
+  background: #d0d0d0;
+  border-radius: 4px;
+}
+
+.profile-search-horizontal::-webkit-scrollbar-thumb:hover {
+  background: #b5b5b5;
+>>>>>>> 8bc465df7abe8c69ae474c3f3310efa064f1c0ee
 }

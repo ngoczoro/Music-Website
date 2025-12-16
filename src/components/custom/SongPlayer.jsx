@@ -235,13 +235,6 @@ const handleEnded = () => {
         <p className="songplayer-artist">{song.artistName}</p>
 
         <div className="control-row">
-          <button
-            className={`icon-btn ${isShuffle ? "active" : ""}`}
-            onClick={() => setIsShuffle(!isShuffle)}
-          >
-            <Shuffle size={18} />
-          </button>
-
           <button className="icon-btn" onClick={handleSkipBack}>
             <SkipBack size={24} />
           </button>
@@ -256,10 +249,6 @@ const handleEnded = () => {
 
           <button className="icon-btn" onClick={handleSkipForward}>
             <SkipForward size={24} />
-          </button>
-
-          <button className="icon-btn">
-            <Repeat size={18} />
           </button>
         </div>
 
