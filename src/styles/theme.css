@@ -397,7 +397,7 @@ input {
   transition: all 0.25s ease-in-out;
   border: 1px solid rgba(0, 0, 0, 0.08);
   width: 300px;
-  height: 380px;
+  height: 250px;
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* Đẩy nút xuống đều */
@@ -497,7 +497,7 @@ input {
 .artist-card {
   flex: 0 0 auto; /* Giữ nguyên kích thước, không co giãn */
   width: 300px;
-  height: 380px;
+  height: 270px;
 }
 /* ============================= */
 /* Playlist Card Styles */
@@ -975,7 +975,7 @@ input {
   font-size: 1.75rem;
   color: #111827;
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   overflow: hidden;
   color: #121212;
   text-overflow: ellipsis;
@@ -988,7 +988,7 @@ input {
 }
 
 .profile-details p {
-  color: #b9b9b9;
+  color: #cbc5c5;
   text-align: center;
   font-family: Montserrat;
   font-size: 18px;
@@ -1362,8 +1362,8 @@ input {
 }
 
 .artist-avatar {
-  width: 120px;
-  height: 120px;
+  width: 180px;
+  height: 200px;
   border-radius: 50%;
   object-fit: cover;
 }

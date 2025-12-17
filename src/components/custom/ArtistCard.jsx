@@ -9,9 +9,6 @@ export function ArtistCard({ name, followers, imageUrl }) {
       </div>
 
       <h3 className="artist-name">{name}</h3>
-      <p className="artist-followers">{followers} followers</p>
-
-      <button className="artist-button following">Following</button>
     </div>
   );
 }

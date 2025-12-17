@@ -17,7 +17,7 @@ export function SongList() {
         // Tìm playlist "Favorites"
         const favorite = playlists.find((p) => p.name === "Favorites");
         if (!favorite) {
-          console.warn("Không tìm thấy playlist Favorites.");
+          console.warn("Not found playlist Favorites.");
           setSongs([]);
           return;
         }
@@ -26,7 +26,7 @@ export function SongList() {
         const songsData = await fetchSongsInPlaylist(favorite.id);
         setSongs(songsData);
       } catch (err) {
-        console.error("Lỗi khi tải playlist yêu thích:", err.message);
+        console.error("Error loading favorite playlist:", err.message);
       }
     };
 
@@ -40,7 +40,7 @@ export function SongList() {
           <SongItem key={song.id} index={index + 1} song={song} />
         ))
       ) : (
-        <p>Không có bài hát trong playlist Favorites.</p>
+        <p>No songs in Favorites playlist.</p>
       )}
     </div>
   );

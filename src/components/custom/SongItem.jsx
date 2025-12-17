@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { addSongToFavorites, removeSongFromFavorites, fetchMyPlaylists } from "../../services/musicService";
+import {
+  addSongToFavorites,
+  removeSongFromFavorites,
+  fetchMyPlaylists,
+} from "../../services/musicService";
 import "../../styles/theme.css";
 
 export function SongItem({ index, song }) {
@@ -14,7 +18,11 @@ export function SongItem({ index, song }) {
       try {
         const playlists = await fetchMyPlaylists();
         const favorite = playlists.find((p) => p.name === "Favorites");
-        setIsFavorite(favorite && favorite.songs && (favorite.songs.includes(song._id || song.id)));
+        setIsFavorite(
+          favorite &&
+            favorite.songs &&
+            favorite.songs.includes(song._id || song.id)
+        );
       } catch {
         setIsFavorite(false);
       }
@@ -33,11 +41,19 @@ export function SongItem({ index, song }) {
       if (isFavorite) {
         await removeSongFromFavorites(song._id || song.id);
         setIsFavorite(false);
-        window.dispatchEvent(new CustomEvent("favorite-updated", { detail: { songId: song._id || song.id, action: "remove" } }));
+        window.dispatchEvent(
+          new CustomEvent("favorite-updated", {
+            detail: { songId: song._id || song.id, action: "remove" },
+          })
+        );
       } else {
         await addSongToFavorites(song._id || song.id);
         setIsFavorite(true);
-        window.dispatchEvent(new CustomEvent("favorite-updated", { detail: { songId: song._id || song.id, action: "add" } }));
+        window.dispatchEvent(
+          new CustomEvent("favorite-updated", {
+            detail: { songId: song._id || song.id, action: "add" },
+          })
+        );
       }
     } catch (err) {
       alert("Lỗi khi cập nhật yêu thích: " + err.message);
@@ -49,14 +65,6 @@ export function SongItem({ index, song }) {
   const coverUrl = song.coverImageUrl?.startsWith("/")
     ? `http://localhost:8081${song.coverImageUrl}`
     : song.coverImageUrl;
-
-  const formatDuration = (seconds) => {
-    if (!seconds) return "00:00";
-    const totalSeconds = Math.floor(seconds);
-    const mins = Math.floor(totalSeconds / 60);
-    const secs = totalSeconds % 60;
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
 
   return (
     <div
@@ -81,10 +89,21 @@ export function SongItem({ index, song }) {
       </div>
 
       <div className="song-actions">
-        <button className={`heart-btn${isFavorite ? " active" : ""}`} onClick={handleHeartClick} disabled={loading}>
-          <img src={isFavorite ? "./src/assets/icon/redheart.svg" : "./src/assets/icon/heart.svg"} alt="Heart" />
+        <button
+          className={`heart-btn${isFavorite ? " active" : ""}`}
+          onClick={handleHeartClick}
+          disabled={loading}
+        >
+          <img
+            src={
+              isFavorite
+                ? "./src/assets/icon/redheart.svg"
+                : "./src/assets/icon/heart.svg"
+            }
+            alt="Heart"
+          />
         </button>
-        <span className="song-time">{formatDuration(song.duration)}</span>
+
         <button className="more-btn">
           <img src="./src/assets/icon/more.svg" alt="More" />
         </button>

@@ -28,12 +28,12 @@ export function ArtistList() {
     loadArtists();
   }, []);
 
-  if (loading) return <p>Đang tải danh sách nghệ sĩ...</p>;
-  if (error) return <p>Lỗi tải nghệ sĩ: {error}</p>;
+  if (loading) return <p>Loading artist list...</p>;
+  if (error) return <p>Error loading artists: {error}</p>;
 
   return (
     <div className="artist-list grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {artists.length > 0 ?  (
+      {artists.length > 0 ? (
         artists.map((artist) => (
           <ArtistCard
             key={artist.id || artist._id}
@@ -43,10 +43,9 @@ export function ArtistList() {
             views={artist.totalViews || 0}
           />
         ))
-      ) : 
-      (
-        <p>Chưa có nghệ sĩ thịnh hành.</p>
-      ) }
+      ) : (
+        <p>No trending artists available.</p>
+      )}
     </div>
   );
 }

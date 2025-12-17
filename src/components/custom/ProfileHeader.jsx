@@ -45,7 +45,7 @@ export function ProfileHeader({
         const playlistsData = await fetchMyPlaylists();
         setPlaylists(playlistsData || []);
       } catch (err) {
-        console.error("Lỗi khi tải dữ liệu:", err);
+        console.error("Error loading data:", err);
         setError("User not found or failed to load data.");
       } finally {
         setLoading(false);
@@ -155,7 +155,7 @@ export function ProfileHeader({
 
               <div className="profile-details">
                 <h1>{user?.fullName || "No Name"}</h1>
-                <p>{user?.bio || "Chưa có tiểu sử"}</p>
+                <p>{user?.bio || "No bio available"}</p>
 
                 <div className="profile-stats">
                   <div className="profile-stat">
