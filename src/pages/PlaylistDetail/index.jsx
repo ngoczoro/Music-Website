@@ -204,6 +204,20 @@ function onSearchChange(e) {
         <span className="breadcrumb-sep"> ›› </span>
         <span className="breadcrumb-current">"{playlist.name}" playlist</span>
         </span>
+
+        {playlist.description && (
+    <div
+      className="playlist-description"
+      style={{
+        marginTop: "6px",
+        fontSize: "14px",
+        opacity: 0.7
+      }}
+    >
+      <strong>Playlist's description:</strong>{" "}
+      {playlist.description}
+    </div>
+  )}
       </div>
 
 
