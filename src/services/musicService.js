@@ -1,8 +1,10 @@
 const API_BASE_URL = "http://localhost:8081/api";
 
+
 export const addSongToFavorites = async (songId) => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
+
 
   const res = await fetch(
     `${API_BASE_URL}/common/playlist/favorites/songs/${songId}`,
@@ -14,12 +16,15 @@ export const addSongToFavorites = async (songId) => {
     }
   );
 
+
   return handleResponse(res);
 };
+
 
 export const removeSongFromFavorites = async (songId) => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
+
 
   const res = await fetch(
     `${API_BASE_URL}/common/playlist/favorites/songs/${songId}`,
@@ -31,14 +36,17 @@ export const removeSongFromFavorites = async (songId) => {
     }
   );
 
+
   return handleResponse(res);
 };
+
 
 const handleResponse = async (response) => {
   const isJson = response.headers
     .get("content-type")
     ?.includes("application/json");
   const data = isJson ? await response.json() : {};
+
 
   return {
     ok: response.ok,
@@ -47,6 +55,7 @@ const handleResponse = async (response) => {
     data,
   };
 };
+
 
 export const checkSongInFavorite = async (songId) => {
   const token = localStorage.getItem("authToken");
@@ -73,6 +82,7 @@ export const checkSongInFavorite = async (songId) => {
   }
 };
 
+
 /**
  * Lấy thông tin người dùng hiện tại (profile)
  */
@@ -80,15 +90,19 @@ export const getCurrentUser = async () => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
 
+
   const res = await fetch(`${API_BASE_URL}/common/users/me`, {
     method: "GET",
     headers: { Authorization: `Bearer ${token}` },
   });
 
+
   const result = await handleResponse(res);
+
 
   return result.data; // ✔ chỉ trả về phần data
 };
+
 
 /**
  * Lấy tất cả playlist của người dùng đang đăng nhập
@@ -96,6 +110,7 @@ export const getCurrentUser = async () => {
 export const fetchMyPlaylists = async () => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
+
 
   const res = await fetch(`${API_BASE_URL}/common/playlist`, {
     method: "GET",
@@ -105,11 +120,14 @@ export const fetchMyPlaylists = async () => {
     },
   });
 
+
   const result = await handleResponse(res);
+
 
   // Backend trả data là ARRAY
   return Array.isArray(result.data) ? result.data : [];
 };
+
 
 /**
  * Lấy thông tin playlist theo ID
@@ -118,18 +136,30 @@ export const fetchPlaylistById = async (playlistId) => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
 
-  // Lấy tất cả playlists và tìm playlist có ID khớp
-  const playlists = await fetchMyPlaylists();
-  const playlist = playlists.find(
-    (p) => p.id === playlistId || p._id === playlistId
+
+  const res = await fetch(
+    `${API_BASE_URL}/common/playlist/${playlistId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
   );
 
-  if (!playlist) {
-    throw new Error("Không tìm thấy playlist");
+
+  const result = await handleResponse(res);
+
+
+  if (!result.ok) {
+    throw new Error(result.message || "Không tìm thấy playlist");
   }
 
-  return playlist;
+
+  return result.data;
 };
+
+
+
 
 /**
  * Lấy danh sách bài hát trong playlist cụ thể (ví dụ: Favorites)
@@ -137,6 +167,7 @@ export const fetchPlaylistById = async (playlistId) => {
 export const fetchSongsInPlaylist = async (playlistId) => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
+
 
   const res = await fetch(
     `${API_BASE_URL}/common/playlist/${playlistId}/songs`,
@@ -149,16 +180,20 @@ export const fetchSongsInPlaylist = async (playlistId) => {
     }
   );
 
+
   const result = await handleResponse(res);
+
 
   return Array.isArray(result.data) ? result.data : [];
 };
+
 
 /**
  * Lấy danh sách nghệ sĩ thịnh hành (trending)
  */
 export const fetchTrendingArtists = async () => {
   const token = localStorage.getItem("authToken");
+
 
   const res = await fetch(`${API_BASE_URL}/common/users/trending-artists`, {
     method: "GET",
@@ -167,6 +202,7 @@ export const fetchTrendingArtists = async () => {
       Authorization: token ? `Bearer ${token}` : "",
     },
   });
+
 
   return handleResponse(res);
 };
@@ -179,10 +215,12 @@ export const updateProfile = async ({ fullName, bio, avatar }) => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
 
+
   const formData = new FormData();
   if (fullName) formData.append("fullName", fullName);
   if (bio) formData.append("bio", bio);
   if (avatar) formData.append("avatar", avatar);
+
 
   const res = await fetch(`${API_BASE_URL}/common/users/me/change`, {
     method: "PATCH",
@@ -192,8 +230,10 @@ export const updateProfile = async ({ fullName, bio, avatar }) => {
     body: formData,
   });
 
+
   return handleResponse(res);
 };
+
 
 /**
  * Đổi mật khẩu người dùng đang đăng nhập
@@ -202,6 +242,7 @@ export const updateProfile = async ({ fullName, bio, avatar }) => {
 export const changePassword = async ({ oldPassword, newPassword }) => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
+
 
   const res = await fetch(`${API_BASE_URL}/common/users/me/password/change`, {
     method: "PATCH",
@@ -212,20 +253,24 @@ export const changePassword = async ({ oldPassword, newPassword }) => {
     body: JSON.stringify({ oldPassword, newPassword }),
   });
 
+
   if (!res.ok) {
     // đọc text trả về từ BE
     const errorText = await res.text();
     throw new Error(errorText || "Unknown error");
   }
 
+
   return await res.text();
 };
+
 
 /**
  * Lấy chi tiết bài hát theo ID
  */
 export const fetchSongById = async (songId) => {
   const token = localStorage.getItem("authToken");
+
 
   const res = await fetch(`${API_BASE_URL}/common/song/${songId}`, {
     method: "GET",
@@ -234,6 +279,7 @@ export const fetchSongById = async (songId) => {
       Authorization: token ? `Bearer ${token}` : "",
     },
   });
+
 
   return handleResponse(res);
 };
@@ -245,6 +291,7 @@ export const fetchSongById = async (songId) => {
 export const fetchArtistById = async (artistId) => {
   const token = localStorage.getItem("authToken");
 
+
   const res = await fetch(`${API_BASE_URL}/common/users/${artistId}`, {
     method: "GET",
     headers: {
@@ -253,8 +300,10 @@ export const fetchArtistById = async (artistId) => {
     },
   });
 
+
   return handleResponse(res);
 };
+
 
 /**
  * Lấy URL stream nhạc từ backend
@@ -272,20 +321,24 @@ export const fetchLyricsBySongId = async (songId) => {
   const result = await fetchSongById(songId);
   const song = result.data;
 
+
   if (!song) {
     return { song: null, lines: [] };
   }
+
 
   // BE hiện tại đã đọc file và trả về mảng `lyrics`
   if (Array.isArray(song.lyrics) && song.lyrics.length > 0) {
     return { song, lines: song.lyrics };
   }
 
+
   // Fallback: tự đọc file .txt/.lrc từ lyricUrl
   if (song.lyricUrl) {
     const lyricUrl = song.lyricUrl.startsWith("http")
       ? song.lyricUrl
       : `http://localhost:8081${song.lyricUrl}`;
+
 
     const res = await fetch(lyricUrl);
     if (res.ok) {
@@ -295,20 +348,26 @@ export const fetchLyricsBySongId = async (songId) => {
     }
   }
 
+
   return { song, lines: [] };
 };
 
+
 //getPopularSongs
+
 
 export async function getPopularSongs() {
   try {
     const token = localStorage.getItem("authToken");
 
+
     const res = await fetch("http://localhost:8081/api/common/song/popular", {
       headers: { Authorization: `Bearer ${token}` },
     });
 
+
     if (!res.ok) throw new Error(res.status);
+
 
     return await res.json();
   } catch (error) {
@@ -322,6 +381,7 @@ export async function getRecommendedSongs(userId) {
     const token = localStorage.getItem("authToken");
     if (!token) throw new Error("Chưa đăng nhập");
 
+
     const res = await fetch(`${API_BASE_URL}/common/song/rcm/${userId}`, {
       headers: {
         "Content-Type": "application/json",
@@ -329,7 +389,9 @@ export async function getRecommendedSongs(userId) {
       },
     });
 
+
     if (!res.ok) throw new Error(res.status);
+
 
     // BE đang trả List<Song>
     return await res.json();
@@ -342,28 +404,51 @@ export async function getRecommendedSongs(userId) {
 
 
 
+
+
+
+
 /**
  * Tạo playlist mới
  * @param {object} payload - { name, isPublic }
  */
-export const createPlaylist = async (formData) => {
-  const token = localStorage.getItem("token");
+export const createPlaylist = async ({ name, description }) => {
+  const token = localStorage.getItem("authToken");
+  if (!token) throw new Error("Chưa đăng nhập");
 
-  const res = await fetch("http://localhost:8081/api/playlists", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      // ❌ KHÔNG set Content-Type khi dùng FormData
-    },
-    body: formData,
-  });
+
+  const res = await fetch(
+    "http://localhost:8081/api/common/playlist/create",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name,
+        description,
+      }),
+    }
+  );
+
 
   if (!res.ok) {
-    throw new Error("Failed to create playlist");
+    const text = await res.text();
+    throw new Error(text || "Failed to create playlist");
   }
 
-  return res.json();
+
+  return res.text(); // backend trả string
 };
+
+
+
+
+
+
+
+
 
 
 /**
@@ -375,7 +460,10 @@ export const updatePlaylist = async (playlistId, payload) => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
 
-  const res = await fetch(`${API_BASE_URL}/common/playlist/${playlistId}`, {
+
+const res = await fetch(
+  `${API_BASE_URL}/common/playlist/change/${playlistId}`,
+  {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -384,8 +472,11 @@ export const updatePlaylist = async (playlistId, payload) => {
     body: JSON.stringify(payload),
   });
 
+
   return handleResponse(res);
 };
+
+
 
 
 /**
@@ -396,13 +487,23 @@ export const deletePlaylist = async (playlistId) => {
   const token = localStorage.getItem("authToken");
   if (!token) throw new Error("Chưa đăng nhập");
 
-  const res = await fetch(`${API_BASE_URL}/common/playlist/${playlistId}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
 
-  return handleResponse(res);
+  const res = await fetch(
+    `${API_BASE_URL}/common/playlist/delete/${playlistId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || "Failed to delete playlist");
+  }
+
+
+  return await res.text(); // backend trả string
 };
-
