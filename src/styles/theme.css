@@ -1,3 +1,194 @@
+/* Overlay nền mờ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* Hộp popup */
+.modal-box {
+  background: #121212;
+  color: #ffffff;
+  border-radius: 14px;
+  padding: 24px;
+  width: 500px;
+  max-width: 90%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  animation: popupFade 0.25s ease;
+}
+
+/* Animation mở popup */
+@keyframes popupFade {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Tiêu đề */
+.modal-box h3 {
+  margin-bottom: 16px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Input search */
+.modal-box input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: #1f1f1f;
+  color: #fff;
+}
+
+.modal-box input::placeholder {
+  color: #aaa;
+}
+
+/* Danh sách bài hát */
+.modal-box > div[style*="overflow"] {
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+}
+
+/* Item bài hát */
+.modal-box > div[style*="overflow"] > div {
+  transition: background 0.2s;
+}
+
+.modal-box > div[style*="overflow"] > div:hover {
+  background: #1e1e1e;
+}
+
+/* Tên bài hát */
+.modal-box > div[style*="overflow"] strong,
+.modal-box > div[style*="overflow"] div > div:first-child {
+  color: #fff;
+}
+
+/* Tên nghệ sĩ */
+.modal-box > div[style*="overflow"] div > div:last-child {
+  color: #aaa;
+}
+
+/* Nút Close */
+.modal-box .btn-primary {
+  width: 100%;
+  margin-top: 16px;
+}
+
+
+.playlist-grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 32px;
+  padding: 16px;
+  align-items: stretch;
+}
+
+.playlist-grid-container > div {
+  width: 100%;
+}
+
+
+.playlist-add-form {
+  background: var(--card-bg, #111827);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+
+  max-width: 480px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.playlist-add-form {
+  animation: slideDown 0.25s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.playlist-add-form h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #ffffff;
+}
+
+.playlist-add-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;              /* khoảng cách label – input */
+  margin-bottom: 14px;  /* khoảng cách giữa các field */
+}
+
+.playlist-add-form label {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.playlist-add-form input[type="text"],
+.playlist-add-form textarea,
+.playlist-add-form input[type="file"] {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #374151;
+  background: #020617;
+  color: #fff;
+  font-size: 14px;
+}
+
+.playlist-add-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.playlist-add-form input:focus,
+.playlist-add-form textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+.playlist-add-form .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+
+.playlist-sort-label {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.playlist-sort {
+  padding: 6px 10px;
+  border-radius: 8px;
+  min-width: 220px;
+}
+
+
 /* Container chứa các nút hành động */
 .playlist-action-buttons {
   margin-left: 800px; /* đẩy toàn bộ nhóm nút sang bên phải */
