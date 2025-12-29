@@ -1,5 +1,6 @@
 "use client"
 
+
 import { useEffect, useState } from "react";
 import "../../styles/theme.css";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +9,7 @@ import { PlaylistCard } from "../../components/custom/PlaylistCard";
 import { createPlaylist } from "../../services/musicService";
 import { updatePlaylist } from "../../services/musicService";
 import { deletePlaylist } from "../../services/musicService";
+
 
 const MyPlaylist = () => {
   const navigate = useNavigate();
@@ -19,10 +21,11 @@ const MyPlaylist = () => {
   const [error, setError] = useState(null)
   const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
   const selectedPlaylist = playlists.find(
-  p => p._id === selectedPlaylistId
+  p => p.id === selectedPlaylistId
 );
   const isFavoriteSelected = selectedPlaylist?.name?.toLowerCase() === "favorites";
   const [showAddForm, setShowAddForm] = useState(false);
+
 
   const [newPlaylist, setNewPlaylist] = useState({
     name: "",
@@ -31,22 +34,29 @@ const MyPlaylist = () => {
   });
 
 
+
+
 const loadPlaylists = async () => {
   try {
     setLoading(true);
     const data = await fetchMyPlaylists();
 
+
     console.log("🎧 PLAYLISTS FROM API:", data);
 
+
     let sortedData = [...data];
+
 
     if (sortBy === "recently-added") {
       sortedData = sortedData.reverse(); // 🔥 playlist mới lên đầu
     }
 
+
     if (sortBy === "a-z") {
       sortedData.sort((a, b) => a.name.localeCompare(b.name));
     }
+
 
     setPlaylists(sortedData);
   } catch (err) {
@@ -57,13 +67,17 @@ const loadPlaylists = async () => {
 };
 
 
+
+
 useEffect(() => {
   setSelectedPlaylistId(null); // 👈 clear selection khi sort
   loadPlaylists();
 }, [sortBy]);
 
+
 const handleCreatePlaylist = async () => {
   const name = newPlaylist.name.trim();
+
 
   // ❌ rỗng
   if (!name) {
@@ -71,35 +85,47 @@ const handleCreatePlaylist = async () => {
     return;
   }
 
+
   // ❌ trùng tên
   const isDuplicate = playlists.some(
     (p) => p.name.toLowerCase() === name.toLowerCase()
   );
+
 
   if (isDuplicate) {
     alert("Playlist name already exists");
     return;
   }
 
+
   const formData = new FormData();
   formData.append("name", name);
   formData.append("description", newPlaylist.description || "");
+
 
   if (newPlaylist.thumbnail) {
     formData.append("thumbnail", newPlaylist.thumbnail);
   }
 
-  try {
-    await createPlaylist(formData);
 
-    setShowAddForm(false);
-    setNewPlaylist({ name: "", description: "", thumbnail: null });
-    setCurrentPage(1);
-    await loadPlaylists();
-  } catch (err) {
-    alert("Failed to create playlist");
-  }
+  try {
+  await createPlaylist({
+    name: name,
+    description: newPlaylist.description || "",
+  });
+
+
+  setShowAddForm(false);
+  setNewPlaylist({ name: "", description: "", thumbnail: null });
+  setCurrentPage(1);
+  await loadPlaylists();
+} catch (err) {
+  alert(err.message || "Failed to create playlist");
+}
+
+
 };
+
 
 const handleEditPlaylist = async () => {
   if (!selectedPlaylistId) {
@@ -107,15 +133,19 @@ const handleEditPlaylist = async () => {
     return;
   }
 
+
   const newName = prompt("New playlist name:");
   if (!newName) return;
+
 
   await updatePlaylist(selectedPlaylistId, {
     name: newName,
   });
 
+
   await loadPlaylists(); // 🔁 refetch
 };
+
 
 const handleDeletePlaylist = async () => {
   if (!selectedPlaylistId) {
@@ -123,26 +153,32 @@ const handleDeletePlaylist = async () => {
     return;
   }
 
+
   const selectedPlaylist = playlists.find(
-    p => p._id === selectedPlaylistId
+    p => (p.id || p.id) === selectedPlaylistId
   );
 
+
   if (!selectedPlaylist) return;
+
 
   if (selectedPlaylist.name.toLowerCase() === "favorites") {
     alert("You cannot delete Favorites playlist");
     return;
   }
 
+
   const ok = window.confirm(
     `Delete playlist "${selectedPlaylist.name}"?`
   );
   if (!ok) return;
 
-  await deletePlaylist(selectedPlaylist._id);
+
+  await deletePlaylist(selectedPlaylist.id || selectedPlaylist._id);
   setSelectedPlaylistId(null);
   await loadPlaylists();
 };
+
 
   // 🧮 Pagination
   const indexOfLast = currentPage * playlistsPerPage
@@ -150,13 +186,16 @@ const handleDeletePlaylist = async () => {
   const currentPlaylists = playlists.slice(indexOfFirst, indexOfLast)
   const totalPages = Math.ceil(playlists.length / playlistsPerPage)
 
+
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page)
   }
 
+
   const getPaginationButtons = () => {
     const buttons = []
     const maxVisible = 3
+
 
     if (totalPages <= 5) {
       for (let i = 1; i <= totalPages; i++) {
@@ -166,21 +205,26 @@ const handleDeletePlaylist = async () => {
       buttons.push(1)
       if (currentPage > maxVisible + 1) buttons.push("...")
 
+
       const start = Math.max(2, currentPage - 1)
       const end = Math.min(totalPages - 1, currentPage + 1)
       for (let i = start; i <= end; i++) {
         if (!buttons.includes(i)) buttons.push(i)
       }
 
+
       if (currentPage < totalPages - maxVisible) buttons.push("...")
       if (!buttons.includes(totalPages)) buttons.push(totalPages)
     }
 
+
     return buttons
   }
 
+
   if (loading) return <p className="p-10 text-gray-500">Loading playlists...</p>
   if (error) return <p className="p-10 text-red-500">Error: {error}</p>
+
 
   return (
     <div className="playlist-main-container">
@@ -189,11 +233,13 @@ const handleDeletePlaylist = async () => {
         <h2 className="page-title">Your Playlist</h2>
       </div>
 
+
       {/* Sorting dropdown */}
       <div className="playlist-controls">
         {showAddForm && (
   <div className="playlist-add-form">
     <h3>Create new playlist</h3>
+
 
     {/* Name */}
     <div className="form-group">
@@ -208,6 +254,7 @@ const handleDeletePlaylist = async () => {
       />
     </div>
 
+
     {/* Description */}
     <div className="form-group">
       <label>Description</label>
@@ -220,6 +267,7 @@ const handleDeletePlaylist = async () => {
       />
     </div>
 
+
     {/* Thumbnail */}
     <div className="form-group">
       <label>Thumbnail</label>
@@ -230,6 +278,7 @@ const handleDeletePlaylist = async () => {
     const file = e.target.files[0];
     if (!file) return;
 
+
     const allowedTypes = [
       "image/png",
       "image/jpeg",
@@ -237,11 +286,13 @@ const handleDeletePlaylist = async () => {
       "image/webp",
     ];
 
+
     if (!allowedTypes.includes(file.type)) {
       alert("Only image files (PNG, JPG, JPEG, WEBP) are allowed");
       e.target.value = "";
       return;
     }
+
 
     // Optional: giới hạn size (ví dụ 2MB)
     const maxSize = 2 * 1024 * 1024;
@@ -251,11 +302,14 @@ const handleDeletePlaylist = async () => {
       return;
     }
 
+
     setNewPlaylist({ ...newPlaylist, thumbnail: file });
   }}
 />
 
+
     </div>
+
 
     {/* Buttons */}
     <div className="form-actions">
@@ -265,6 +319,7 @@ const handleDeletePlaylist = async () => {
       >
         Create
       </button>
+
 
       <button
         className="btn-secondary"
@@ -279,6 +334,7 @@ const handleDeletePlaylist = async () => {
   </div>
 )}
 
+
         <select
           className="playlist-sort-dropdown"
           value={sortBy}
@@ -291,6 +347,7 @@ const handleDeletePlaylist = async () => {
           <option value="a-z">A-Z</option>
         </select>
 
+
         {/* ✅ Nhóm nút nằm bên phải */}
         <div className="playlist-action-buttons-2">
           <button
@@ -299,6 +356,8 @@ const handleDeletePlaylist = async () => {
           >
           ➕ Add new playlist
           </button>
+
+
 
 
           <button
@@ -310,8 +369,9 @@ const handleDeletePlaylist = async () => {
               cursor: !selectedPlaylistId || isFavoriteSelected ? "not-allowed" : "pointer",
             }}
 >
-            ✏ Customize created playlist
+            ✏ Change playlist's name
           </button>
+
 
           <button
             className="btn-primary btn-danger"
@@ -327,52 +387,53 @@ const handleDeletePlaylist = async () => {
         </div>
       </div>
 
+
       {/* Playlists grid */}
       {currentPlaylists.length === 0 ? (
         <p className="text-gray-500">You don't have any playlists yet.</p>
       ) : (
-        <div
-        className="playlist-grid-container"
-        onClick={() => setSelectedPlaylistId(null)}
-        >
-
-          {currentPlaylists.map((p) => {
-          const isSelected = selectedPlaylistId === p._id;
+        <div className="playlist-grid-container">
+  {currentPlaylists.map((p) => {
+    const isSelected = selectedPlaylistId === p.id;
 
     return (
-    <div key={p._id} style={{ display: "flex", justifyContent: "flex-start" }}>
-      <div
-        onClick={(e) => {
-          e.stopPropagation();              // ⛔ không cho click lan ra grid
-          setSelectedPlaylistId(p._id);     // ✅ chọn playlist
-        }}
-        onDoubleClick={(e) => {
-          e.stopPropagation();              // ⛔ không clear selection
-          navigate(`/playlists/${p._id}`);  // ➡️ vào detail
-        }}
-        style={{
-          display: "inline-block",
-          border: isSelected
-            ? "2px solid #4f46e5"
-            : "2px solid transparent",
-          borderRadius: "12px",
-          cursor: "pointer",
-        }}
-      >
-        <PlaylistCard
-          title={p.name}
-          songs={p.songs}
-          isPublic={p.isPublic}
-          imageUrl={
-            p.image || p.thumbnailUrl || "/uploads/images/default-img.jpg"
-          }
-        />
-      </div>
-    </div>
-  );
-})} 
+      <div key={p.id}>
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setSelectedPlaylistId(p.id);
+          }}
+          onDoubleClick={(e) => {
+            e.stopPropagation();
+            navigate(`/playlists/${p.id}`);
+          }}
+          style={{
+            border: isSelected ? "2px solid #4f46e5" : "2px solid transparent",
+            borderRadius: "14px",
+            boxSizing: "border-box",
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+            boxShadow: isSelected
+              ? "0 0 0 2px rgba(79,70,229,0.35)"
+              : "none",
+          }}
+        >
+          <PlaylistCard
+            title={p.name}
+            songs={p.songs}
+            isPublic={p.isPublic}
+            imageUrl={
+              p.image || p.thumbnailUrl || "/uploads/images/default-img.jpg"
+            }
+          />
         </div>
+      </div>
+    );
+  })}
+</div>
+
       )}
+
 
       {/* Pagination (always show) */}
       <div className="pagination-container">
@@ -385,6 +446,7 @@ const handleDeletePlaylist = async () => {
           ◀◀
         </button>
 
+
         <button
           className="pagination-btn pagination-nav-btn"
           onClick={() => handlePageChange(currentPage - 1)}
@@ -393,6 +455,7 @@ const handleDeletePlaylist = async () => {
         >
           ◀
         </button>
+
 
         {getPaginationButtons().map((pageNum, index) => (
           <button
@@ -407,6 +470,7 @@ const handleDeletePlaylist = async () => {
           </button>
         ))}
 
+
         <button
           className="pagination-btn pagination-nav-btn"
           onClick={() => handlePageChange(currentPage + 1)}
@@ -415,6 +479,7 @@ const handleDeletePlaylist = async () => {
         >
           ▶
         </button>
+
 
         <button
           className="pagination-btn pagination-nav-btn"
@@ -428,5 +493,6 @@ const handleDeletePlaylist = async () => {
     </div>
   )
 }
+
 
 export default MyPlaylist
